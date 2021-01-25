@@ -23,6 +23,7 @@
 - Users can post pictures with a text caption
 - Users can follow one another
 - Users can leave comments under pictures
+
 **Extra features**
 - Google login?
 - Sending email with verification token on sign up?
