@@ -28,3 +28,8 @@
 - Google login?
 - Sending email with verification token on sign up?
 
+## Getting Started
+
+Create a .env file at the root of the directory to store environment variables of KEY=VALUE pairs.
+**NOTE: ADD IT TO THE .gitignore FILE IF YOU CHOSE A CUSTOM NAME**
+
