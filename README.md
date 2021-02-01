@@ -8,6 +8,7 @@
 | Nicholas Niphoiyen | NicholasYip |    
 | Ke wen Liang | kwl2000 |    
 | Winkel Yin | Winkel515 |
+| Ryan Messervey | ? |
 
 
 ## Languages & Techniques
@@ -23,9 +24,9 @@
 - Users can post pictures with a text caption
 - Users can follow one another
 - Users can leave comments under pictures
+- Google login
 
 **Extra features**
-- Google login?
 - Sending email with verification token on sign up?
 
 ## Getting Started
