@@ -8,7 +8,7 @@
 | Nicholas Niphoiyen | NicholasYip |    
 | Ke wen Liang | kwl2000 |    
 | Winkel Yin | Winkel515 |
-| Ryan Messervey | ? |
+| Ryan Messervey | ??? |
 
 
 ## Languages & Techniques
@@ -25,10 +25,10 @@
 - Users can follow one another
 - Users can leave comments under pictures
 - Users can log in through their google account
-- Users can like other users' pictures
 
 **Extra features**
-- Sending email with verification token on sign up?
+- Sending email with verification token on sign up
+- Users can like other users' pictures
 
 ## Getting Started
 
