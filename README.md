@@ -14,9 +14,10 @@
 ## Languages & Techniques
 
      Backend:  
-	 1. Node.js + Express.js backend  
-	 Frontend: 
-	 2. React.js
+	 1. Node.js + Express.js
+	 2. MongoDB database
+     Frontend: 
+	 1. React.js
 
 ## Description
 
