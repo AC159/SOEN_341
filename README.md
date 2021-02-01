@@ -24,7 +24,8 @@
 - Users can post pictures with a text caption
 - Users can follow one another
 - Users can leave comments under pictures
-- Google login
+- Users can log in through their google account
+- Users can like other users' pictures
 
 **Extra features**
 - Sending email with verification token on sign up?
