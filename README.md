@@ -8,7 +8,7 @@
 | Nicholas Niphoiyen | NicholasYip |    
 | Ke wen Liang | kwl2000 |    
 | Winkel Yin | Winkel515 |
-| Ryan Messervey | ??? |
+| Ryan Messervey | RyanMesservey |
 
 
 ## Languages & Techniques
