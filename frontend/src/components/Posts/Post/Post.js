@@ -1,14 +1,31 @@
-import React from 'react';
-import classes from './Post.module.css';
+import React, { Component } from "react";
+import './Post.css';
+import Image from '../../../assets/images/anonymous.jpg';
 
-const post = (props) => {
+class Post extends Component {
 
-    return (
-        <div className={classes.Post}>
-            <p>Some post</p>
-        </div>
-    );
-
+    render() {
+        return <article className="Post">
+            <header>
+                <div className="Post-user">
+                    <div className="Post-user-avatar">
+                        <img src={Image} alt="Anonymous"/>
+                    </div>
+                    <div className="Post-user-nickname">
+                        <span>{this.props.name}</span>
+                    </div>
+                </div>
+            </header>
+            <div className="Post-image">
+                <div className="Post-image-bg">
+                    <img src={Image} alt="Anonymous"/>
+                </div>
+            </div>
+            <div className="Post-caption">
+                <strong>Comments</strong>
+                <button className="comment-button">Leave a comment</button>
+            </div>
+        </article>;
+    }
 }
-
-export default post;
+export default Post;

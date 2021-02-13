@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './Navbar.module.css';
 import Logo from '../Logo/Logo';
-import NavigationItems from './NavigationItems/NavigationItems';
+import { NavLink } from "react-router-dom";
 
 const navbar = (props) => {
 
@@ -12,8 +12,16 @@ const navbar = (props) => {
                 <Logo />
             </div>
 
-            <nav>
-                <NavigationItems />
+            <nav className={classes.NavigationItem}>
+                <ul>
+                    <li>
+                        <NavLink to="/" >Posts</NavLink>
+                    </li>
+
+                    <li>
+                        <NavLink to="/profile" >Profile</NavLink>
+                    </li>
+                </ul>
             </nav>
         </header>
     );
