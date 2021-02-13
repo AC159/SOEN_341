@@ -1,0 +1,58 @@
+.Navbar {
+    width: 100%;
+    height: 56px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 90;
+}
+
+.Navbar nav {
+    height: 100%;
+    display: block;
+}
+
+.Logo {
+    height: 80%;
+}
+
+.NavigationItem  {
+    border: 1px solid #e7e7e7;
+    background-color: #f3f3f3;
+    text-decoration: none;
+}
+
+.NavigationItem ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.NavigationItem li {
+    display: inline-block;
+    margin: 20px;
+}
+
+li:hover {
+    background-color: #ddd;
+}
+
+.NavigationItem a {
+    text-decoration: none;
+    color: black;
+}
+
+.NavigationItem a:hover,
+.NavigationItem a.active {
+    color: #00aaff;
+}
+
+

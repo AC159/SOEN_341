@@ -1,26 +1,40 @@
 import React from "react";
-import Home from './Home';
-import Profile from './Profile';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Posts from '../src/components/Posts/Posts';
+import Navbar from "./components/Navbar/Navbar";
+import classes from "./components/Layout/Layout.module.css";
 
-function App() {
-  return (
-    <Router>
-      <Switch>
-       <Route path="/profile">
-          <Profile/>
-        </Route>
 
-        <Route path="/">
-          <Home/>
-        </Route>
-      </Switch>
-    </Router>
-  );
+class App extends React.Component {
+
+    render () {
+
+      return (
+
+          <BrowserRouter>
+              <div>
+
+                  <Navbar />
+
+                  <main className={classes.Content}>
+
+                      <Switch>
+
+                          <Route path="/profile" render={() =>  {
+                              return <h2>My profile</h2>;
+                          }}  />
+
+                          <Route path="/" component={Posts}/>
+
+                      </Switch>
+
+                  </main>
+
+              </div>
+          </BrowserRouter>
+      );
+  }
+
 }
 
 export default App;
