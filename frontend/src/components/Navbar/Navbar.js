@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import classes from './Navbar.module.css';
 import Logo from '../Logo/Logo';
 import { NavLink } from "react-router-dom";
+import { auth } from '../../firebase';
 
-const navbar = (props) => {
+const Navbar = (props) => {
+    const [user, setUser] = useState(auth.currentUser);
+    auth.onAuthStateChanged(user => {
+        setUser(user);
+    })
 
     return (
         <header className={classes.Navbar}>
@@ -21,6 +26,10 @@ const navbar = (props) => {
                     <li>
                         <NavLink to="/profile" >Profile</NavLink>
                     </li>
+
+                    <li>
+                        {user ? <span onClick={() => auth.signOut()}>Sign Out</span>: <NavLink to="/signup" >Sign Up</NavLink>}
+                    </li>
                 </ul>
             </nav>
         </header>
@@ -28,4 +37,4 @@ const navbar = (props) => {
 
 }
 
-export default navbar;
+export default Navbar;
