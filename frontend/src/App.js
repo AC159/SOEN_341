@@ -3,12 +3,13 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Posts from '../src/components/Posts/Posts';
 import Navbar from "./components/Navbar/Navbar";
 import classes from "./components/Layout/Layout.module.css";
-
+import SignUp from './components/SignUp/SignUp'
+import SignIn from './components/SignIn/SignIn'
+// import { auth } from './firebase';
 
 class App extends React.Component {
 
     render () {
-
       return (
 
           <BrowserRouter>
@@ -23,6 +24,10 @@ class App extends React.Component {
                           <Route path="/profile" render={() =>  {
                               return <h2>My profile</h2>;
                           }}  />
+
+                          <Route path="/signup" component={SignUp}/>
+
+                          <Route path="/signin" component={SignIn}/>
 
                           <Route path="/" component={Posts}/>
 
