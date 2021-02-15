@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/static/css/main.a5bbe105.chunk.css",
-    "main.js": "/static/js/main.b9894815.chunk.js",
-    "main.js.map": "/static/js/main.b9894815.chunk.js.map",
+    "main.js": "/static/js/main.dae16ade.chunk.js",
+    "main.js.map": "/static/js/main.dae16ade.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.6290e5e0.js",
     "runtime-main.js.map": "/static/js/runtime-main.6290e5e0.js.map",
-    "static/js/2.a13b7836.chunk.js": "/static/js/2.a13b7836.chunk.js",
-    "static/js/2.a13b7836.chunk.js.map": "/static/js/2.a13b7836.chunk.js.map",
+    "static/js/2.1e0fc130.chunk.js": "/static/js/2.1e0fc130.chunk.js",
+    "static/js/2.1e0fc130.chunk.js.map": "/static/js/2.1e0fc130.chunk.js.map",
     "index.html": "/index.html",
     "static/css/main.a5bbe105.chunk.css.map": "/static/css/main.a5bbe105.chunk.css.map",
-    "static/js/2.a13b7836.chunk.js.LICENSE.txt": "/static/js/2.a13b7836.chunk.js.LICENSE.txt",
+    "static/js/2.1e0fc130.chunk.js.LICENSE.txt": "/static/js/2.1e0fc130.chunk.js.LICENSE.txt",
     "static/media/anonymous.b7a62e59.jpg": "/static/media/anonymous.b7a62e59.jpg",
     "static/media/insta_logo.db753620.png": "/static/media/insta_logo.db753620.png"
   },
   "entrypoints": [
     "static/js/runtime-main.6290e5e0.js",
-    "static/js/2.a13b7836.chunk.js",
+    "static/js/2.1e0fc130.chunk.js",
     "static/css/main.a5bbe105.chunk.css",
-    "static/js/main.b9894815.chunk.js"
+    "static/js/main.dae16ade.chunk.js"
   ]
 }
