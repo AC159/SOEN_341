@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { auth } from '../../firebase';
 import { Link, useHistory } from 'react-router-dom';
+import { useAuth } from '../../AuthProvider';
 
 function SignUp() {
     const history = useHistory();
@@ -8,12 +8,13 @@ function SignUp() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(false);
+    const { signup } = useAuth();
 
     const submitForm = async () => {
         if(password !== confirmPassword)
             setError('Passwords do not match')
         else {
-            auth.createUserWithEmailAndPassword(email, password).then(() => {
+            signup(email, password).then(() => {
                 history.push('/')
             }).catch(e => {
                 setError(e.message)

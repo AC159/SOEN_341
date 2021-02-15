@@ -2,13 +2,10 @@ import React, {useState, useEffect} from 'react';
 import classes from './Navbar.module.css';
 import Logo from '../Logo/Logo';
 import { NavLink } from "react-router-dom";
-import { auth } from '../../firebase';
+import { useAuth } from '../../AuthProvider';
 
 const Navbar = (props) => {
-    const [user, setUser] = useState(auth.currentUser);
-    auth.onAuthStateChanged(user => {
-        setUser(user);
-    })
+    const { currentUser, signOut } = useAuth();
 
     return (
         <header className={classes.Navbar}>
@@ -28,7 +25,7 @@ const Navbar = (props) => {
                     </li>
 
                     <li>
-                        {user ? <span onClick={() => auth.signOut()}>Sign Out</span>: <NavLink to="/signup" >Sign Up</NavLink>}
+                        {currentUser ? <span onClick={() => signOut()}>Sign Out</span>: <NavLink to="/signup" >Sign Up</NavLink>}
                     </li>
                 </ul>
             </nav>
