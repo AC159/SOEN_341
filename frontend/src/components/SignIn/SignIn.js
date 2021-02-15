@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
-import { auth } from '../../firebase';
 import { Link, useHistory } from 'react-router-dom';
+import { useAuth } from '../../AuthProvider';
 
 function SignIn() {
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
+    const { signin } = useAuth();
 
     const submitForm = () => {
-        auth.signInWithEmailAndPassword(email, password).then(() =>{
+        signin(email, password).then(() =>{
             history.push('/')
         }).catch(e => {
             setError(e.message)

@@ -5,38 +5,34 @@ import Navbar from "./components/Navbar/Navbar";
 import classes from "./components/Layout/Layout.module.css";
 import SignUp from './components/SignUp/SignUp'
 import SignIn from './components/SignIn/SignIn'
+import AuthProvider from "./AuthProvider";
 // import { auth } from './firebase';
 
 class App extends React.Component {
 
     render () {
       return (
+        <BrowserRouter>
+            <AuthProvider>
+                <div>
+                    <Navbar />
+                    <main className={classes.Content}>
+                        <Switch>
+                            <Route path="/profile" render={() =>  {
+                                return <h2>My profile</h2>;
+                            }}  />
 
-          <BrowserRouter>
-              <div>
+                            <Route path="/signup" component={SignUp}/>
 
-                  <Navbar />
+                            <Route path="/signin" component={SignIn}/>
 
-                  <main className={classes.Content}>
+                            <Route path="/" component={Posts}/>
 
-                      <Switch>
-
-                          <Route path="/profile" render={() =>  {
-                              return <h2>My profile</h2>;
-                          }}  />
-
-                          <Route path="/signup" component={SignUp}/>
-
-                          <Route path="/signin" component={SignIn}/>
-
-                          <Route path="/" component={Posts}/>
-
-                      </Switch>
-
-                  </main>
-
-              </div>
-          </BrowserRouter>
+                        </Switch>
+                    </main>
+                </div>
+            </AuthProvider>
+        </BrowserRouter>
       );
   }
 
