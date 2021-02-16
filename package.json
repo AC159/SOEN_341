@@ -6,7 +6,8 @@
     "start": "node ./bin/www",
     "client": "cd frontend && npm start",
     "dev": "concurrently \"nodemon run start\" \"npm run client",
-    "buildAndStart": "cd frontend && npm run build && cd .. && node ./bin/www"
+    "buildAndStart": "cd frontend && npm run build && cd .. && node ./bin/www",
+    "test": "jest"
   },
   "dependencies": {
     "@google-cloud/storage": "^5.7.4",
@@ -25,6 +26,7 @@
     "multer": "^1.4.2"
   },
   "devDependencies": {
+    "jest": "^26.6.3",
     "nodemon": "^2.0.7"
   }
 }
