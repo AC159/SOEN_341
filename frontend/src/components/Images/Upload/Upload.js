@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import {DropzoneDialog} from 'material-ui-dropzone'
-
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 
 class Upload extends Component{
     constructor(props) {
@@ -42,7 +42,7 @@ class Upload extends Component{
         return(
             <div>
                 <Button onClick={this.handleOpen.bind(this)}>
-                  Add Image
+                  <AddAPhotoIcon/>
                 </Button>
                 <DropzoneDialog
                     open={this.state.open}
