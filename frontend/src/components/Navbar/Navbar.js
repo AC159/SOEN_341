@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import classes from './Navbar.module.css';
 import Logo from '../Logo/Logo';
 import { NavLink } from "react-router-dom";
 import Upload from '../Images/Upload/Upload'
+import { useAuth } from '../../AuthProvider';
 
-const navbar = (props) => {
+const Navbar = (props) => {
+    const { currentUser, signout } = useAuth();
 
     return (
         <header className={classes.Navbar}>
@@ -25,6 +27,7 @@ const navbar = (props) => {
 
                     <li>
                         <Upload />
+                        {currentUser ? <span onClick={() => signout()}>Sign Out</span>: <NavLink to="/signup" >Sign Up</NavLink>}
                     </li>
                 </ul>
             </nav>
@@ -33,4 +36,4 @@ const navbar = (props) => {
 
 }
 
-export default navbar;
+export default Navbar;

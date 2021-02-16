@@ -1,12 +1,12 @@
 const gc = require('../config/index');
 
+const bucketName = 'soen-341-instagram-pictures';
+const bucket = gc.bucket(bucketName);
 
 const uploadImage = (image) => new Promise((resolve, reject) => {
 
     // Multer stores the image in req.file with upload.single('image')
     console.log(image);
-
-    const bucket = gc.bucket('soen-341-instagram-pictures');
 
     // Multer stored the file (image) in a buffer
 
@@ -23,10 +23,7 @@ const uploadImage = (image) => new Promise((resolve, reject) => {
 
     stream.on('finish', () => {
 
-        // The promise returns the public url of the image, this url needs to be stored for each user in mongodb
-        file.makePublic(function (error, apiResponse) {
-            resolve({ apiResponse, fileName: gcsFileName });
-        })
+        resolve({ url: `https://storage.googleapis.com/${bucketName}/${gcsFileName}` });
 
     });
 
@@ -36,3 +33,5 @@ const uploadImage = (image) => new Promise((resolve, reject) => {
 
 
 module.exports = uploadImage;
+
+
