@@ -23,36 +23,14 @@
 }
 
 .NavigationItem  {
-    border: 1px solid #e7e7e7;
+    width: 500px;
+    margin: 0;
+    padding: 0;
     background-color: #f3f3f3;
     text-decoration: none;
 }
 
-.NavigationItem ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    text-align: center;
+.NavbarButton:hover{
+    background-color: #F4F4F4;
+    border-radius: 10px;
 }
-
-.NavigationItem li {
-    display: inline-block;
-    margin: 20px;
-}
-
-li:hover {
-    background-color: #ddd;
-}
-
-.NavigationItem a {
-    text-decoration: none;
-    color: black;
-}
-
-.NavigationItem a:hover,
-.NavigationItem a.active {
-    color: #00aaff;
-}
-
-
