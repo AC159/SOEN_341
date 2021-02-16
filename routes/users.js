@@ -22,6 +22,7 @@ router.get('/', function(req, res) {
     'users': ['AC', 'WY', 'NY', 'KL', 'RM']
   });
 
+
 });
 
 
@@ -31,6 +32,8 @@ router.post('/images', upload.single('image'), async function(req, res, next) {
   try {
 
     const imageUrl = await uploadImage(req.file);
+
+    // todo: save the public image url in the user object
 
     res.status(200).json({
       message: "Upload was successful!",
@@ -42,6 +45,7 @@ router.post('/images', upload.single('image'), async function(req, res, next) {
   }
 
 });
+
 
 module.exports.router = router;
 
