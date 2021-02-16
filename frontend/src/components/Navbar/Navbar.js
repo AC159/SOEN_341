@@ -1,11 +1,24 @@
 import React, {useState, useEffect} from 'react';
 import classes from './Navbar.module.css';
 import Logo from '../Logo/Logo';
-import { NavLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useAuth } from '../../AuthProvider';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import FeaturedPlayListIcon from '@material-ui/icons/FeaturedPlayList';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import CreateIcon from '@material-ui/icons/Create';
+
+const buttons = [
+    {label:"Posts", icon: <FeaturedPlayListIcon/>, link: "/"},
+    {label:"Profile", icon: <AccountBoxIcon/>, link: "/profile"},
+    {label:"Sign In", icon: <CreateIcon/>, link: "/signup"},
+]
 
 const Navbar = (props) => {
+    const [page, changePage] = useState(0);
     const { currentUser, signout } = useAuth();
+    const history = useHistory();
 
     return (
         <header className={classes.Navbar}>
@@ -15,19 +28,9 @@ const Navbar = (props) => {
             </div>
 
             <nav className={classes.NavigationItem}>
-                <ul>
-                    <li>
-                        <NavLink to="/" >Posts</NavLink>
-                    </li>
-
-                    <li>
-                        <NavLink to="/profile" >Profile</NavLink>
-                    </li>
-
-                    <li>
-                        {currentUser ? <span onClick={() => signout()}>Sign Out</span>: <NavLink to="/signup" >Sign Up</NavLink>}
-                    </li>
-                </ul>
+                <BottomNavigation showLabels value={page} onChange={(event, newPage) => {changePage(newPage);}}>
+                    {buttons.map((button) => <BottomNavigationAction label={button.label} icon={button.icon} onClick={() => {history.push(button.link)}} />)}
+                </BottomNavigation>
             </nav>
         </header>
     );
