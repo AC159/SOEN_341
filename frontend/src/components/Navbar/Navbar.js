@@ -3,6 +3,7 @@ import classes from './Navbar.module.css';
 import Logo from '../Logo/Logo';
 import { useHistory } from "react-router-dom";
 import { useAuth } from '../../AuthProvider';
+import Upload from '../Images/Upload/Upload'
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import FeaturedPlayListIcon from '@material-ui/icons/FeaturedPlayList';
@@ -26,10 +27,10 @@ const Navbar = (props) => {
             <div className={classes.Logo}>
                 <Logo />
             </div>
-
+            <Upload/>
             <nav className={classes.NavigationItem}>
                 <BottomNavigation showLabels value={page} onChange={(event, newPage) => {changePage(newPage);}}>
-                    {buttons.map((button) => <BottomNavigationAction label={button.label} icon={button.icon} onClick={() => {history.push(button.link)}} />)}
+                    {buttons.map((button) => <BottomNavigationAction label={button.label} icon={button.icon} onClick={() => {history.push(button.link)}} classes={{wrapper:classes.NavbarButton}}/>)}
                 </BottomNavigation>
             </nav>
         </header>
