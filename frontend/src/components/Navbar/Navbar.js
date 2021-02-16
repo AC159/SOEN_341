@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from '../../AuthProvider';
 
 const Navbar = (props) => {
-    const { currentUser, signOut } = useAuth();
+    const { currentUser, signout } = useAuth();
 
     return (
         <header className={classes.Navbar}>
@@ -25,7 +25,7 @@ const Navbar = (props) => {
                     </li>
 
                     <li>
-                        {currentUser ? <span onClick={() => signOut()}>Sign Out</span>: <NavLink to="/signup" >Sign Up</NavLink>}
+                        {currentUser ? <span onClick={() => signout()}>Sign Out</span>: <NavLink to="/signup" >Sign Up</NavLink>}
                     </li>
                 </ul>
             </nav>
