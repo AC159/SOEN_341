@@ -2,6 +2,7 @@ import React from 'react';
 import classes from './Navbar.module.css';
 import Logo from '../Logo/Logo';
 import { NavLink } from "react-router-dom";
+import Upload from '../Images/Upload/Upload'
 
 const navbar = (props) => {
 
@@ -20,6 +21,10 @@ const navbar = (props) => {
 
                     <li>
                         <NavLink to="/profile" >Profile</NavLink>
+                    </li>
+
+                    <li>
+                        <Upload />
                     </li>
                 </ul>
             </nav>
