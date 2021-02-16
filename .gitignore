@@ -2,5 +2,6 @@
 node_modules
 .env
 /frontend/.eslintcache
+.eslintcache
 /frontend/build
 /config/google_cloud_api_key.json
