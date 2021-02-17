@@ -3,6 +3,7 @@ import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import {DropzoneDialog} from 'material-ui-dropzone'
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
+import classes from '../../Navbar/Navbar.module.css';
 
 class Upload extends Component{
     constructor(props) {
@@ -41,8 +42,8 @@ class Upload extends Component{
     render() {
         return(
             <div>
-                <Button onClick={this.handleOpen.bind(this)}>
-                  <AddAPhotoIcon/>
+                <Button onClick={this.handleOpen.bind(this)} classes={{root:classes.UploadButton}} >
+                    <AddAPhotoIcon/>
                 </Button>
                 <DropzoneDialog
                     open={this.state.open}
