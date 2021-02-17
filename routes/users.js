@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 const uploadImage = require('../cloudStorage/helpers');
+const bcrypt = require('bcryptjs');
 
 // Middleware to check for image size an
 const upload = multer({
@@ -42,6 +43,41 @@ router.post('/images', upload.single('image'), async function(req, res, next) {
   }
 
 });
+
+
+// Users that aren't logged in are routed to /signup when they click Sign Up in the nav bar
+// They are asked for their email, a password, and a confirmation of that password
+router.post('/signup', function(req, res) {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+
+    req.checkBody('email', 'Required').notEmpty();
+    req.checkBody('password', 'Required').notEmpty();
+    req.checkBody('confirmPassword', 'Required; Passwords must match').equals(req.body.password);
+
+    let newUser = new User({
+      id:password;
+      password:password;
+    });
+
+    bcrypt.getSalt(10, function (salt) {
+      bcrypt.hash(newUser.password, salt, function(hashedPassword){
+        newUser.password = hashedPassword;
+        newUser.save;
+      });
+    });
+
+  }
+  catch (error){
+
+    res.send(error);
+    res.render('SignUp');
+
+  }
+});
+
 
 module.exports.router = router;
 
