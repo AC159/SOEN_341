@@ -23,6 +23,7 @@ router.get('/', function(req, res) {
     'users': ['AC', 'WY', 'NY', 'KL', 'RM']
   });
 
+
 });
 
 
@@ -32,6 +33,8 @@ router.post('/images', upload.single('image'), async function(req, res, next) {
   try {
 
     const imageUrl = await uploadImage(req.file);
+
+    // todo: save the public image url in the user object
 
     res.status(200).json({
       message: "Upload was successful!",
@@ -45,6 +48,7 @@ router.post('/images', upload.single('image'), async function(req, res, next) {
 });
 
 
+<<<<<<< HEAD
 // Users that aren't logged in are routed to /signup when they click Sign Up in the nav bar
 // They are asked for their email, a password, and a confirmation of that password
 router.post('/signup', function(req, res) {
@@ -79,5 +83,7 @@ router.post('/signup', function(req, res) {
 });
 
 
+=======
+>>>>>>> b4465ea17e0322fe0c7759bd7aad432a9516d460
 module.exports.router = router;
 

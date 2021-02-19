@@ -8,9 +8,7 @@ import SignIn from './components/SignIn/SignIn'
 import AuthProvider from "./AuthProvider";
 // import { auth } from './firebase';
 
-class App extends React.Component {
-
-    render () {
+function App(){
       return (
         <BrowserRouter>
             <AuthProvider>
@@ -34,8 +32,6 @@ class App extends React.Component {
             </AuthProvider>
         </BrowserRouter>
       );
-  }
-
 }
 
 export default App;
