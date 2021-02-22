@@ -36,7 +36,7 @@ router.post('/user', async function (req, res) {
 
     const user = new User({
       email: req.body.email,
-      password: req.body.password,
+      name: req.body.name,
       images: [],
       follows: [],
       followers: [],
