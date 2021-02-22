@@ -63,7 +63,10 @@ function Profile(props){
                                             <img src={tile.img} alt={tile.title} name={tile.name} likedBy={tile.likedBy} />
                                         </GridListTile>))}
             </GridList>
-            <Modal open={open} onClose={() => setOpen(false)}>
+            <Modal open={open} onClose={() => {
+                setOpen(false)
+                setAttributes("")
+                }}>
                 
                     {attributes === "" ? null:
                     <div className={classes.Popup}>
