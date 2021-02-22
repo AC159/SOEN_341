@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import classes from '../Layout/Layout.module.css'
+import axios from 'axios';
 
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
@@ -29,7 +30,11 @@ function SignUp() {
     const { signup } = useAuth();
 
     const submitForm = async () => {
-        signup(email, password).then(() => {
+        signup(email, password).then(async () => {
+            await axios.post('/users/signup', {
+                email,
+                name
+            })
             history.push('/')
         }).catch(e => {
             alert(e.message)
