@@ -1,31 +1,36 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import './Post.css';
-import Image from '../../../assets/images/anonymous.jpg';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
-class Post extends Component {
+function Post(props){
+    const [inputBox, changeInputBox] = useState(false)
 
-    render() {
         return <article className="Post">
-            <header>
+            {props.modal ? null: <header>
                 <div className="Post-user">
                     <div className="Post-user-avatar">
-                        <img src={Image} alt="Anonymous"/>
+                        <img src={props.profile} alt="Anonymous"/>
                     </div>
                     <div className="Post-user-nickname">
-                        <span>{this.props.name}</span>
+                        <span>{props.name}</span>
                     </div>
                 </div>
-            </header>
+            </header>}
             <div className="Post-image">
                 <div className="Post-image-bg">
-                    <img src={Image} alt="Anonymous"/>
+                    <img src={props.source} alt="Anonymous"/>
                 </div>
             </div>
             <div className="Post-caption">
-                <strong>Comments</strong>
-                <button className="comment-button">Leave a comment</button>
+                <h4>Liked by {props.likedBy}</h4>
+                <Button variant="outlined" size="small"  style={{height: 40, marginLeft:'auto'}}>Like</Button>
+                <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
             </div>
+            {inputBox ? <div className="Post-comment">
+                <TextField id="outlined-basic" label="Comment..." variant="outlined" style={{width: "85%"}} />
+                <Button variant="outlined" onClick={() => console.log("posted")} style={{width: "15%"}} >Post</Button>
+            </div>: null}
         </article>;
-    }
 }
 export default Post;
