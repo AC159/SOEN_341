@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 const uploadImage = require('../cloudStorage/helpers');
+require('../Database/Mongoose.js');
+const User = require('../Database/Models/User.js');
+
 
 // Middleware to check for image size an
 const upload = multer({
@@ -24,6 +27,32 @@ router.get('/', function(req, res) {
 
 
 });
+
+
+//  Route to save users to database
+router.post('/user', async function (req, res) {
+
+    // Create new user:
+
+    const user = new User({
+      email: req.body.email,
+      password: req.body.password,
+      images: [],
+      follows: [],
+      followers: [],
+      likes: []
+    });
+
+    try {
+
+      await user.save();
+      res.status(201).send({ user });
+
+    } catch (error) {
+      res.status(400).send({ error });
+    }
+
+})
 
 
 // The 'name' property of the html "input" element must be named "image" and it will be stored in "req.file":
