@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 const uploadImage = require('../cloudStorage/helpers');
-require('../Database/Mongoose.js');
 const User = require('../Database/Models/User.js');
 
 
@@ -30,7 +29,7 @@ router.get('/', function(req, res) {
 
 
 //  Route to save users to database
-router.post('/user', async function (req, res) {
+router.post('/signup', async function (req, res) {
 
     // Create new user:
 
