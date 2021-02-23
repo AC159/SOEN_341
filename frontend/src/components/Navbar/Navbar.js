@@ -14,32 +14,30 @@ import Button from '@material-ui/core/Button';
 import PersonOutline from '@material-ui/icons/PersonOutline';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 
-var buttons = []
-
-const buttonsNotSignedIn = [
-    { label: "Posts", icon: <FeaturedPlayListIcon />, link: "/" },
-    { label: "Sign In", icon: <CreateIcon />, link: "/signin" }
-]
-
-const buttonsSignedIn = [
-    { label: "Posts", icon: <FeaturedPlayListIcon />, link: "/" },
-    { label: "Profile", icon: <AccountBoxIcon />, link: "/profile/12" },
-    { label: "Sign Out", icon: <PersonOutline />, link: "/signout" }
-]
-
 const Navbar = (props) => {
     const [page, changePage] = useState(0);
     const { currentUser, signout } = useAuth();
     const history = useHistory();
 
-    if (currentUser == null) {
-        buttons = buttonsNotSignedIn;
-    }
-    else {
-        buttons = buttonsSignedIn;
+    function getButtons() {
+        if (currentUser == null) {
+            const buttonsNotSignedIn = [
+                { label: "Posts", icon: <FeaturedPlayListIcon />, link: "/" },
+                { label: "Sign In", icon: <CreateIcon />, link: "/signin" }
+            ];
+            return buttonsNotSignedIn;
+        }
+        else {
+            const buttonsSignedIn = [
+                { label: "Posts", icon: <FeaturedPlayListIcon />, link: "/" },
+                { label: "Profile", icon: <AccountBoxIcon />, link: "/profile/12" },
+                { label: "Sign Out", icon: <PersonOutline />, link: "/signout" }
+            ];
+            return buttonsSignedIn;
+        }
     }
 
-    function UploadCheck() {
+    function Upload() {
         if (currentUser == null) {
             return (
                 <Button onClick={() => {history.push("/signin")}} classes={{ root: classes.UploadButton }} >
@@ -59,14 +57,14 @@ const Navbar = (props) => {
             <div className={classes.Logo}>
                 <Logo />
             </div>
-            <UploadCheck />
+            <Upload />
             <div>
                 <TextField id="outlined-basic" label="Search user..." variant="outlined" margin='dense' style={{ height: 40, marginTop: '5px' }} />
                 <Button variant="outlined" style={{ height: 40, marginTop: '5px' }}>Search</Button>
             </div>
             <nav className={classes.NavigationItem}>
                 <BottomNavigation showLabels value={page} onChange={(event, newPage) => { changePage(newPage); }}>
-                    {buttons.map((button, index) => <BottomNavigationAction key={index} label={button.label} icon={button.icon} onClick={() => { history.push(button.link) }} classes={{ wrapper: classes.NavbarButton }} />)}
+                    {getButtons().map((button, index) => <BottomNavigationAction key={index} label={button.label} icon={button.icon} onClick={() => { history.push(button.link) }} classes={{ wrapper: classes.NavbarButton }} />)}
                 </BottomNavigation>
             </nav>
         </header>
