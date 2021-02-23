@@ -11,17 +11,33 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import CreateIcon from '@material-ui/icons/Create';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import PersonOutline from '@material-ui/icons/PersonOutline';
 
-const buttons = [
+var buttons = []
+
+const buttons1 = [
+    {label:"Posts", icon: <FeaturedPlayListIcon/>, link: "/"},
+    {label:"Sign In", icon: <CreateIcon/>, link: "/signin"}
+]
+
+const buttons2 = [
     {label:"Posts", icon: <FeaturedPlayListIcon/>, link: "/"},
     {label:"Profile", icon: <AccountBoxIcon/>, link: "/profile/12"},
-    {label:"Sign In", icon: <CreateIcon/>, link: "/signin"},
+    {label:"Sign Out", icon: <PersonOutline/>, link: "/signout"}
 ]
 
 const Navbar = (props) => {
     const [page, changePage] = useState(0);
     const { currentUser, signout } = useAuth();
     const history = useHistory();
+
+    if (currentUser == null){
+        buttons = buttons1;
+    }
+    else{
+        buttons = buttons2;
+    }
+
 
     return (
         <header className={classes.Navbar}>
