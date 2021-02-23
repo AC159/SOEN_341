@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { useAuth } from '../../AuthProvider';
-import classes from '../Layout/Layout.module.css'
+import { useAuth } from '../../../AuthProvider';
+import classes from '../../Layout/Layout.module.css'
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
