@@ -15,12 +15,12 @@ import PersonOutline from '@material-ui/icons/PersonOutline';
 
 var buttons = []
 
-const buttons1 = [
+const buttonsNotSignedIn = [
     {label:"Posts", icon: <FeaturedPlayListIcon/>, link: "/"},
     {label:"Sign In", icon: <CreateIcon/>, link: "/signin"}
 ]
 
-const buttons2 = [
+const buttonsSignedIn = [
     {label:"Posts", icon: <FeaturedPlayListIcon/>, link: "/"},
     {label:"Profile", icon: <AccountBoxIcon/>, link: "/profile/12"},
     {label:"Sign Out", icon: <PersonOutline/>, link: "/signout"}
@@ -32,12 +32,11 @@ const Navbar = (props) => {
     const history = useHistory();
 
     if (currentUser == null){
-        buttons = buttons1;
+        buttons = buttonsNotSignedIn;
     }
     else{
-        buttons = buttons2;
+        buttons = buttonsSignedIn;
     }
-
 
     return (
         <header className={classes.Navbar}>

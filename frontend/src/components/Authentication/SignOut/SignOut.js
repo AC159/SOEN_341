@@ -14,7 +14,6 @@ function SignOut() {
     }).catch(e => {
         alert(e.message)
     });
-    history.push('/');
     return null
 }
 
