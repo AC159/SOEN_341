@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Link, useHistory } from 'react-router-dom';
-import { useAuth } from '../../AuthProvider';
+import { useAuth } from '../../../AuthProvider';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
@@ -11,7 +11,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import classes from '../Layout/Layout.module.css'
+import classes from '../../Layout/Layout.module.css'
 import axios from 'axios';
 
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -32,9 +32,11 @@ function SignUp() {
     const submitForm = async () => {
         signup(email, password).then(async () => {
             await axios.post('/users/signup', {
-                email,
-                name
-            })
+                email: email,
+                name: name
+            }).then(res => {
+                console.log(res);
+            });
             history.push('/')
         }).catch(e => {
             alert(e.message)
