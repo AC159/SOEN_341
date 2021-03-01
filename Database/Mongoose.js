@@ -4,7 +4,11 @@ require("dotenv").config({ path: ".env" })
 
 
 // This file contains the connection method to connect and save objects to the db
-mongoose.connect(process.env.MONGODB_CLUSTER_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_CLUSTER_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+})
     .then(() => {
       console.log(chalk.green('Successfully connected to cluster...'))
     })
