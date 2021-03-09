@@ -6,7 +6,7 @@ const bucket = gc.bucket(bucketName);
 const uploadImage = (image) => new Promise((resolve, reject) => {
 
     // Multer stores the image in req.file with upload.single('image')
-    console.log(image);
+    // console.log(image);
 
     // Multer stored the file (image) in a buffer
 
@@ -23,7 +23,7 @@ const uploadImage = (image) => new Promise((resolve, reject) => {
 
     stream.on('finish', () => {
 
-        resolve({ url: `https://storage.googleapis.com/${bucketName}/${gcsFileName}` });
+        resolve(`https://storage.googleapis.com/${bucketName}/${gcsFileName}`);
 
     });
 
@@ -32,6 +32,22 @@ const uploadImage = (image) => new Promise((resolve, reject) => {
 })
 
 
-module.exports = uploadImage;
+const deleteImage = (imageUrl) => new Promise((resolve, reject) => {
+
+    const filename = imageUrl.replace(`https://storage.googleapis.com/${bucketName}/`, '');
+    const file = bucket.file(filename);
+
+    console.log(filename);
+    file.delete().then((data) => {
+        resolve(data);
+    }).catch((error) => {
+        reject(error);
+    });
+
+})
+
+
+module.exports.uploadImage = uploadImage;
+module.exports.deleteImage = deleteImage;
 
 
