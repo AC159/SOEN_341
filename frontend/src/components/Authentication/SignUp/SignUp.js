@@ -30,10 +30,11 @@ function SignUp() {
     const { signup } = useAuth();
 
     const submitForm = async () => {
-        signup(email, password).then(async () => {
+        signup(email, password).then(async (userData) => {
             await axios.post('/users/signup', {
                 email: email,
-                name: name
+                name: name,
+                uid: userData.user.uid
             }).then(res => {
                 console.log(res);
             });
