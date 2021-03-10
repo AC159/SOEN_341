@@ -88,7 +88,7 @@ function Profile(props){
             changeFollowersFollowing(Numbers);
             changePictures(Display)
         }
-    }, [])
+    }, [currentUser, history])
 
     useEffect(() => {
         if (attributes === "");

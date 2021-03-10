@@ -27,15 +27,15 @@ function Posts(){
     const history = useHistory();
 
     useEffect(() => {
-        if (currentUser == null){
+        if (currentUser === null){
             history.push('/signin')
         } else {
             axios.get('/users')
             .then((res) => {
-            setPosts(res.data.users)
+            setPosts(res.data)
             });
         }
-    }, []);
+    }, [currentUser, history]);
 
 
     if (Posts === null)
@@ -43,9 +43,9 @@ function Posts(){
             <CircularProgress size='100px'/>
         </div>
 
-    const users = Posts.map((user, index) => {
+    const users = Posts === null ? Posts.map((user, index) => {
         return <Post key={index} name={user} source={source} profile={Image} likedBy={likedBy} comments={comments} />;
-    })
+    }) : []
     function getMoreItems(){
         if (Posts.length > 25)
             changeMoreItems(false)
