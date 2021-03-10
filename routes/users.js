@@ -44,8 +44,10 @@ router.post('/signup', async function (req, res) {
     }
 
     // Create new user:
+    console.log(req.body)
 
     const user = new User({
+      id: req.body.uid,
       email: req.body.email,
       name: req.body.name,
       images: [],
