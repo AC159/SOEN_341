@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "soen-341-instagram",
+  "private_key_id": "4b11e6b5c4e53d5922afe931ebc0c023a6539a81",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDWuglujMU6VldW\nF6jrgf6CQUBxqyVuNBsa1G9dHXitAsM1ggguT9C0ujm+hfYsZRLBh/JWzwHzAIyX\nRZ6f3kNsxTHu1rZmm8Z1Dkvxrg1WjEbTdl0G0l9hXr1s1BP9aUlLM0OGeZQowgCC\n9Y8FhKeZanWGl450WtwxOy2CfzGM2TFpxS0SvylOeihObjnEXBZDmtbGralPAV4D\nPd8TofJ0zpIEMZf7WvXb4paqAbjMNx7hJ7ldo6YalBHn7oRjmhCnx02/ElRYXMj4\n8W0G0pPY0vWgiWUzW1/NFpXyBaqDge9jwbZWmvZ6ZlxYuoaiSWHFsttMZ6wpHmQh\nIJ7+SMjdAgMBAAECggEAYTuP3s/+1WpYlQMUukQ8p+X9VRuPUQZmSbFtlkgsp4dr\nNvUhWDtLQjNbx5LoxPSl2B4D1lxZwRx8DVn4uOLQPFZVRJZUtUUPylzFdfR/VLQj\ntEjSWi70AucANuIYBTXiexuFFcVDGmuzCJpCf9iwfg+PlXlWiAjG0cI+2utW2DSD\nLxPRDmQi6cw1RKmluPEascxCngkD2QVk6ZPlbTfSD6wfrgArsBCFSL34+OTiN88x\nZIcsFrEPBwTwDak/XRl76UM0WHZfViJFdmGb+Q6l4X6gZS36ewJQxy/IPthosWWI\noX0BnfD3sDGumSmQ0VswFVW5VmmX5btDg+i6Hck1bwKBgQDye3gUbAP+dPEB/k/A\naQb6Ah095l2PzSYfhG1qLdVJXINsRUjEQVVkONoLo9rR03/+6B5PSs+7cPUCJsIe\nddVaBRgL2vp6pYei6TCkEPAUBMkucpesXOcQOfp94dKU6RIhbS9OJvnbvdkJRcJv\nvS2haKm2WsEP1zBZAuhLYeD5XwKBgQDisnXLVfcYqnyPFeECCUjNv4spsEe7q2Gw\n1E2YRN9oUdWD8/0dV4hqLF8QRJG2ePbPwAdpesCl1ie6bjLAUkRJ2cjQ+8d9L2el\nGKIenDDyq3FIRS0UHhovPR4OnKyQj4kO1mT4l3fkEwGpS7zbU4r+Oz951bBoUUx6\ncsKxb3WbQwKBgQDZGNplzl+1DpZJJpvYtS/d3s63gOz7tr0PMs2TZv2y9PVllpKT\nw7rkRFJUYZukiSvr2X5pl51tQLDcAD+EbhNayXzCAIiKDnHl1coK2m9YPQCyaT6K\nv5LQ4Ff5JJoZYKMu8kaMPjEuIEeVGbP/vux/uulXruFzgUJ0LzozY6q9GQKBgQCq\nOk/xzC+sOfkmiMtZeBdPSJH7T//NkLfezM0nljAcabbnSwO6UMyCzabk1FiGqPbM\nsene7upSnSlf+PfrKttUiVEefLIj8sDlXEYArlCjKNH77tYW0TPgXQiA+G0scFv+\n5EcV1MeWYB9TPSgnmeg5V8wmdKvu6X2ARUSlcIjjeQKBgQDjcIDwg/DfYO0tY5VE\nt+n31jy6+mJcN6Sfg3PGHHgfxMMQQhQvkWpC3mTDiYZVEbhbXXzGmazZ0Pktbns9\njfjasvwKWYAwjeLL7H2aNYnrDILH258bBGHws5fGQOIStcM1YpTqhbwm7CtuXY96\nv22IrHsS6MMG7p6IOUDWy3AUBQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "soen-341-pictures-692@soen-341-instagram.iam.gserviceaccount.com",
+  "client_id": "106771251480993455030",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/soen-341-pictures-692%40soen-341-instagram.iam.gserviceaccount.com"
+}
