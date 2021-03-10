@@ -6,6 +6,9 @@ import GridListTile from '@material-ui/core/GridListTile';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
+import { useAuth } from '../../AuthProvider';
+import { useHistory } from "react-router-dom";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const AccountName = "DummyName"
 const ProfilePictureSource = "https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg"
@@ -64,15 +67,28 @@ const Display = [
 ]
 
 function Profile(props){
-    const [picture, setPicture] = useState(ProfilePictureSource)
-    const [name, setName] = useState(AccountName)
-    const [folllowersFollowing, changeFollowersFollowing] = useState(Numbers);
-    const [pictures, changePictures] = useState(Display)
+    const [picture, setPicture] = useState(null)
+    const [name, setName] = useState(null)
+    const [folllowersFollowing, changeFollowersFollowing] = useState(null);
+    const [pictures, changePictures] = useState(null)
     const [open, setOpen] = useState(false)
     const [attributes, setAttributes] = useState("")
     const [inputBox, changeInputBox] = useState(false)
     const [comments, changeComments] = useState("")
     const [text, changeText] = useState("")
+    const { currentUser, signout } = useAuth();
+    const history = useHistory();
+
+    useEffect(() => {
+        if (currentUser == null){
+            history.push('/signin')
+        } else {
+            setName(AccountName);
+            setPicture(ProfilePictureSource);
+            changeFollowersFollowing(Numbers);
+            changePictures(Display)
+        }
+    }, [currentUser, history])
 
     useEffect(() => {
         if (attributes === "");
@@ -88,6 +104,10 @@ function Profile(props){
         changeComments(temp)
         changeText("")
     }
+    if (picture === null || name === null || folllowersFollowing == null || pictures == null)
+        return (<div className={classes.loading}>
+                <CircularProgress size='100px'/>
+            </div>)
 
     return(
         <div className={classes.ProfileContainer}>
