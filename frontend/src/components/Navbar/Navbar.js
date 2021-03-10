@@ -50,7 +50,6 @@ const Navbar = (props) => {
         );
 
     }
-
     return (
         <header className={classes.Navbar}>
 
