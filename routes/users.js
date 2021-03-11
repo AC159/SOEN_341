@@ -13,6 +13,10 @@ const upload = multer({
   },
 })
 
+router.get('/:uid/followers', async (req, res) => {
+  const users = await User.find({});
+  return res.json(users);
+})
 
 /* GET a user's information:
 *
@@ -23,8 +27,8 @@ const upload = multer({
 router.get('/:uid', async function(req, res) {
 
   // Fetch user here from database
-  const users = await User.findById(req.params.uid);
-  res.json(users);
+  const user = await User.findById(req.params.uid);
+  return res.json(user);
 });
 
 
@@ -49,6 +53,7 @@ router.post('/signup', async function (req, res) {
       _id: req.body.uid,
       email: req.body.email,
       name: req.body.name,
+      avatar: "",
       images: [],
       following: [],
       followers: []
