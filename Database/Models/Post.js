@@ -7,12 +7,14 @@ let PostSchema = new Schema({
     imageUrl: {
         type: String
     },
-    comments: [{
-        type: String
-    }],
+    comments: Array,
     likes: [{
         type: String
-    }]
+    }],
+    owner: {
+        type: String,
+        ref: 'User'
+    }
 });
 
 const Post = mongoose.model('Post', PostSchema);
