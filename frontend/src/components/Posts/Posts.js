@@ -22,6 +22,7 @@ const comments = [
 
 function Posts(){
     const [Posts, setPosts] = useState(null)
+    const [hiddenPosts, changeHiddenPosts] = useState(null);
     const [MoreItems, changeMoreItems] = useState(true)
     const { currentUser, signout } = useAuth();
     const history = useHistory();
@@ -29,35 +30,50 @@ function Posts(){
     useEffect(() => {
         if (currentUser === null){
             history.push('/signin')
-        } else {
-            axios.get('/users')
+        } else if(currentUser === undefined){
+            
+        }
+        else {
+            axios.get('/posts')
             .then((res) => {
-            setPosts(res.data)
+                if (res.data.length < 10){
+                    setPosts(res.data)
+                } else{
+                    changeHiddenPosts(res.data)
+                    setPosts(res.data.slice(0, 10))
+                }
             });
         }
     }, [currentUser, history]);
 
+    useEffect(() => {
+        if (Posts === null || hiddenPosts === null)
+            return
+         else if (hiddenPosts === null || hiddenPosts.length === Posts.length)
+            setTimeout(() => {
+                changeMoreItems(false)
+            } ,1000)
+    }, [Posts, hiddenPosts])
 
-    if (Posts === null)
+    if (Posts === null && hiddenPosts === null)
         return <div className="loading">
             <CircularProgress size='100px'/>
         </div>
 
-    const users = Posts === null ? Posts.map((user, index) => {
-        return <Post key={index} name={user} source={source} profile={Image} likedBy={likedBy} comments={comments} />;
+    const users = Posts !== null ? Posts.map((post, index) => {
+        return <Post key={post._id} name={post.name || "Placeholder"} source={post.imageUrl} profile={Image} likedBy={post.likes} comments={post.comments} user={currentUser.name} owner={post.owner}/>;
     }) : []
     function getMoreItems(){
-        if (Posts.length > 25)
+        if (hiddenPosts === null || hiddenPosts.length === Posts.length)
             changeMoreItems(false)
         else
-            setTimeout(() =>{
-                setPosts(Posts.concat(Posts))
-            },2000)
+            setPosts(hiddenPosts.slice(0, Posts.length + 10))
     }
+    
     return (
         <InfiniteScroll
             style={{paddingTop:'40px'}}
-            dataLength={Posts.length} 
+            dataLength={hiddenPosts === null ? Posts.length: hiddenPosts.length} 
             next={getMoreItems}
             hasMore={MoreItems}
             loader={<LinearProgress style={{ textAlign: 'center', marginBottom: '25px', marginLeft: '100px', marginRight: '100px' }}/>}
