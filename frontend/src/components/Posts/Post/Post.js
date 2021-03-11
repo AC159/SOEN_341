@@ -54,6 +54,7 @@ function Post(props){
                 </div>
             </div>
             <div className="Post-caption">
+                <h3>{props.caption}</h3>
                 <h4>{props.likedBy.length > 2 ? "Liked by " + props.likedBy[0] + ", " + props.likedBy[1] + "and many others" : props.likedBy.length === 0 ? "" : "Liked by " + props.likedBy.join(" ,")}</h4>
                 <Button variant="outlined" size="small"  style={{height: 40, marginLeft:'auto'}}>Like</Button>
                 <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
