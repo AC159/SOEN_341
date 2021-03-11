@@ -275,7 +275,7 @@ router.post('/like', async function (req, res) {
 
 /* POST request to follow a user:
 *
-* REQUEST PARAMS: req.body.name + req.body.usernameToFollow
+* REQUEST PARAMS: req.body.uid + req.body.following_uid
 *
 *  */
 
@@ -286,12 +286,12 @@ router.post('/follow', async function (req, res) {
     try {
 
       // Append to the 'following' field the name of the user the current user want to follow
-      let user = await User.findOneAndUpdate({ name: req.body.name },
-          { "$push": { following: req.body.usernameToFollow } }, { new: true });
+      let user = await User.findOneAndUpdate({ _id: req.body.uid },
+          { "$push": { following: req.body.following_uid } }, { new: true });
 
       // Append to the 'followers' field of the other (followed) user the name of the current user
-      let followedUser = await User.findOneAndUpdate({ name: req.body.usernameToFollow },
-          { "$push": { followers: req.body.name  }}, { new: true });
+      let followedUser = await User.findOneAndUpdate({ _id: req.body.following_uid },
+          { "$push": { followers: req.body.uid  }}, { new: true });
 
       res.status(200).json({
         user: user
@@ -300,6 +300,32 @@ router.post('/follow', async function (req, res) {
     } catch (error) {
       res.send(error);
     }
+
+})
+
+/* POST request to unfollow a user:
+*
+* REQUEST PARAMS: req.body.uid + req.body.following_uid
+*
+*  */
+
+router.post('/unfollow', async function (req, res) {
+
+  try {
+
+    await User.updateOne({ _id: req.body.uid },
+        { "$pullAll": { following: req.body.following_uid } });
+
+    await User.updateOne({ _id: req.body.following_uid },
+        { "$pullAll": { followers: req.body.uid  }}, { new: true });
+
+    res.status(200).json({
+      user: user
+    });
+
+  } catch (error) {
+    res.send(error);
+  }
 
 })
 
