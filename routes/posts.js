@@ -40,5 +40,9 @@ router.post('/new', upload.single('image'), async function(req, res, next) {
   
   });
 
+router.get('/', async (req, res) => {
+    const posts = await Post.find({});
+    return res.json(posts)
+})
   
 module.exports.router = router;
