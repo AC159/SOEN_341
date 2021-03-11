@@ -23,11 +23,12 @@ function Post(props){
             name: currentUser.uid,
             ImageOwnerName: props.owner,
           })
-        axios.post('/users/comment', {
+        axios.post('/posts/comment', {
             comment: text,
             imageUrl: props.source,
-            name: currentUser.uid,
-            ImageOwnerName: props.owner,
+            uid: currentUser.uid,
+            name: currentUser.name,
+            ImageOwnerName: props.owner
           })
           .then(function (response) {
             console.log(response);
