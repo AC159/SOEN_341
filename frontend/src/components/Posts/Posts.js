@@ -23,6 +23,7 @@ const comments = [
 function Posts(){
     const [Posts, setPosts] = useState(null)
     const [MoreItems, changeMoreItems] = useState(true)
+    const [currentUserName, changeCurrentUserName] = useState(null)
     const { currentUser, signout } = useAuth();
     const history = useHistory();
 
@@ -34,17 +35,25 @@ function Posts(){
             .then((res) => {
             setPosts(res.data)
             });
+
+            axios.get('/users/' + currentUser.uid)
+            .then(function (response) {
+                changeCurrentUserName(response.data.name)
+            })
+            .catch(function (error) {
+            console.log(error);
+            })
         }
     }, [currentUser, history]);
 
 
-    if (Posts === null)
+    if (Posts === null || currentUserName === null)
         return <div className="loading">
             <CircularProgress size='100px'/>
         </div>
 
     const users = Posts === null ? Posts.map((user, index) => {
-        return <Post key={index} name={user} source={source} profile={Image} likedBy={likedBy} comments={comments} />;
+        return <Post key={index} name={user} source={source} profile={Image} likedBy={likedBy} comments={comments} user={currentUserName}/>;
     }) : []
     function getMoreItems(){
         if (Posts.length > 25)

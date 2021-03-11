@@ -107,7 +107,7 @@ function Profile(props){
 
     function postComment(){
         let temp = comments
-        temp.push({id: "10", person: "currentUser", content: text})
+        temp.push({id: comments[comments.length - 1].id + 1, person: {name}, content: text})
         changeComments(temp)
         changeText("")
     }
