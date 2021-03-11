@@ -37,8 +37,8 @@ function SignUp() {
                 uid: userData.user.uid
             }).then(res => {
                 console.log(res);
+                history.push('/')
             });
-            history.push('/')
         }).catch(e => {
             console.log(e.message)
         });
