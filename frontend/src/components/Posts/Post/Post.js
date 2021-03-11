@@ -1,31 +1,56 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import './Post.css';
-import Image from '../../../assets/images/anonymous.jpg';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import useAuth from "../../../AuthProvider"
 
-class Post extends Component {
+function Post(props){
+    const [inputBox, changeInputBox] = useState(false)
+    const [comments, changeComments] = useState(props.comments)
+    const [text, changeText] = useState("")
+    // const { currentUser } = useAuth();
 
-    render() {
+
+    function postComment(){
+        let temp = comments
+        temp.push({id: "10", person: "currentUser", content: text})
+        changeComments(temp)
+        changeText("")
+    }
+
         return <article className="Post">
-            <header>
+            {props.modal ? null: <header>
                 <div className="Post-user">
                     <div className="Post-user-avatar">
-                        <img src={Image} alt="Anonymous"/>
+                        <img src={props.profile} alt="Anonymous"/>
                     </div>
                     <div className="Post-user-nickname">
-                        <span>{this.props.name}</span>
+                        <span>{props.name}</span>
                     </div>
                 </div>
-            </header>
+            </header>}
             <div className="Post-image">
                 <div className="Post-image-bg">
-                    <img src={Image} alt="Anonymous"/>
+                    <img src={props.source} alt="Anonymous"/>
                 </div>
             </div>
             <div className="Post-caption">
-                <strong>Comments</strong>
-                <button className="comment-button">Leave a comment</button>
+                <h4>Liked by {props.likedBy}</h4>
+                <Button variant="outlined" size="small"  style={{height: 40, marginLeft:'auto'}}>Like</Button>
+                <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
             </div>
+            {inputBox ? <div className = "Post-Comments">
+                {comments.map((item, index) => {
+                    if (comments.length - index < 6)
+                        return(
+                            <p className="Post-comments"><b>{item.person}</b>{item.content}</p>
+                        )
+                })}
+                <div className="Post-comment">
+                    <TextField id="outlined-basic" label="Comment..." variant="outlined" style={{width: "85%"}} value={text} onChange={(event) => changeText(event.target.value)}/>
+                    <Button disabled={text === ""} variant="outlined" onClick={postComment} style={{width: "15%"}} >Post</Button>
+                </div>
+            </div>: null}
         </article>;
-    }
 }
 export default Post;
