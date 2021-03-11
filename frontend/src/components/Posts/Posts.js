@@ -6,6 +6,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import '../Posts/Post/Post.css'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { useAuth } from '../../AuthProvider';
+import { useHistory } from "react-router-dom";
 
 const source = 'https://i.ytimg.com/vi/nVDxiLBjMuM/maxresdefault.jpg'
 const likedBy = "Bob, John, and 12 others"
@@ -21,21 +23,29 @@ const comments = [
 function Posts(){
     const [Posts, setPosts] = useState(null)
     const [MoreItems, changeMoreItems] = useState(true)
+    const { currentUser, signout } = useAuth();
+    const history = useHistory();
+
     useEffect(() => {
-        axios.get('/users')
-        .then((res) => {
-            setPosts(res.data.users)
+        if (currentUser === null){
+            history.push('/signin')
+        } else {
+            axios.get('/users')
+            .then((res) => {
+            setPosts(res.data)
             });
-    }, []);
+        }
+    }, [currentUser, history]);
+
 
     if (Posts === null)
         return <div className="loading">
             <CircularProgress size='100px'/>
         </div>
 
-    const users = Posts.map((user, index) => {
+    const users = Posts === null ? Posts.map((user, index) => {
         return <Post key={index} name={user} source={source} profile={Image} likedBy={likedBy} comments={comments} />;
-    })
+    }) : []
     function getMoreItems(){
         if (Posts.length > 25)
             changeMoreItems(false)
@@ -47,7 +57,7 @@ function Posts(){
     return (
         <InfiniteScroll
             style={{paddingTop:'40px'}}
-            dataLength={Posts.length} //This is important field to render the next data
+            dataLength={Posts.length} 
             next={getMoreItems}
             hasMore={MoreItems}
             loader={<LinearProgress style={{ textAlign: 'center', marginBottom: '25px', marginLeft: '100px', marginRight: '100px' }}/>}
