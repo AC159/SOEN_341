@@ -13,6 +13,10 @@ const upload = multer({
   },
 })
 
+router.get('/:uid/followers', async (req, res) => {
+  const users = await User.find({});
+  return res.json(users);
+})
 
 /* GET a user's information:
 *
@@ -23,8 +27,8 @@ const upload = multer({
 router.get('/:uid', async function(req, res) {
 
   // Fetch user here from database
-  const users = await User.findById(req.params.uid);
-  res.json(users);
+  const user = await User.findById(req.params.uid);
+  return res.json(user);
 });
 
 
@@ -49,6 +53,7 @@ router.post('/signup', async function (req, res) {
       _id: req.body.uid,
       email: req.body.email,
       name: req.body.name,
+      avatar: "",
       images: [],
       following: [],
       followers: []
@@ -73,20 +78,13 @@ router.post('/signup', async function (req, res) {
 
 // The 'name' property of the html "input" element must be named "image" and it will be stored in "req.file":
 router.post('/images', upload.single('image'), async function(req, res, next) {
-
-  if (!req.body.name) {
-    res.status(401).json({ error: "Not Authorized. Authentication required." });
-  }
-
   try {
 
     // Upload the image to google cloud and returns a public image url
     const imageUrl = await cloudHelpers.uploadImage(req.file);
 
-    const filter = { "name": req.body.name };
-
     // Update user (append the new imageUrl to the images array)
-    let user = await User.findOneAndUpdate(filter, { "$push": { images: { imageUrl: imageUrl, comments: [], likes: [] }}}, { new: true });
+    let user = await User.findByIdAndUpdate(req.body.uid, { "$push": { images: { imageUrl: imageUrl, comments: [], likes: [] }}}, { new: true });
 
     res.status(200).json({
       user: user, // return updated user object
