@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 const cloudHelpers = require('../cloudStorage/helpers');
+const Post = require('../Database/Models/Post');
 const User = require('../Database/Models/User.js');
 
 
@@ -13,6 +14,10 @@ const upload = multer({
   },
 })
 
+router.get('/:uid/followers', async (req, res) => {
+  const users = await User.find({});
+  return res.json(users);
+})
 
 /* GET a user's information:
 *
@@ -20,12 +25,11 @@ const upload = multer({
 *
 *  */
 
-router.get('/', async function(req, res) {
+router.get('/:uid', async function(req, res) {
 
   // Fetch user here from database
-  const users = await User.find({});
-  res.json(users);
-
+  const user = await User.findById(req.params.uid);
+  return res.json(user);
 });
 
 
@@ -47,9 +51,10 @@ router.post('/signup', async function (req, res) {
     console.log(req.body)
 
     const user = new User({
-      id: req.body.uid,
+      _id: req.body.uid,
       email: req.body.email,
       name: req.body.name,
+      avatar: "",
       images: [],
       following: [],
       followers: []
@@ -71,78 +76,6 @@ router.post('/signup', async function (req, res) {
 * REQUEST PARAMS: req.body.name + image file with name 'image'
 *
 *  */
-
-// The 'name' property of the html "input" element must be named "image" and it will be stored in "req.file":
-router.post('/images', upload.single('image'), async function(req, res, next) {
-
-  if (!req.body.name) {
-    res.status(401).json({ error: "Not Authorized. Authentication required." });
-  }
-
-  try {
-
-    // Upload the image to google cloud and returns a public image url
-    const imageUrl = await cloudHelpers.uploadImage(req.file);
-
-    const filter = { "name": req.body.name };
-
-    // Update user (append the new imageUrl to the images array)
-    let user = await User.findOneAndUpdate(filter, { "$push": { images: { imageUrl: imageUrl, comments: [], likes: [] }}}, { new: true });
-
-    res.status(200).json({
-      user: user, // return updated user object
-      message: "Upload was successful!",
-      data: imageUrl // New image url
-    });
-
-  } catch (error) {
-    res.send(error);
-  }
-
-});
-
-
-/* DELETE an image for a user:
-*
-* REQUEST PARAMS: req.body.name + req.body.imageUrl
-*
-*  */
-
-router.delete('/images', async function (req, res) {
-
-  try {
-
-    if (!req.body.name) {
-      res.status(401).json({ error: "Not Authorized. Authentication required." });
-    }
-
-    // Delete user image in mongodb
-    User.findOne({ name: req.body.name }, async function (error, user) {
-
-      for (let i = 0; i < user.images.length; i++) {
-        if (user.images[i].imageUrl === req.body.imageUrl) {
-          user.images.splice(i, 1); // Delete the image from user object
-          break;
-        }
-      }
-
-      const response = await User.replaceOne({ name: req.body.name }, user);
-
-      // Delete the image in google cloud bucket
-      const data = await cloudHelpers.deleteImage(req.body.imageUrl);
-
-      res.status(200).json({
-        user: user, // return updated user object
-        data: data
-      });
-
-    });
-
-  } catch (error) {
-    res.send(error);
-  }
-
-})
 
 
 
@@ -278,7 +211,7 @@ router.post('/like', async function (req, res) {
 
 /* POST request to follow a user:
 *
-* REQUEST PARAMS: req.body.name + req.body.usernameToFollow
+* REQUEST PARAMS: req.body.uid + req.body.following_uid
 *
 *  */
 
@@ -289,12 +222,12 @@ router.post('/follow', async function (req, res) {
     try {
 
       // Append to the 'following' field the name of the user the current user want to follow
-      let user = await User.findOneAndUpdate({ name: req.body.name },
-          { "$push": { following: req.body.usernameToFollow } }, { new: true });
+      let user = await User.findOneAndUpdate({ _id: req.body.uid },
+          { "$push": { following: req.body.following_uid } }, { new: true });
 
       // Append to the 'followers' field of the other (followed) user the name of the current user
-      let followedUser = await User.findOneAndUpdate({ name: req.body.usernameToFollow },
-          { "$push": { followers: req.body.name  }}, { new: true });
+      let followedUser = await User.findOneAndUpdate({ _id: req.body.following_uid },
+          { "$push": { followers: req.body.uid  }}, { new: true });
 
       res.status(200).json({
         user: user
@@ -303,6 +236,32 @@ router.post('/follow', async function (req, res) {
     } catch (error) {
       res.send(error);
     }
+
+})
+
+/* POST request to unfollow a user:
+*
+* REQUEST PARAMS: req.body.uid + req.body.following_uid
+*
+*  */
+
+router.post('/unfollow', async function (req, res) {
+
+  try {
+
+    await User.updateOne({ _id: req.body.uid },
+        { "$pullAll": { following: req.body.following_uid } });
+
+    await User.updateOne({ _id: req.body.following_uid },
+        { "$pullAll": { followers: req.body.uid  }}, { new: true });
+
+    res.status(200).json({
+      user: user
+    });
+
+  } catch (error) {
+    res.send(error);
+  }
 
 })
 

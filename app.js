@@ -8,6 +8,7 @@ require('./Database/Mongoose.js');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users').router;
+const postsRouter = require('./routes/posts').router;
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 
 app.use('/users', usersRouter);
+app.use('/posts', postsRouter);
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'/frontend/build/index.html'));
 })
