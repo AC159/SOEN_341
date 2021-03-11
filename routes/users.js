@@ -78,20 +78,13 @@ router.post('/signup', async function (req, res) {
 
 // The 'name' property of the html "input" element must be named "image" and it will be stored in "req.file":
 router.post('/images', upload.single('image'), async function(req, res, next) {
-
-  if (!req.body.name) {
-    res.status(401).json({ error: "Not Authorized. Authentication required." });
-  }
-
   try {
 
     // Upload the image to google cloud and returns a public image url
     const imageUrl = await cloudHelpers.uploadImage(req.file);
 
-    const filter = { "name": req.body.name };
-
     // Update user (append the new imageUrl to the images array)
-    let user = await User.findOneAndUpdate(filter, { "$push": { images: { imageUrl: imageUrl, comments: [], likes: [] }}}, { new: true });
+    let user = await User.findByIdAndUpdate(req.body.uid, { "$push": { images: { imageUrl: imageUrl, comments: [], likes: [] }}}, { new: true });
 
     res.status(200).json({
       user: user, // return updated user object

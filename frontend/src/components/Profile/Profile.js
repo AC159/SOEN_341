@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import { useAuth } from '../../AuthProvider';
 import { useHistory } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import axios from 'axios'
 
 const AccountName = "DummyName"
 const ProfilePictureSource = "https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg"
@@ -83,10 +84,16 @@ function Profile(props){
         if (currentUser == null){
             history.push('/signin')
         } else {
-            setName(AccountName);
-            setPicture(ProfilePictureSource);
-            changeFollowersFollowing(Numbers);
-            changePictures(Display)
+            axios.get('/users/' + currentUser.uid)
+            .then(function (response) {
+                setName(response.data.name);
+                changeFollowersFollowing({"followers": response.data.followers.length, "following": response.data.following.length})
+                changePictures(response.data.images)
+                setPicture(response.data.avatar);
+            })
+            .catch(function (error) {
+            console.log(error);
+            })
         }
     }, [currentUser, history])
 

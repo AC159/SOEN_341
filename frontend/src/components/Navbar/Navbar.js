@@ -30,13 +30,13 @@ const Navbar = (props) => {
         else {
             const buttonsSignedIn = [
                 { label: "Posts", icon: <FeaturedPlayListIcon />, link: "/" },
-                { label: "Profile", icon: <AccountBoxIcon />, link: "/profile/12" },
+                { label: "Profile", icon: <AccountBoxIcon />, link: "/profile/" + currentUser.uid},
                 { label: "Sign Out", icon: <PersonOutline />, link: "/signout" }
             ];
             return buttonsSignedIn;
         }
     }
-
+    console.log(currentUser)
     function Upload() {
         if (currentUser == null) {
             return (
@@ -46,7 +46,7 @@ const Navbar = (props) => {
             );
         }
         return (
-            <UploadButton />
+            <UploadButton currentUser={currentUser} />
         );
 
     }
