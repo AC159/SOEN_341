@@ -3,6 +3,8 @@ var router = express.Router();
 const multer = require('multer');
 const uploadImage = require('../cloudStorage/helpers');
 const bcrypt = require('bcryptjs');
+const User = require('../Database/Models/User.js');
+
 
 // Middleware to check for image size an
 const upload = multer({
@@ -27,6 +29,32 @@ router.get('/', function(req, res) {
 });
 
 
+//  Route to save users to database
+router.post('/signup', async function (req, res) {
+
+    // Create new user:
+
+    const user = new User({
+      email: req.body.email,
+      name: req.body.name,
+      images: [],
+      follows: [],
+      followers: [],
+      likes: []
+    });
+
+    try {
+
+      await user.save();
+      res.status(201).send({ user });
+
+    } catch (error) {
+      res.status(400).send({ error });
+    }
+
+})
+
+
 // The 'name' property of the html "input" element must be named "image" and it will be stored in "req.file":
 router.post('/images', upload.single('image'), async function(req, res, next) {
 
@@ -48,7 +76,6 @@ router.post('/images', upload.single('image'), async function(req, res, next) {
 });
 
 
-<<<<<<< HEAD
 // Users that aren't logged in are routed to /signup when they click Sign Up in the nav bar
 // They are asked for their email, a password, and a confirmation of that password
 router.post('/signup', function(req, res) {
@@ -62,8 +89,8 @@ router.post('/signup', function(req, res) {
     req.checkBody('confirmPassword', 'Required; Passwords must match').equals(req.body.password);
 
     let newUser = new User({
-      id:password;
-      password:password;
+      id:password,
+      password:password
     });
 
     bcrypt.getSalt(10, function (salt) {
@@ -83,7 +110,5 @@ router.post('/signup', function(req, res) {
 });
 
 
-=======
->>>>>>> b4465ea17e0322fe0c7759bd7aad432a9516d460
 module.exports.router = router;
 
