@@ -90,7 +90,7 @@ function Profile(props){
             axios.get('/users/' + params.id)
             .then(function (response) {
                 setName(response.data.name);
-                changeFollowersFollowing({"followers": response.data.followers.length, "following": response.data.following.length})
+                changeFollowersFollowing({"followers": response.data.followers, "following": response.data.following})
                 changePictures(response.data.images)
                 setPicture(response.data.avatar);
             })
@@ -110,13 +110,47 @@ function Profile(props){
 
     function postComment(){
         let temp = comments
-        temp.push({id: comments[comments.length - 1].id + 1, person: {name}, content: text})
+        temp.push({id: comments.length + 1, person: {name}, content: text})
         changeComments(temp)
         changeText("")
+        axios.post('/users/comment', {
+            comment: text,
+            imageUrl: attributes.getNamedItem("src").value,
+            name: currentUser.uid,
+            ImageOwnerName: params.id,
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     }
 
     function TryFollow(){
-        
+        if (folllowersFollowing.followers.includes(currentUser.uid)){
+            axios.post('/users/unfollow', {
+                uid: currentUser.uid,
+                following_uid: params.id,
+              })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+        } else {
+            axios.post('/users/follow', {
+                uid: currentUser.uid,
+                following_uid: params.id,
+              })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+        }
     }
 
     if (picture === null || name === null || folllowersFollowing == null || pictures == null)
@@ -136,12 +170,12 @@ function Profile(props){
                         </td>
                     </tr>
                     <tr>
-                        <td><p className={classes.ProfileStats}>Followers: {folllowersFollowing.followers}</p></td>
-                        <td><p className={classes.ProfileStats}>Followers: {folllowersFollowing.following}</p></td>
+                        <td><p className={classes.ProfileStats}>Followers: {folllowersFollowing.followers.length}</p></td>
+                        <td><p className={classes.ProfileStats}>Following: {folllowersFollowing.following.length}</p></td>
                     </tr>
                     </tbody>
                 </table>
-                <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>
+                {currentUser.uid === params.id ? <div></div>: <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>}
             </div>
             <GridList cellHeight={250} style={{width: "100%"}} cols={3}>
                 {pictures.map((tile) => (<GridListTile key={tile.id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => setAttributes(event.target.attributes)}>
