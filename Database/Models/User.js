@@ -8,7 +8,10 @@ let UserSchema = new Schema({
     avatar: {type: String},
     email: {type: String, required: true},
     name: {type: String, required: true, unique: true},
-    images: Array,
+    images: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Post'
+    }],
     following: Array,
     followers: Array,
 });

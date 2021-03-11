@@ -36,7 +36,6 @@ const Navbar = (props) => {
             return buttonsSignedIn;
         }
     }
-    console.log(currentUser)
     function Upload() {
         if (currentUser == null) {
             return (

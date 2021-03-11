@@ -28,9 +28,12 @@ function Posts(){
     const history = useHistory();
 
     useEffect(() => {
-        if (currentUser == null){
+        if (currentUser === null){
             history.push('/signin')
-        } else {
+        } else if(currentUser === undefined){
+            
+        }
+        else {
             axios.get('/users/')
             .then((res) => {
             setPosts(res.data)
