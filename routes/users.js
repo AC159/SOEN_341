@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 const cloudHelpers = require('../cloudStorage/helpers');
+const Post = require('../Database/Models/Post');
 const User = require('../Database/Models/User.js');
 
 
@@ -84,7 +85,13 @@ router.post('/images', upload.single('image'), async function(req, res, next) {
     const imageUrl = await cloudHelpers.uploadImage(req.file);
 
     // Update user (append the new imageUrl to the images array)
-    let user = await User.findByIdAndUpdate(req.body.uid, { "$push": { images: { imageUrl: imageUrl, comments: [], likes: [] }}}, { new: true });
+    let post = new Post({
+      imageUrl,
+      comments: [],
+      likes: []
+    })
+    await post.save();
+    let user = await User.findByIdAndUpdate(req.body.uid, { "$push": { images: post._id}}, { new: true });
 
     res.status(200).json({
       user: user, // return updated user object
