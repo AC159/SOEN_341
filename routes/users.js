@@ -20,12 +20,11 @@ const upload = multer({
 *
 *  */
 
-router.get('/', async function(req, res) {
+router.get('/:uid', async function(req, res) {
 
   // Fetch user here from database
-  const users = await User.find({});
+  const users = await User.findById(req.params.uid);
   res.json(users);
-
 });
 
 
@@ -47,7 +46,7 @@ router.post('/signup', async function (req, res) {
     console.log(req.body)
 
     const user = new User({
-      id: req.body.uid,
+      _id: req.body.uid,
       email: req.body.email,
       name: req.body.name,
       images: [],
