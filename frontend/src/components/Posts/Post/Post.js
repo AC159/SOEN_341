@@ -8,12 +8,11 @@ function Post(props){
     const [inputBox, changeInputBox] = useState(false)
     const [comments, changeComments] = useState(props.comments)
     const [text, changeText] = useState("")
-    // const { currentUser } = useAuth();
 
 
     function postComment(){
         let temp = comments
-        temp.push({id: "10", person: "currentUser", content: text})
+        temp.push({id: comments[comments.length-1].id + 1, person: props.user, content: text})
         changeComments(temp)
         changeText("")
     }
