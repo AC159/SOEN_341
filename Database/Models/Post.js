@@ -14,6 +14,9 @@ let PostSchema = new Schema({
     owner: {
         type: String,
         ref: 'User'
+    },
+    caption: {
+        type: String,
     }
 });
 

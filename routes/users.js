@@ -78,49 +78,6 @@ router.post('/signup', async function (req, res) {
 *  */
 
 
-/* DELETE an image for a user:
-*
-* REQUEST PARAMS: req.body.name + req.body.imageUrl
-*
-*  */
-
-router.delete('/images', async function (req, res) {
-
-  try {
-
-    if (!req.body.name) {
-      res.status(401).json({ error: "Not Authorized. Authentication required." });
-    }
-
-    // Delete user image in mongodb
-    User.findOne({ name: req.body.name }, async function (error, user) {
-
-      for (let i = 0; i < user.images.length; i++) {
-        if (user.images[i].imageUrl === req.body.imageUrl) {
-          user.images.splice(i, 1); // Delete the image from user object
-          break;
-        }
-      }
-
-      const response = await User.replaceOne({ name: req.body.name }, user);
-
-      // Delete the image in google cloud bucket
-      const data = await cloudHelpers.deleteImage(req.body.imageUrl);
-
-      res.status(200).json({
-        user: user, // return updated user object
-        data: data
-      });
-
-    });
-
-  } catch (error) {
-    res.send(error);
-  }
-
-})
-
-
 
 // Route to post a profile picture
 /* POST an avatar for a user:

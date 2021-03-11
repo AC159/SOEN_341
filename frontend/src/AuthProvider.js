@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
 import { auth } from './firebase';
 
@@ -23,12 +24,19 @@ function AuthProvider({children}) {
     }
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
+        const unsubscribe = auth.onAuthStateChanged(async user => {
+            if(user && user.uid) {
+                const res = await axios.get(`/users/${user.uid}`);
+                user = {
+                    ...user,
+                    ...res.data
+                };
+            }
             setCurrentUser(user);
         })
 
         return unsubscribe;
-    })
+    }, [])
 
     const value = {
         currentUser,
