@@ -46,7 +46,7 @@ const Navbar = (props) => {
             );
         }
         return (
-            <UploadButton />
+            <UploadButton currentUser={currentUser} />
         );
 
     }
