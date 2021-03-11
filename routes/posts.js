@@ -41,6 +41,43 @@ router.post('/new', upload.single('image'), async function(req, res, next) {
   
   });
 
+/* POST a comment for an image:
+*
+* REQUEST PARAMS: req.body.imageUrl + req.body.comment + req.body.ImageOwnerName + req.body.name
+*
+* req.body.ImageOwnerName is the name of the OWNER OF THE PICTURE, NOT the person who comments
+* req.body.name is the username of the person who comments
+*  */
+
+router.post('/comment', async function (req, res) {
+
+  try {
+
+    if (!req.body.ImageOwnerName) {
+      res.status(401).json({ error: "Not Authorized. Authentication required." });
+    }
+
+    // Find the user of the picture that was commented on
+    await Post.findOne({"imageUrl": req.body.imageUrl} , async function (error, image) {
+
+      if (error) {
+        res.status(404).send(error);
+      }
+      image.comments.push({ person: req.body.name, content: req.body.comment, uid: req.body.uid});
+      await Post.replaceOne({ "imageUrl": req.body.imageUrl }, image);
+
+      res.status(200).json({
+        image: image // return updated image object
+      });
+
+    });
+
+  } catch (error) {
+    res.send(error);
+  }
+
+})
+
   /* DELETE an image for a user:
 *
 * REQUEST PARAMS: req.body.name + req.body.imageUrl
