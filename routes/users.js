@@ -116,52 +116,6 @@ router.post('/avatar', upload.single('avatar'), async function(req, res, next) {
 });
 
 
-
-/* POST a comment for an image:
-*
-* REQUEST PARAMS: req.body.imageUrl + req.body.comment + req.body.ImageOwnerName + req.body.name
-*
-* req.body.ImageOwnerName is the name of the OWNER OF THE PICTURE, NOT the person who comments
-* req.body.name is the username of the person who comments
-*  */
-
-router.post('/comment', async function (req, res) {
-
-  try {
-
-    if (!req.body.ImageOwnerName) {
-      res.status(401).json({ error: "Not Authorized. Authentication required." });
-    }
-
-    // Find the user of the picture that was commented on
-    await User.findOne({ "name": req.body.ImageOwnerName }, async function (error, user) {
-
-      if (error) {
-        res.status(404).send(error);
-      }
-
-      // Append the comment to the corresponding image
-      for (let i = 0; i < user.images.length; i++) {
-          if (user.images[i].imageUrl === req.body.imageUrl) {
-            user.images[i].comments.push({ username: req.body.name, comment: req.body.comment});
-          }
-        }
-
-      const response = await User.replaceOne({ "name": req.body.ImageOwnerName }, user);
-
-      res.status(200).json({
-        user: user // return updated user object
-      });
-
-    });
-
-  } catch (error) {
-    res.send(error);
-  }
-
-})
-
-
 /* POST a like for an image:
 *
 * REQUEST PARAMS: req.body.imageUrl + req.body.ImageOwnerName + req.body.name
