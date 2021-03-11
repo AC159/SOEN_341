@@ -23,7 +23,8 @@ router.post('/new', upload.single('image'), async function(req, res, next) {
         imageUrl,
         comments: [],
         likes: [],
-        owner: req.body.uid
+        owner: req.body.uid,
+        caption: req.body.caption
       })
       await post.save();
       let user = await User.findByIdAndUpdate(req.body.uid, { "$push": { images: post._id}}, { new: true });
@@ -39,6 +40,44 @@ router.post('/new', upload.single('image'), async function(req, res, next) {
     }
   
   });
+
+  /* DELETE an image for a user:
+*
+* REQUEST PARAMS: req.body.name + req.body.imageUrl
+*
+*  */
+
+router.delete('/:id', async function (req, res) {
+
+    try {
+      // Delete user image in mongodb
+      const post = await Post.findById(req.params.id);
+      User.findOne({ _id: post.owner }, async function (error, user) {
+  
+        for (let i = 0; i < user.images.length; i++) {
+          if (user.images[i] === req.params.id) {
+            user.images.splice(i, 1); // Delete the image from user object
+            break;
+          }
+        }
+  
+        const response = await User.replaceOne({ _id: post.owner }, user);
+  
+        // Delete the image in google cloud bucket
+        const data = await cloudHelpers.deleteImage(req.body.imageUrl);
+  
+        res.status(200).json({
+          user: user, // return updated user object
+          data: data
+        });
+  
+      });
+  
+    } catch (error) {
+      res.send(error);
+    }
+  
+  })
 
 router.get('/', async (req, res) => {
     const posts = await Post.find({});
