@@ -1,6 +1,8 @@
 .idea
 node_modules
-.env
+frontend/.env
 /frontend/.eslintcache
+.eslintcache
+.env
 /frontend/build
-/config/google_cloud_api_key.json
+/config/google_cloud_api_key_2.json
