@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 const cloudHelpers = require('../cloudStorage/helpers');
+const Post = require('../Database/Models/Post');
 const User = require('../Database/Models/User.js');
 
 
@@ -75,28 +76,6 @@ router.post('/signup', async function (req, res) {
 * REQUEST PARAMS: req.body.name + image file with name 'image'
 *
 *  */
-
-// The 'name' property of the html "input" element must be named "image" and it will be stored in "req.file":
-router.post('/images', upload.single('image'), async function(req, res, next) {
-  try {
-
-    // Upload the image to google cloud and returns a public image url
-    const imageUrl = await cloudHelpers.uploadImage(req.file);
-
-    // Update user (append the new imageUrl to the images array)
-    let user = await User.findByIdAndUpdate(req.body.uid, { "$push": { images: { imageUrl: imageUrl, comments: [], likes: [] }}}, { new: true });
-
-    res.status(200).json({
-      user: user, // return updated user object
-      message: "Upload was successful!",
-      data: imageUrl // New image url
-    });
-
-  } catch (error) {
-    res.send(error);
-  }
-
-});
 
 
 /* DELETE an image for a user:

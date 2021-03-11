@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import { useAuth } from '../../AuthProvider';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams  } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios'
 
@@ -79,12 +79,15 @@ function Profile(props){
     const [text, changeText] = useState("")
     const { currentUser, signout } = useAuth();
     const history = useHistory();
+    const params = useParams();
 
     useEffect(() => {
-        if (currentUser == null){
+        if (currentUser === null){
             history.push('/signin')
+        } else if (currentUser === undefined){
+
         } else {
-            axios.get('/users/' + currentUser.uid)
+            axios.get('/users/' + params.id)
             .then(function (response) {
                 setName(response.data.name);
                 changeFollowersFollowing({"followers": response.data.followers.length, "following": response.data.following.length})
@@ -95,7 +98,7 @@ function Profile(props){
             console.log(error);
             })
         }
-    }, [currentUser, history])
+    }, [currentUser, history, params.id])
 
     useEffect(() => {
         if (attributes === "");
@@ -111,6 +114,11 @@ function Profile(props){
         changeComments(temp)
         changeText("")
     }
+
+    function TryFollow(){
+        
+    }
+
     if (picture === null || name === null || folllowersFollowing == null || pictures == null)
         return (<div className={classes.loading}>
                 <CircularProgress size='100px'/>
@@ -133,7 +141,7 @@ function Profile(props){
                     </tr>
                     </tbody>
                 </table>
-                <div> <Button variant="outlined" onClick={() => console.log("Followed")}>Follow</Button></div>
+                <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>
             </div>
             <GridList cellHeight={250} style={{width: "100%"}} cols={3}>
                 {pictures.map((tile) => (<GridListTile key={tile.id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => setAttributes(event.target.attributes)}>
