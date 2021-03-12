@@ -174,15 +174,20 @@ router.post('/follow', async function (req, res) {
     try {
 
       // Append to the 'following' field the name of the user the current user want to follow
-      let user = await User.findOneAndUpdate({ _id: req.body.uid },
+      await User.findOneAndUpdate({ _id: req.body.uid },
           { "$addToSet": { following: req.body.following_uid } }, { new: true });
 
+      let user = await User.findOne({ _id: req.body.uid });
+
       // Append to the 'followers' field of the other (followed) user the name of the current user
-      let followedUser = await User.findOneAndUpdate({ _id: req.body.following_uid },
+      await User.findOneAndUpdate({ _id: req.body.following_uid },
           { "$addToSet": { followers: req.body.uid  }}, { new: true });
 
+      let followedUser = await User.findOne({ _id: req.body.following_uid });
+
       res.status(200).json({
-        user: user
+        user: user,
+        followedUser: followedUser
       });
 
     } catch (error) {
@@ -201,14 +206,19 @@ router.post('/unfollow', async function (req, res) {
 
   try {
 
-    const current_user = await User.updateOne({ _id: req.body.uid },
+    await User.updateOne({ _id: req.body.uid },
         { "$pullAll": { following: [req.body.following_uid] } });
 
-    const followed_user = await User.updateOne({ _id: req.body.following_uid },
+    let user = await User.findOne({ _id: req.body.uid });
+
+    await User.updateOne({ _id: req.body.following_uid },
         { "$pullAll": { followers: [req.body.uid] }}, { new: true });
 
+    let followedUser = await User.findOne({ _id: req.body.following_uid });
+
     res.status(200).json({
-      user: current_user
+      user: user,
+      followedUser: followedUser
     });
 
   } catch (error) {
