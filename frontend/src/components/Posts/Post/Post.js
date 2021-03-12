@@ -7,9 +7,10 @@ import axios from 'axios'
 import { useAuth } from '../../../AuthProvider';
 
 function Post(props){
-    const [inputBox, changeInputBox] = useState(false)
-    const [comments, changeComments] = useState(props.comments)
-    const [text, changeText] = useState("")
+    const [inputBox, changeInputBox] = useState(false);
+    const [comments, changeComments] = useState(props.comments);
+    const [like, setLike] = useState(props.likedby);
+    const [text, changeText] = useState("");
     const { currentUser, signout } = useAuth();
 
     function postComment(){
@@ -38,6 +39,19 @@ function Post(props){
           });
     }
 
+    const postLike = (postID) => {
+        axios.post('/posts/like', {
+            uid: currentUser.uid,
+            name: currentUser.name,
+            postID: postID
+        }).then((response) => {
+            console.log(response);
+            setLike(response.data.post.likes);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
         return <article className="Post">
             {props.modal ? null: <header>
                 <div className="Post-user">
@@ -56,8 +70,8 @@ function Post(props){
             </div>
             <div className="Post-caption">
                 <h3>{props.caption}</h3>
-                <h4>{props.likedBy.length > 2 ? "Liked by " + props.likedBy[0] + ", " + props.likedBy[1] + "and many others" : props.likedBy.length === 0 ? "" : "Liked by " + props.likedBy.join(" ,")}</h4>
-                <Button variant="outlined" size="small"  style={{height: 40, marginLeft:'auto'}}>Like</Button>
+                <h4>{like > 2 ? "Liked by " + like[0] + ", " + like[1] + "and many others" : like.length === 0 ? "" : "Liked by " + like.join(" ,")}</h4>
+                <Button variant="outlined" size="small" onClick={() => postLike(props.id)} style={{height: 40, marginLeft:'auto'}}>Like</Button>
                 <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
             </div>
             {inputBox ? <div className = "Post-Comments">
