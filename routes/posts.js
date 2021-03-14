@@ -117,7 +117,7 @@ router.delete('/:id', async function (req, res) {
   })
 
 router.get('/', async (req, res) => {
-    const posts = await Post.find({}).populate('owner', 'name avatar');
+    const posts = await Post.find({}).populate('owner', '-email -images -following -followers');
     return res.json(posts)
 })
   
