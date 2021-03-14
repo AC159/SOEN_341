@@ -122,7 +122,7 @@ router.get('/:uid', async (req, res) => {
 })
 
 router.get('/', async (req, res) => {
-    const posts = await Post.find({}).populate('owner', '-email -images -following -followers');
+    const posts = await Post.find({}).populate('owner', '_id name');
     return res.json(posts)
 })
 

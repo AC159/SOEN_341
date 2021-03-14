@@ -28,7 +28,7 @@ router.get('/:uid/followers', async (req, res) => {
 router.get('/:uid', async function(req, res) {
 
   // Fetch user here from database
-  const user = await User.findById(req.params.uid);
+  const user = await User.findById(req.params.uid).populate('followers', '_id name').populate('following', '_id name');
   return res.json(user);
 });
 
