@@ -61,7 +61,7 @@ function Posts(){
         </div>
 
     const users = Posts !== null ? Posts.map((post, index) => {
-        return <Post key={post._id} name={post.name || "Placeholder"} caption={post.caption} source={post.imageUrl} profile={Image} likedBy={post.likes} comments={post.comments} user={currentUser.name} owner={post.owner}/>;
+        return <Post key={post._id} name={post.owner.name} caption={post.caption} source={post.imageUrl} profile={post.owner.avatar || Image} likedBy={post.likes} comments={post.comments} user={currentUser.name} owner={post.owner}/>;
     }) : []
     function getMoreItems(){
         if (hiddenPosts === null || hiddenPosts.length === Posts.length)
