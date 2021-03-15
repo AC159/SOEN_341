@@ -116,26 +116,14 @@ router.delete('/:id', async function (req, res) {
   
   })
 
-router.get('/', async (req, res) => {
-    const posts = await Post.find({});
-    return res.json(posts);
+router.get('/:uid', async (req, res) => {
+  const posts = await Post.find({owner: req.params.uid});
+  return res.json(posts);
 })
 
-router.post('/like', async (req, res) => {
-
-  try {
-
-    let post = await Post.findOneAndUpdate({ _id: req.body.postID },
-        { "$addToSet": { likes: req.body.name } }, { new: true });
-
-    res.status(200).json({
-        post: post
-    });
-
-  } catch (error) {
-    res.send(error);
-  }
-
+router.get('/', async (req, res) => {
+    const posts = await Post.find({}).populate('owner', '-email -images -following -followers');
+    return res.json(posts)
 })
   
 module.exports.router = router;

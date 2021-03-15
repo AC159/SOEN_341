@@ -47,9 +47,8 @@ function Posts(){
     }, [currentUser, history]);
 
     useEffect(() => {
-        if (Posts === null || hiddenPosts === null) {
-            return;
-        }
+        if (Posts === null || hiddenPosts === null)
+            return
          else if (hiddenPosts === null || hiddenPosts.length === Posts.length)
             setTimeout(() => {
                 changeMoreItems(false)
@@ -62,7 +61,7 @@ function Posts(){
         </div>
 
     const users = Posts !== null ? Posts.map((post, index) => {
-        return <Post key={post._id} id={post._id} name={post.name || "Placeholder"} caption={post.caption} source={post.imageUrl} profile={Image} likedby={post.likes} comments={post.comments} user={currentUser.name} owner={post.owner}/>;
+        return <Post key={post._id} name={post.owner.name} caption={post.caption} source={post.imageUrl} profile={post.owner.avatar || Image} likedBy={post.likes} comments={post.comments} user={currentUser.name} owner={post.owner._id}/>;
     }) : []
     function getMoreItems(){
         if (hiddenPosts === null || hiddenPosts.length === Posts.length)

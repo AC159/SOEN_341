@@ -91,11 +91,14 @@ function Profile(props){
             .then(function (response) {
                 setName(response.data.name);
                 changeFollowersFollowing({"followers": response.data.followers, "following": response.data.following})
-                changePictures(response.data.images)
                 setPicture(response.data.avatar);
             })
             .catch(function (error) {
             console.log(error);
+            })
+            axios.get(`/posts/${params.id}`).then((res) => {
+                const { data } = res;
+                changePictures(data)
             })
         }
     }, [currentUser, history, params.id])
@@ -127,15 +130,14 @@ function Profile(props){
           });
     }
 
-    function TryFollow() {
+    function TryFollow(){
         if (folllowersFollowing.followers.includes(currentUser.uid)){
             axios.post('/users/unfollow', {
                 uid: currentUser.uid,
                 following_uid: params.id,
               })
               .then(function (response) {
-                console.log('unfollow', response);
-                changeFollowersFollowing({"followers": response.data.followedUser.followers, "following": response.data.followedUser.following});
+                console.log(response);
               })
               .catch(function (error) {
                 console.log(error);
@@ -146,8 +148,7 @@ function Profile(props){
                 following_uid: params.id,
               })
               .then(function (response) {
-                console.log('follow', response);
-                changeFollowersFollowing({"followers": response.data.followedUser.followers, "following": response.data.followedUser.following})
+                console.log(response);
               })
               .catch(function (error) {
                 console.log(error);
@@ -177,15 +178,13 @@ function Profile(props){
                     </tr>
                     </tbody>
                 </table>
-                {
-                    currentUser.uid === params.id ? <div/>:
-                    folllowersFollowing.followers.includes(currentUser.uid) ? <div> <Button variant="outlined" onClick={TryFollow}>Unfollow</Button></div> :
-                        <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>
-                }
+                {currentUser.uid === params.id ? <div></div>: <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>}
             </div>
             <GridList cellHeight={250} style={{width: "100%"}} cols={3}>
-                {pictures.map((tile) => (<GridListTile key={tile.id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => setAttributes(event.target.attributes)}>
-                                            <img src={tile.img} alt={tile.title} likedby={tile.likedBy} comments={JSON.stringify(tile.comments)}/>
+                {pictures.map((tile) => (<GridListTile key={tile._id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => {
+                    console.log(event.target.attributes)
+                    setAttributes(event.target.attributes)}}>
+                                            <img src={tile.imageUrl} alt={tile.caption} likedBy={tile.likes} comments={JSON.stringify(tile.comments)}/>
                                         </GridListTile>))}
             </GridList>
             <Modal open={open} onClose={() => {
