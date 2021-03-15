@@ -40,13 +40,14 @@ function Post(props){
     }
 
     const postLike = (postID) => {
+        console.log(postID)
         axios.post('/posts/like', {
             uid: currentUser.uid,
             name: currentUser.name,
             postID: postID
         }).then((response) => {
-            console.log(response);
-            setLike(response.data.post.likes);
+            console.log(response.data);
+            setLike(like.concat(currentUser.name));
         }).catch((error) => {
             console.log(error);
         });
@@ -71,7 +72,7 @@ function Post(props){
             <div className="Post-caption">
                 <h3>{props.caption}</h3>
                 <h4>{like > 2 ? "Liked by " + like[0] + ", " + like[1] + "and many others" : like.length === 0 ? "" : "Liked by " + like.join(" ,")}</h4>
-                <Button variant="outlined" size="small" onClick={() => postLike(props.id)} style={{height: 40, marginLeft:'auto'}}>Like</Button>
+                <Button variant="outlined" size="small" onClick={() => postLike(props.postID)} style={{height: 40, marginLeft:'auto'}}>Like</Button>
                 <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
             </div>
             {inputBox ? <div className = "Post-Comments">
