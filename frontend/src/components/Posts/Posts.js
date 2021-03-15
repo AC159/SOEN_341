@@ -9,16 +9,6 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { useAuth } from '../../AuthProvider';
 import { useHistory } from "react-router-dom";
 
-const source = 'https://i.ytimg.com/vi/nVDxiLBjMuM/maxresdefault.jpg'
-const likedBy = "Bob, John, and 12 others"
-const comments = [
-    {id: 1, person: "bob", content: "432x4cf3"},
-    {id: 2, person: "bob", content: "2213214"},
-    {id: 3, person: "bob", content: "4324523"},
-    {id: 4, person: "bob", content: "r32r3sx"},
-    {id: 5, person: "bob", content: "21d324f532"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-]
 
 function Posts(){
     const [Posts, setPosts] = useState(null)
@@ -62,7 +52,7 @@ function Posts(){
         </div>
 
     const users = Posts !== null ? Posts.map((post, index) => {
-        return <Post key={post._id} name={post.owner.name} caption={post.caption} source={post.imageUrl} profile={post.owner.avatar || Image} likedBy={post.likes} comments={post.comments} user={currentUser.name} owner={post.owner._id}/>;
+        return <Post key={post._id} name={post.owner.name} caption={post.caption} source={post.imageUrl} profile={post.owner.avatar || Image} likedby={post.likes} comments={post.comments} user={currentUser.name} owner={post.owner._id} postID = {post._id}/>;
     }) : []
     function getMoreItems(){
         if (hiddenPosts === null || hiddenPosts.length === Posts.length)
