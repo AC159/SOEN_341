@@ -116,9 +116,14 @@ router.delete('/:id', async function (req, res) {
   
   })
 
+router.get('/:uid', async (req, res) => {
+  const posts = await Post.find({owner: req.params.uid});
+  return res.json(posts);
+})
+
 router.get('/', async (req, res) => {
-    const posts = await Post.find({});
-    return res.json(posts);
+    const posts = await Post.find({}).populate('owner', '_id name');
+    return res.json(posts)
 })
 
 router.post('/like', async (req, res) => {
