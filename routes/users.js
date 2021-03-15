@@ -171,20 +171,23 @@ router.post('/like', async function (req, res) {
 
 router.post('/follow', async function (req, res) {
 
-  // todo: verify that the follower and the following users exist
-
     try {
 
       // Append to the 'following' field the name of the user the current user want to follow
-      let user = await User.findOneAndUpdate({ _id: req.body.uid },
-          { "$push": { following: req.body.following_uid } }, { new: true });
+      await User.findOneAndUpdate({ _id: req.body.uid },
+          { "$addToSet": { following: req.body.following_uid } }, { new: true });
+
+      let user = await User.findOne({ _id: req.body.uid });
 
       // Append to the 'followers' field of the other (followed) user the name of the current user
-      let followedUser = await User.findOneAndUpdate({ _id: req.body.following_uid },
-          { "$push": { followers: req.body.uid  }}, { new: true });
+      await User.findOneAndUpdate({ _id: req.body.following_uid },
+          { "$addToSet": { followers: req.body.uid  }}, { new: true });
+
+      let followedUser = await User.findOne({ _id: req.body.following_uid });
 
       res.status(200).json({
-        user: user
+        user: user,
+        followedUser: followedUser
       });
 
     } catch (error) {
@@ -204,13 +207,18 @@ router.post('/unfollow', async function (req, res) {
   try {
 
     await User.updateOne({ _id: req.body.uid },
-        { "$pullAll": { following: req.body.following_uid } });
+        { "$pullAll": { following: [req.body.following_uid] } });
+
+    let user = await User.findOne({ _id: req.body.uid });
 
     await User.updateOne({ _id: req.body.following_uid },
-        { "$pullAll": { followers: req.body.uid  }}, { new: true });
+        { "$pullAll": { followers: [req.body.uid] }}, { new: true });
+
+    let followedUser = await User.findOne({ _id: req.body.following_uid });
 
     res.status(200).json({
-      user: user
+      user: user,
+      followedUser: followedUser
     });
 
   } catch (error) {
@@ -218,6 +226,25 @@ router.post('/unfollow', async function (req, res) {
   }
 
 })
+
+router.get('/search/:filter', async function (req, res) {
+
+  try {
+
+    const users = await User.find({ name: req.params.filter });
+
+    // todo: only send back a max of 10 values ??
+
+    res.status(200).json({
+      users
+    });
+
+  } catch (error) {
+    res.send(error);
+  }
+
+
+});
 
 
 module.exports.router = router;
