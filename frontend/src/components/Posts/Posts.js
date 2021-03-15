@@ -47,8 +47,9 @@ function Posts(){
     }, [currentUser, history]);
 
     useEffect(() => {
-        if (Posts === null || hiddenPosts === null)
-            return
+        if (Posts === null || hiddenPosts === null) {
+            return;
+        }
          else if (hiddenPosts === null || hiddenPosts.length === Posts.length)
             setTimeout(() => {
                 changeMoreItems(false)

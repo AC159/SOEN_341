@@ -130,14 +130,15 @@ function Profile(props){
           });
     }
 
-    function TryFollow(){
+    function TryFollow() {
         if (folllowersFollowing.followers.includes(currentUser.uid)){
             axios.post('/users/unfollow', {
                 uid: currentUser.uid,
                 following_uid: params.id,
               })
               .then(function (response) {
-                console.log(response);
+                console.log('unfollow', response);
+                changeFollowersFollowing({"followers": response.data.followedUser.followers, "following": response.data.followedUser.following});
               })
               .catch(function (error) {
                 console.log(error);
@@ -148,7 +149,8 @@ function Profile(props){
                 following_uid: params.id,
               })
               .then(function (response) {
-                console.log(response);
+                console.log('follow', response);
+                changeFollowersFollowing({"followers": response.data.followedUser.followers, "following": response.data.followedUser.following})
               })
               .catch(function (error) {
                 console.log(error);
@@ -178,7 +180,11 @@ function Profile(props){
                     </tr>
                     </tbody>
                 </table>
-                {currentUser.uid === params.id ? <div></div>: <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>}
+                {
+                    currentUser.uid === params.id ? <div/>:
+                    folllowersFollowing.followers.includes(currentUser.uid) ? <div> <Button variant="outlined" onClick={TryFollow}>Unfollow</Button></div> :
+                        <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>
+                }
             </div>
             <GridList cellHeight={250} style={{width: "100%"}} cols={3}>
                 {pictures.map((tile) => (<GridListTile key={tile._id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => {
