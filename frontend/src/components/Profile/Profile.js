@@ -13,22 +13,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios'
 import Dialog from "./Followers_Following_Dialog/Dialog";
 
-const AccountName = "DummyName"
-const ProfilePictureSource = "https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg"
-const Numbers = {followers: 10, following: 17}
-const comments = [
-    {id: 1, person: "bob", content: "432x4cf3"},
-    {id: 2, person: "bob", content: "2213214"},
-    {id: 3, person: "bob", content: "4324aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa523"},
-]
-const Display = [
-    {id: 1, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
-    {id: 2, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
-    {id: 3, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
-    {id: 9, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
-    {id: 10, img: 'https://media.wired.com/photos/598e35fb99d76447c4eb1f28/master/pass/phonepicutres-TA.jpg', title: 'whatever', cols: 2, likedBy: "Bob, John, and 12 others", comments: comments}
-]
-
 function Profile(props){
     const [picture, setPicture] = useState(null)
     const [name, setName] = useState(null)
@@ -37,8 +21,8 @@ function Profile(props){
     const [pictures, changePictures] = useState(null)
     const [open, setOpen] = useState(false)
     const [attributes, setAttributes] = useState("")
-    const [inputBox, changeInputBox] = useState(false)
-    const [comments, changeComments] = useState("")
+    const [comments, changeComments] = useState(null)
+    const [like, changeLike] = useState(null)
     const [text, changeText] = useState("")
     const { currentUser, signout } = useAuth();
     const history = useHistory();
@@ -62,7 +46,6 @@ function Profile(props){
         } else {
             axios.get('/users/' + params.id)
             .then(function (response) {
-                console.log('changeFollowersFollowing', response);
                 setName(response.data.name);
                 changeFollowersFollowing({"followers": response.data.followers, "following": response.data.following})
                 setPicture(response.data.avatar);
@@ -81,19 +64,19 @@ function Profile(props){
         if (attributes === "");
         else {
             setOpen(true);
-            changeComments(JSON.parse(attributes.getNamedItem("comments").value));
         } 
     }, [attributes])
 
     function postComment(){
-        let temp = comments
-        temp.push({id: comments.length + 1, person: {name}, content: text})
+        let temp = comments || JSON.parse(attributes.getNamedItem("comments").value)
+        temp.push({id: temp.length + 1, person: currentUser.name, content: text})
         changeComments(temp)
         changeText("")
-        axios.post('/users/comment', {
+        axios.post('/posts/comment', {
             comment: text,
             imageUrl: attributes.getNamedItem("src").value,
-            name: currentUser.uid,
+            uid: currentUser.uid,
+            name: currentUser.name,
             ImageOwnerName: params.id,
           })
           .then(function (response) {
@@ -132,9 +115,21 @@ function Profile(props){
                 console.log(error);
               });
         }
+    }
 
-        console.log('openFollowersModal', openFollowersModal);
-        console.log('openFollowingModal', openFollowingModal);
+    const postLike = () => {
+        axios.post('/posts/like', {
+            uid: currentUser.uid,
+            name: currentUser.name,
+            postID: attributes.getNamedItem("id").value
+        }).then((response) => {
+            if (like === null && !JSON.parse(attributes.getNamedItem("likedby").value).includes(currentUser.name))
+                changeLike(JSON.parse(attributes.getNamedItem("likedby").value).concat(currentUser.name))
+            else if (like !== null && !like.includes(currentUser.name))
+                    changeLike(like.concat(currentUser.name))
+        }).catch((error) => {
+            console.log(error)
+        });
     }
 
     if (picture === null || name === null || folllowersFollowing == null || pictures == null)
@@ -175,9 +170,8 @@ function Profile(props){
             </div>
             <GridList cellHeight={250} style={{width: "100%"}} cols={3}>
                 {pictures.map((tile) => (<GridListTile key={tile._id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => {
-                    console.log(event.target.attributes)
                     setAttributes(event.target.attributes)}}>
-                                            <img src={tile.imageUrl} alt={tile.caption} likedBy={tile.likes} comments={JSON.stringify(tile.comments)}/>
+                                            <img src={tile.imageUrl} alt={tile.caption} likedby={JSON.stringify(tile.likes)} comments={JSON.stringify(tile.comments)} id={tile._id}/>
                                         </GridListTile>))}
             </GridList>
 
@@ -189,7 +183,6 @@ function Profile(props){
                 setOpen(false)
                 setAttributes("")
                 changeComments(null)
-                changeInputBox(false)
                 }}>
                     {attributes === "" ? null:
                     <div className={classes.Popup}>
@@ -197,15 +190,19 @@ function Profile(props){
                             <div className={classes.PopupPicture}>
                                 <img src={attributes.getNamedItem("src").value} alt={attributes.getNamedItem("alt").value} style={{maxHeight:'75vh', maxWidth:"80vw"}}/>
                             </div>
+                            <h3 style={{marginTop:'5px', marginBottom:'-10px'}}>{attributes.getNamedItem("alt").value}</h3>
                             <div className={classes.ProfileCaption}>
-                                <h4>Liked by {attributes.getNamedItem("likedBy").value}</h4>
-                                <Button variant="outlined" size="small"  style={{height: 40, marginLeft:'auto'}}>Like</Button>
-                                <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
+                                {/* <h4>Liked by {attributes.getNamedItem("likedby").value}</h4> */}
+                                <h4>{like === null? JSON.parse(attributes.getNamedItem("likedby").value).length > 2 ? "Liked by " + JSON.parse(attributes.getNamedItem("likedby").value)[0] + ", " + JSON.parse(attributes.getNamedItem("likedby").value)[1] + " and many others" : JSON.parse(attributes.getNamedItem("likedby").value).length === 0 ? "" : "Liked by " + JSON.parse(attributes.getNamedItem("likedby").value).join(", "):
+                                    like.length > 2 ? "Liked by " + like[0] + ", " + like[1] + " and many others" : like.length === 0 ? "" : "Liked by " + like.join(", ")}</h4>
+                                <Button variant="outlined" size="small"  style={{height: 40, marginLeft:'auto'}} onClick={() => postLike()}>Like</Button>
                             </div>
                         </div>
-                        {inputBox ? <div className={classes.ProfileComment}>
+                        <div className={classes.ProfileComment}>
                             <div className={classes.ProfileCommentScroll}>
-                                {comments.map(item => {
+                                {comments === null ? JSON.parse(attributes.getNamedItem("comments").value).map(item => {
+                                    return(<p className="Post-comments"><b>{item.person}</b>{item.content}</p>)
+                                }) : comments.map(item => {
                                     return(<p className="Post-comments"><b>{item.person}</b>{item.content}</p>)
                                 })}
                             </div>
@@ -213,7 +210,7 @@ function Profile(props){
                                 <TextField id="outlined-basic" label="Comment..." variant="outlined" style={{marginLeft: "10px", width: '80%'}} value={text} onChange ={(event) => changeText(event.target.value)}/>
                                 <Button variant="outlined" onClick={postComment} style={{ height:56}} >Post</Button>
                             </div>
-                        </div>: null}
+                        </div>
                     </div>}
                 
             </Modal>
