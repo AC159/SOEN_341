@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import classes from './Profile.module.css'
 import Avatar from '@material-ui/core/Avatar';
 import GridList from '@material-ui/core/GridList';
@@ -7,9 +7,11 @@ import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import { useAuth } from '../../AuthProvider';
+import { ModalContext } from './ModalContextProvider/ModalContextProvider';
 import { useHistory, useParams  } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios'
+import Dialog from "./Followers_Following_Dialog/Dialog";
 
 const AccountName = "DummyName"
 const ProfilePictureSource = "https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg"
@@ -17,52 +19,12 @@ const Numbers = {followers: 10, following: 17}
 const comments = [
     {id: 1, person: "bob", content: "432x4cf3"},
     {id: 2, person: "bob", content: "2213214"},
-    {id: 3, person: "bob", content: "4324aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa523"},
-    {id: 4, person: "bob", content: "r32r3sx"},
-    {id: 5, person: "bob", content: "21d324f532"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "1"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-    {id: 6, person: "bob", content: "3s1254v32"},
-
-
+    {id: 3, person: "bob", content: "4324aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa523"},
 ]
 const Display = [
     {id: 1, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
     {id: 2, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
     {id: 3, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
-    {id: 4, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 2, likedBy: "Bob, John, and 12 others", comments: comments},
-    {id: 5, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
-    {id: 6, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
-    {id: 7, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
-    {id: 8, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
     {id: 9, img: 'https://cdn.mos.cms.futurecdn.net/z3rNHS9Y6PV6vbhH8w83Yn-1200-80.jpg', title: 'whatever', cols: 1, likedBy: "Bob, John, and 12 others", comments: comments},
     {id: 10, img: 'https://media.wired.com/photos/598e35fb99d76447c4eb1f28/master/pass/phonepicutres-TA.jpg', title: 'whatever', cols: 2, likedBy: "Bob, John, and 12 others", comments: comments}
 ]
@@ -71,6 +33,7 @@ function Profile(props){
     const [picture, setPicture] = useState(null)
     const [name, setName] = useState(null)
     const [folllowersFollowing, changeFollowersFollowing] = useState(null);
+    const [includesID, setIncludesID] = useState(false);
     const [pictures, changePictures] = useState(null)
     const [open, setOpen] = useState(false)
     const [attributes, setAttributes] = useState("")
@@ -80,6 +43,16 @@ function Profile(props){
     const { currentUser, signout } = useAuth();
     const history = useHistory();
     const params = useParams();
+    const { openFollowersModal, openFollowingModal, openFollowersDialog, openFollowingDialog } = useContext(ModalContext);
+
+    useEffect(() => {
+        // Verify if the current user is already following the other user and change state accordingly
+
+        if (folllowersFollowing !== null) {
+            setIncludesID(folllowersFollowing.followers.some(user => user._id === currentUser.uid));
+        }
+
+    }, [folllowersFollowing, changeFollowersFollowing, setIncludesID, includesID]);
 
     useEffect(() => {
         if (currentUser === null){
@@ -89,6 +62,7 @@ function Profile(props){
         } else {
             axios.get('/users/' + params.id)
             .then(function (response) {
+                console.log('changeFollowersFollowing', response);
                 setName(response.data.name);
                 changeFollowersFollowing({"followers": response.data.followers, "following": response.data.following})
                 setPicture(response.data.avatar);
@@ -131,7 +105,9 @@ function Profile(props){
     }
 
     function TryFollow() {
-        if (folllowersFollowing.followers.includes(currentUser.uid)){
+        // Here the current user is looking at another user's profile page
+
+        if (includesID){
             axios.post('/users/unfollow', {
                 uid: currentUser.uid,
                 following_uid: params.id,
@@ -156,6 +132,9 @@ function Profile(props){
                 console.log(error);
               });
         }
+
+        console.log('openFollowersModal', openFollowersModal);
+        console.log('openFollowingModal', openFollowingModal);
     }
 
     if (picture === null || name === null || folllowersFollowing == null || pictures == null)
@@ -175,14 +154,22 @@ function Profile(props){
                         </td>
                     </tr>
                     <tr>
-                        <td><p className={classes.ProfileStats}>Followers: {folllowersFollowing.followers.length}</p></td>
-                        <td><p className={classes.ProfileStats}>Following: {folllowersFollowing.following.length}</p></td>
+                        <td>
+                            <span className={classes.ProfileStats} onClick={() => openFollowersDialog(true)} style={{ cursor: 'pointer' }}>
+                                Followers: {folllowersFollowing.followers.length}
+                            </span>
+                        </td>
+                        <td>
+                            <span className={classes.ProfileStats} onClick={() => openFollowingDialog(true)} style={{ cursor: 'pointer' }}>
+                                Following: {folllowersFollowing.following.length}
+                            </span>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
                 {
                     currentUser.uid === params.id ? <div/>:
-                    folllowersFollowing.followers.includes(currentUser.uid) ? <div> <Button variant="outlined" onClick={TryFollow}>Unfollow</Button></div> :
+                        includesID ? <div><Button variant="outlined" onClick={TryFollow}>Unfollow</Button></div> :
                         <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>
                 }
             </div>
@@ -193,6 +180,11 @@ function Profile(props){
                                             <img src={tile.imageUrl} alt={tile.caption} likedBy={tile.likes} comments={JSON.stringify(tile.comments)}/>
                                         </GridListTile>))}
             </GridList>
+
+            {openFollowersModal ? <Dialog type={"followers"} data={folllowersFollowing.followers} /> : null}
+
+            {openFollowingModal ? <Dialog type={"following"} data={folllowersFollowing.following} /> : null}
+
             <Modal open={open} onClose={() => {
                 setOpen(false)
                 setAttributes("")

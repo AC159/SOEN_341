@@ -28,7 +28,7 @@ router.get('/:uid/followers', async (req, res) => {
 router.get('/:uid', async function(req, res) {
 
   // Fetch user here from database
-  const user = await User.findById(req.params.uid).populate('followers', '_id name').populate('following', '_id name');
+  const user = await User.findById(req.params.uid).populate('followers', '_id name avatar').populate('following', '_id name avatar');
   return res.json(user);
 });
 
@@ -177,13 +177,13 @@ router.post('/follow', async function (req, res) {
       await User.findOneAndUpdate({ _id: req.body.uid },
           { "$addToSet": { following: req.body.following_uid } }, { new: true });
 
-      let user = await User.findOne({ _id: req.body.uid });
+      let user = await User.findOne({ _id: req.body.uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');
 
       // Append to the 'followers' field of the other (followed) user the name of the current user
       await User.findOneAndUpdate({ _id: req.body.following_uid },
           { "$addToSet": { followers: req.body.uid  }}, { new: true });
 
-      let followedUser = await User.findOne({ _id: req.body.following_uid });
+      let followedUser = await User.findOne({ _id: req.body.following_uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');
 
       res.status(200).json({
         user: user,
@@ -209,12 +209,12 @@ router.post('/unfollow', async function (req, res) {
     await User.updateOne({ _id: req.body.uid },
         { "$pullAll": { following: [req.body.following_uid] } });
 
-    let user = await User.findOne({ _id: req.body.uid });
+    let user = await User.findOne({ _id: req.body.uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');
 
     await User.updateOne({ _id: req.body.following_uid },
         { "$pullAll": { followers: [req.body.uid] }}, { new: true });
 
-    let followedUser = await User.findOne({ _id: req.body.following_uid });
+    let followedUser = await User.findOne({ _id: req.body.following_uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');
 
     res.status(200).json({
       user: user,
