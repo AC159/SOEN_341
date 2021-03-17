@@ -18,12 +18,6 @@ function Post(props){
         temp.push({id: comments.length + 1, person: props.user, content: text})
         changeComments(temp)
         changeText("")
-        console.log({
-            comment: text,
-            imageUrl: props.source,
-            name: currentUser.uid,
-            ImageOwnerName: props.owner,
-          })
         axios.post('/posts/comment', {
             comment: text,
             imageUrl: props.source,
@@ -40,13 +34,15 @@ function Post(props){
     }
 
     const postLike = (postID) => {
+        console.log(postID)
         axios.post('/posts/like', {
             uid: currentUser.uid,
             name: currentUser.name,
             postID: postID
         }).then((response) => {
-            console.log(response);
-            setLike(response.data.post.likes);
+            console.log(response.data);
+            if (!like.includes(currentUser.name))
+                setLike(like.concat(currentUser.name));
         }).catch((error) => {
             console.log(error);
         });
@@ -68,10 +64,10 @@ function Post(props){
                     <img src={props.source} alt="Anonymous"/>
                 </div>
             </div>
-            <div className="Post-caption">
-                <h3>{props.caption}</h3>
-                <h4>{like > 2 ? "Liked by " + like[0] + ", " + like[1] + "and many others" : like.length === 0 ? "" : "Liked by " + like.join(" ,")}</h4>
-                <Button variant="outlined" size="small" onClick={() => postLike(props.id)} style={{height: 40, marginLeft:'auto'}}>Like</Button>
+            <h3 className="Post-caption">{props.caption}</h3>
+            <div className="Post-like">
+                <h4>{like > 2 ? "Liked by " + like[0] + ", " + like[1] + " and many others" : like.length === 0 ? "" : "Liked by " + like.join(", ")}</h4>
+                <Button variant="outlined" size="small" onClick={() => postLike(props.postID)} style={{height: 40, marginLeft:'auto'}}>Like</Button>
                 <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
             </div>
             {inputBox ? <div className = "Post-Comments">

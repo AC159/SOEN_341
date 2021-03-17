@@ -8,6 +8,7 @@ import SignIn from './components/Authentication/SignIn/SignIn'
 import Profile from './components/Profile/Profile'
 import AuthProvider from "./AuthProvider";
 import SignOut from './components/Authentication/SignOut/SignOut';
+import ModalContextProvider from "./components/Profile/ModalContextProvider/ModalContextProvider";
 // import { auth } from './firebase';
 
 function App(){
@@ -17,6 +18,7 @@ function App(){
                 <div>
                     <Navbar />
                     <main className={classes.Content}>
+                        <ModalContextProvider>
                         <Switch>
                             <Route exact path="/profile/:id" component={Profile}/>
 
@@ -29,6 +31,7 @@ function App(){
                             <Route exact path="/" component={Posts}/>
 
                         </Switch>
+                        </ModalContextProvider>
                     </main>
                 </div>
             </AuthProvider>
