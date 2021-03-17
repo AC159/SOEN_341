@@ -35,7 +35,7 @@
     display: block;
     width: 100%;
 }
-.Post-caption {
+.Post-like {
     padding: 0px 16px;
     display: flex;
     justify-content: space-between;
@@ -43,10 +43,10 @@
     margin-bottom: 10px;
 }
 
-.Post-caption h4{
+.Post-like h4{
     margin: 0px;
 }
-.Post-caption strong {
+.Post-like strong {
     font-family: 'PT Sans', sans-serif;
     font-weight: bold;
 }
@@ -83,4 +83,9 @@
 
 .Post-comments b{
     margin-right: 10px;
+}
+
+.Post-caption{
+    padding: 0px 16px;
+    margin: 0px
 }
