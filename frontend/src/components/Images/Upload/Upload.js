@@ -37,6 +37,7 @@ class Upload extends Component {
         formData.append('image', this.state.files[0], this.state.files[0].name);
         formData.append('uid', this.props.currentUser.uid);
         formData.append('caption', this.state.description);
+        formData.append('avatar', this.props.currentUser.avatar);
         axios.post('/posts/new', formData).then(res => {
             console.log(res);
         });
