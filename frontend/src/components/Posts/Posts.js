@@ -52,6 +52,7 @@ function Posts(){
         </div>
 
     const users = Posts !== null ? Posts.map((post, index) => {
+        console.log('post', post);
         return <Post key={post._id} name={post.owner.name} caption={post.caption} source={post.imageUrl} profile={post.owner.avatar || Image} likedby={post.likes} comments={post.comments} user={currentUser.name} owner={post.owner._id} postID = {post._id}/>;
     }) : []
     function getMoreItems(){
