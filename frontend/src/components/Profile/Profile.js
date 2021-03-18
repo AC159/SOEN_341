@@ -149,22 +149,30 @@ function Profile(props) {
             <CircularProgress size='100px' />
         </div>)
 
+    let clickableAvatar = null;
+    if (currentUser.uid === params.id) {
+            clickableAvatar = <IconButton>
+            <Avatar alt={name} src={picture} onClick={() => {setShown(true)}} style={{ height: '150px', width: '150px' }} />
+            <DropzoneDialog
+                open={shown}
+                onSave={saveAvatar}
+                acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+                showPreviews={false}
+                showPreviewsInDropzone={true}
+                maxFileSize={1000000}
+                filesLimit={1}
+                onClose={() => {setShown(false)}}>
+            </DropzoneDialog>
+        </IconButton>
+
+    } else {
+        clickableAvatar = <Avatar alt={name} src={picture} style={{ height: '150px', width: '150px' }} />
+    }
+
     return (
         <div className={classes.ProfileContainer}>
             <div className={classes.ProfileTop}>
-                <IconButton>
-                    <Avatar alt={name} src={picture} onClick={() => {setShown(true)}} style={{ height: '150px', width: '150px' }} />
-                    <DropzoneDialog
-                        open={shown}
-                        onSave={saveAvatar}
-                        acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
-                        showPreviews={false}
-                        showPreviewsInDropzone={true}
-                        maxFileSize={1000000}
-                        filesLimit={1}
-                        onClose={() => {setShown(false)}}>
-                    </DropzoneDialog>
-                </IconButton>
+                {clickableAvatar}
                 <table className={classes.ProfileStats}>
                     <tbody>
                         <tr>
