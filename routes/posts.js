@@ -17,14 +17,14 @@ router.post('/new', upload.single('image'), async function(req, res, next) {
   
       // Upload the image to google cloud and returns a public image url
       const imageUrl = await cloudHelpers.uploadImage(req.file);
-  
       // Update user (append the new imageUrl to the images array)
       let post = new Post({
         imageUrl,
         comments: [],
         likes: [],
         owner: req.body.uid,
-        caption: req.body.caption
+        caption: req.body.caption,
+        avatar: req.body.avatar
       })
       await post.save();
       let user = await User.findByIdAndUpdate(req.body.uid, { "$push": { images: post._id}}, { new: true });
