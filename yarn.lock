@@ -607,7 +607,7 @@
     "jest-util" "^26.6.2"
     "slash" "^3.0.0"
 
-"@jest/core@^26.6.0", "@jest/core@^26.6.3":
+"@jest/core@^26.6.3":
   "integrity" "sha512-xvV1kKbhfUqFVuZ8Cyo+JPpipAHHAV3kcDBftiduK8EICXmTFddryy3P7NfZt8Pv37rA9nEJBKCCkglCPt/Xjw=="
   "resolved" "https://registry.npmjs.org/@jest/core/-/core-26.6.3.tgz"
   "version" "26.6.3"
@@ -696,7 +696,6 @@
     "jest-resolve" "^26.6.2"
     "jest-util" "^26.6.2"
     "jest-worker" "^26.6.2"
-    "node-notifier" "^8.0.0"
     "slash" "^3.0.0"
     "source-map" "^0.6.0"
     "string-length" "^4.0.1"
@@ -1488,7 +1487,6 @@
   dependencies:
     "anymatch" "~3.1.1"
     "braces" "~3.0.2"
-    "fsevents" "~2.3.1"
     "glob-parent" "~5.1.0"
     "is-binary-path" "~2.1.0"
     "is-glob" "~4.0.1"
@@ -2571,7 +2569,6 @@
     "minimist" "^1.2.5"
     "neo-async" "^2.6.0"
     "source-map" "^0.6.1"
-    "uglify-js" "^3.1.4"
     "wordwrap" "^1.0.0"
   optionalDependencies:
     "uglify-js" "^3.1.4"
@@ -3100,7 +3097,7 @@
     "execa" "^4.0.0"
     "throat" "^5.0.0"
 
-"jest-cli@^26.6.0":
+"jest-cli@^26.6.3":
   "integrity" "sha512-GF9noBSa9t08pSyl3CY4frMrqp+aQXFGFkf5hEPbh/pIUFYWMK6ZLTfbmadxJVcJrdRoChlWQsA2VkJcDFK8hg=="
   "resolved" "https://registry.npmjs.org/jest-cli/-/jest-cli-26.6.3.tgz"
   "version" "26.6.3"
@@ -3211,7 +3208,6 @@
     "@types/node" "*"
     "anymatch" "^3.0.3"
     "fb-watchman" "^2.0.0"
-    "fsevents" "^2.1.2"
     "graceful-fs" "^4.2.4"
     "jest-regex-util" "^26.0.0"
     "jest-serializer" "^26.6.2"
@@ -3456,14 +3452,14 @@
     "merge-stream" "^2.0.0"
     "supports-color" "^7.0.0"
 
-"jest@^26.6.0":
-  "integrity" "sha512-jxTmrvuecVISvKFFhOkjsWRZV7sFqdSUAd1ajOKY+/QE/aLBVstsJ/dX8GczLzwiT6ZEwwmZqtCUHLHHQVzcfA=="
-  "resolved" "https://registry.npmjs.org/jest/-/jest-26.6.0.tgz"
-  "version" "26.6.0"
+"jest@^26.6.3":
+  "integrity" "sha512-lGS5PXGAzR4RF7V5+XObhqz2KZIDUA1yD0DG6pBVmy10eh0ZIXQImRuzocsI/N2XZ1GrLFwTS27In2i2jlpq1Q=="
+  "resolved" "https://registry.npmjs.org/jest/-/jest-26.6.3.tgz"
+  "version" "26.6.3"
   dependencies:
-    "@jest/core" "^26.6.0"
+    "@jest/core" "^26.6.3"
     "import-local" "^3.0.2"
-    "jest-cli" "^26.6.0"
+    "jest-cli" "^26.6.3"
 
 "js-tokens@^4.0.0":
   "integrity" "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="
@@ -3868,7 +3864,6 @@
     "denque" "^1.4.1"
     "require_optional" "^1.0.1"
     "safe-buffer" "^5.1.2"
-    "saslprep" "^1.0.0"
   optionalDependencies:
     "saslprep" "^1.0.0"
 
@@ -3882,7 +3877,6 @@
     "denque" "^1.4.1"
     "require_optional" "^1.0.1"
     "safe-buffer" "^5.1.2"
-    "saslprep" "^1.0.0"
   optionalDependencies:
     "saslprep" "^1.0.0"
 
