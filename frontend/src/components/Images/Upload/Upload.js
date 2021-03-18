@@ -87,7 +87,7 @@ class Upload extends Component {
                     showPreviews={false}
                     showPreviewsInDropzone={true}
                     maxFileSize={1000000}
-                    filesLimit={3}
+                    filesLimit={1}
                     onClose={this.handleClose.bind(this)}>
                 </DropzoneDialog>
 

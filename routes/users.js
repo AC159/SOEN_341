@@ -91,14 +91,14 @@ router.post('/avatar', upload.single('avatar'), async function(req, res, next) {
 
   try {
 
-    if (!req.body.name) {
+    if (!req.body.uid) {
       res.status(401).json({ error: "Not Authorized. Authentication required" });
     }
-
     // Upload the image to google cloud and returns a public image url
-    const avatarUrl = await uploadImage(req.file);
-
-    const filter = { "name": req.body.name };
+    const avatarUrl = await cloudHelpers.uploadImage(req.file);
+    console.log("e")
+    console.log(avatarUrl);
+    const filter = { "_id": req.body.uid };
 
     // Update user (append the new imageUrl to the images array)
     let user = await User.findOneAndUpdate(filter, { "avatar": avatarUrl }, { new: true });
@@ -110,6 +110,7 @@ router.post('/avatar', upload.single('avatar'), async function(req, res, next) {
     });
 
   } catch (error) {
+    console.log(error);
     res.send(error);
   }
 
