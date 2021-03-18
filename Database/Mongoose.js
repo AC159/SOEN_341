@@ -12,7 +12,6 @@ var UserSchema = new Schema({
 
 mongoose.connect('mongodb://localhost:27017/myapp', {useNewUrlParser: true});
 module.exports = mongoose.model('User', UserSchema);
-let mongoose = require('mongoose');
 const chalk = require('chalk');
 require("dotenv").config({ path: ".env" })
 
