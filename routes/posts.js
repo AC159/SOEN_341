@@ -23,8 +23,7 @@ router.post('/new', upload.single('image'), async function(req, res, next) {
         comments: [],
         likes: [],
         owner: req.body.uid,
-        caption: req.body.caption,
-        avatar: req.body.avatar
+        caption: req.body.caption
       })
       await post.save();
       let user = await User.findByIdAndUpdate(req.body.uid, { "$push": { images: post._id}}, { new: true });
@@ -117,13 +116,13 @@ router.delete('/:id', async function (req, res) {
   })
 
 router.get('/:uid', async (req, res) => {
-  const posts = await Post.find({owner: req.params.uid});
+  const posts = await Post.find({owner: req.params.uid}).populate('owner', '_id name avatar');
   return res.json(posts);
 })
 
 router.get('/', async (req, res) => {
-    const posts = await Post.find({}).populate('owner', '_id name');
-    return res.json(posts)
+    const posts = await Post.find({}).populate('owner', '_id name avatar');
+    return res.json(posts);
 })
 
 router.post('/like', async (req, res) => {
