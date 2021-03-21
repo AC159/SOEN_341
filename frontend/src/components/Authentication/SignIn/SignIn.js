@@ -15,16 +15,16 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 function SignIn() {
-    const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
     const [showPassword, changeShowPassword] = useState(false)
     const { signin } = useAuth();
+    const history = useHistory();
 
     const submitForm = () => {
         signin(email, password).then(() =>{
-            history.push('/')
+            history.replace('/');
         })
         .catch(e => {
             setError(e.message)

@@ -140,7 +140,10 @@ function Profile(props) {
         formData.append('avatar', event[0]);
         formData.append('uid', currentUser.uid);
         axios.post('/users/avatar', formData
-        ).then((res) => {console.log(res)});
+        ).then((res) => {
+            console.log(res);
+            setPicture(res.data.data);
+        });
         setShown(false);
     }
 
