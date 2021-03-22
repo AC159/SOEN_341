@@ -203,7 +203,7 @@ function Profile(props) {
                             <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>
                 }
             </div>
-            <GridList cellHeight={250} style={{ width: "100%" }} cols={3}>
+            <GridList cellHeight={250} style={{ width: "100%", cursor: 'pointer' }} cols={3}>
                 {pictures.map((tile) => (<GridListTile key={tile._id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => {
                     setAttributes(event.target.attributes)
                 }}>
@@ -211,7 +211,7 @@ function Profile(props) {
                 </GridListTile>))}
             </GridList>
 
-            {openFollowersModal ? <Dialog type={"followers"} data={folllowersFollowing.followers} /> : null}
+            {openFollowersModal ? <Dialog contentStyle={{maxWidth: 300}}type={"followers"} data={folllowersFollowing.followers} /> : null}
 
             {openFollowingModal ? <Dialog type={"following"} data={folllowersFollowing.following} /> : null}
 

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../../../AuthProvider';
-import classes from '../../Layout/Layout.module.css'
+import classes from './SignIn.module.css';
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
@@ -32,6 +32,7 @@ function SignIn() {
     }
 
     return (
+
         <table className={classes.SignInTable}>
             <tbody>
              <tr>
@@ -45,10 +46,10 @@ function SignIn() {
                 </td>
             </tr>
             <tr>
-                <td>  
+                <td>
                     <FormControl  variant="outlined" error={error} style = {{width: 300}}>
                         <InputLabel>Password</InputLabel>
-                            <OutlinedInput 
+                            <OutlinedInput
                                 type={showPassword ? 'text' : 'password'}
                                 value={password}
                                 onChange={(event) => setPassword(event.target.value)}
