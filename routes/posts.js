@@ -141,5 +141,22 @@ router.post('/like', async (req, res) => {
   }
 
 })
+
+router.post('/unlike', async (req, res) => {
+
+  try {
+
+    let post = await Post.findOneAndUpdate({ _id: req.body.postID },
+        { "$pull": { likes: req.body.name } }, { new: true });
+
+    res.status(200).json({
+      post: post
+    });
+
+  } catch (error) {
+    res.send(error);
+  }
+
+})
   
 module.exports.router = router;

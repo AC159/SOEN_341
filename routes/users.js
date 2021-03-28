@@ -94,14 +94,22 @@ router.post('/avatar', upload.single('avatar'), async function(req, res, next) {
     if (!req.body.uid) {
       res.status(401).json({ error: "Not Authorized. Authentication required" });
     }
+
+    // Fetch the old avatar url of the user if any:
+    const user = await User.findOne({ "_id": req.body.uid });
+
+    // Remove old avatar image if any:
+    if (user.avatar) {
+      const response = await cloudHelpers.deleteImage(user.avatar);
+      console.log('Delete avatar response: ', response);
+    }
+
     // Upload the image to google cloud and returns a public image url
     const avatarUrl = await cloudHelpers.uploadImage(req.file);
-    console.log("e")
-    console.log(avatarUrl);
-    const filter = { "_id": req.body.uid };
 
-    // Update user (append the new imageUrl to the images array)
-    let user = await User.findOneAndUpdate(filter, { "avatar": avatarUrl }, { new: true });
+    // Update user with new avatar and save
+    user.avatar = avatarUrl;
+    await user.save();
 
     res.status(200).json({
       user: user, // return updated user object
@@ -115,54 +123,6 @@ router.post('/avatar', upload.single('avatar'), async function(req, res, next) {
   }
 
 });
-
-
-/* POST a like for an image:
-*
-* REQUEST PARAMS: req.body.imageUrl + req.body.ImageOwnerName + req.body.name
-*
-* ImageOwnerName is the name of the OWNER OF THE PICTURE, NOT the person who likes
-* req.body.name is the username of the person who likes the image
-*  */
-
-router.post('/like', async function (req, res) {
-
-  // todo: maybe add a query parameter to remove a like for a picture ?
-
-  try {
-
-    if (!req.body.ImageOwnerName) {
-      res.status(401).json({ error: "Not Authorized. Authentication required." });
-    }
-
-    // Find the user of the picture that was commented on
-    await User.findOne({ "name": req.body.ImageOwnerName }, async function (error, user) {
-
-      if (error) {
-        res.status(404).send(error);
-      }
-
-      // Append the name of the user who liked the picture
-      for (let i = 0; i < user.images.length; i++) {
-        if (user.images[i].imageUrl === req.body.imageUrl) {
-          user.images[i].likes.push(req.body.name);
-        }
-      }
-
-      const response = await User.replaceOne({ "name": req.body.ImageOwnerName }, user);
-
-      res.status(200).json({
-        user: user // return updated user object
-      });
-
-    });
-
-  } catch (error) {
-    res.send(error);
-  }
-
-})
-
 
 /* POST request to follow a user:
 *

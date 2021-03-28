@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import './Post.css';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import BootstrapTooltips from './BootstrapTooltip';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../../../AuthProvider';
@@ -11,7 +12,7 @@ function Post(props){
     const [comments, changeComments] = useState(props.comments);
     const [like, setLike] = useState(props.likedby);
     const [text, changeText] = useState("");
-    const { currentUser, signout } = useAuth();
+    const { currentUser } = useAuth();
 
     function postComment(){
         let temp = comments
@@ -34,7 +35,6 @@ function Post(props){
     }
 
     const postLike = (postID) => {
-        console.log(postID)
         axios.post('/posts/like', {
             uid: currentUser.uid,
             name: currentUser.name,
@@ -43,6 +43,27 @@ function Post(props){
             console.log(response.data);
             if (!like.includes(currentUser.name))
                 setLike(like.concat(currentUser.name));
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    const postUnlike = (postID) => {
+        axios.post('/posts/unlike', {
+            uid: currentUser.uid,
+            name: currentUser.name,
+            postID: postID
+        }).then((response) => {
+
+            if (!like.includes(currentUser.name)) {
+                setLike(like.concat(currentUser.name));
+            }
+
+            // Remove the current user name from the list of "likes" for this post since he just unliked
+            setLike(like.filter(name => {
+                return name !== currentUser.name;
+            }));
+
         }).catch((error) => {
             console.log(error);
         });
@@ -66,8 +87,16 @@ function Post(props){
             </div>
             <h3 className="Post-caption">{props.caption}</h3>
             <div className="Post-like">
-                <h4>{like > 2 ? "Liked by " + like[0] + ", " + like[1] + " and many others" : like.length === 0 ? "" : "Liked by " + like.join(", ")}</h4>
-                <Button variant="outlined" size="small" onClick={() => postLike(props.postID)} style={{height: 40, marginLeft:'auto'}}>Like</Button>
+                <BootstrapTooltips title={like.join(",\n")}>
+                    <h4>{like.length + " like(s)"}</h4>
+                </BootstrapTooltips>
+                { like.includes(currentUser.name) ? <Button variant="outlined"
+                        size="small" onClick={() => postUnlike(props.postID)}
+                        style={{height: 40, marginLeft:'auto'}}>Unlike</Button> : <Button variant="outlined"
+                                                                                          size="small"
+                                                                                          onClick={() => postLike(props.postID)}
+                                                                                          style={{height: 40, marginLeft:'auto'}}>Like</Button>
+                }
                 <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
             </div>
             {inputBox ? <div className = "Post-Comments">
