@@ -15,16 +15,18 @@ const Posts = (props) => {
     const [Posts, setPosts] = useState(null)
     const [hiddenPosts, changeHiddenPosts] = useState(null);
     const [MoreItems, changeMoreItems] = useState(true)
-    const { currentUser, signout } = useAuth();
+    const { currentUser } = useAuth();
     const history = useHistory();
 
     useEffect(() => {
+
         if (currentUser === null){
             history.push('/signin')
         } else if(currentUser === undefined){
             
         }
         else {
+            // Retrieve post from backend
             axios.get('/posts')
             .then((res) => {
                 if (res.data.length < 10){
@@ -44,7 +46,8 @@ const Posts = (props) => {
          else if (hiddenPosts === null || hiddenPosts.length === Posts.length)
             setTimeout(() => {
                 changeMoreItems(false)
-            } ,1000)
+            } ,1000);
+
     }, [Posts, hiddenPosts])
 
     if (Posts === null && hiddenPosts === null)
@@ -56,8 +59,10 @@ const Posts = (props) => {
         return <Post key={post._id} name={post.owner.name} caption={post.caption} source={post.imageUrl}
                      profile={post.owner.avatar || Image} likedby={post.likes} comments={post.comments}
                      user={currentUser.name} owner={post.owner._id} postID = {post._id}/>;
-    }) : []
+    }) : [];
+
     function getMoreItems(){
+        // Load more post when the user reaches the bottom of the screen
         if (hiddenPosts === null || hiddenPosts.length === Posts.length)
             changeMoreItems(false)
         else

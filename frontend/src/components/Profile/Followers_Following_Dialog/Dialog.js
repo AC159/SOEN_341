@@ -7,7 +7,6 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
-import PersonIcon from '@material-ui/icons/Person';
 import { blue } from '@material-ui/core/colors';
 import { ModalContext } from '../ModalContextProvider/ModalContextProvider';
 import { useHistory } from "react-router";
@@ -52,14 +51,12 @@ function SimpleDialog(props) {
 }
 
 export default function SimpleDialogDemo(props) {
+
     const [open, setOpen] = React.useState(true);
     const [selectedValues, setSelectedValues] = React.useState(props.data);
-    const { openFollowersModal, openFollowingModal, closeFollowersDialog, closeFollowingDialog } = useContext(ModalContext);
+    const { closeFollowersDialog, closeFollowingDialog } = useContext(ModalContext);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
+    // Close the modal
     const handleClose = (value) => {
         setOpen(false);
         setSelectedValues(value);

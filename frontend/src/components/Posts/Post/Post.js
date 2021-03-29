@@ -14,7 +14,10 @@ function Post(props){
     const [text, changeText] = useState("");
     const { currentUser } = useAuth();
 
-    function postComment(){
+    function postComment() {
+
+        // Post a comment (send the data to the backend) and change state so that it triggers a re-render of the component
+
         let temp = comments
         temp.push({id: comments.length + 1, person: props.user, content: text})
         changeComments(temp)
@@ -35,6 +38,8 @@ function Post(props){
     }
 
     const postLike = (postID) => {
+        // Like a post and change state so that it triggers a re-render of the component
+
         axios.post('/posts/like', {
             uid: currentUser.uid,
             name: currentUser.name,
@@ -49,6 +54,9 @@ function Post(props){
     }
 
     const postUnlike = (postID) => {
+
+        // Unlike a post and change state so that it triggers a re-render of the component
+
         axios.post('/posts/unlike', {
             uid: currentUser.uid,
             name: currentUser.name,

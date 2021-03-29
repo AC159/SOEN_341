@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Posts from '../src/components/Posts/Posts';
-import Navbar from "./components/Navbar/Navbar";
 import classes from "./components/Layout/Layout.module.css";
 import SignUp from './components/Authentication/SignUp/SignUp'
 import SignIn from './components/Authentication/SignIn/SignIn'
