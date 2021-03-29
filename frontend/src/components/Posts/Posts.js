@@ -8,9 +8,10 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { useAuth } from '../../AuthProvider';
 import { useHistory } from "react-router-dom";
+import Navbar from "../Navbar/Navbar";
 
 
-function Posts(){
+const Posts = (props) => {
     const [Posts, setPosts] = useState(null)
     const [hiddenPosts, changeHiddenPosts] = useState(null);
     const [MoreItems, changeMoreItems] = useState(true)
@@ -53,7 +54,9 @@ function Posts(){
 
     const users = Posts !== null ? Posts.map((post, index) => {
         console.log('post', post);
-        return <Post key={post._id} name={post.owner.name} caption={post.caption} source={post.imageUrl} profile={post.owner.avatar || Image} likedby={post.likes} comments={post.comments} user={currentUser.name} owner={post.owner._id} postID = {post._id}/>;
+        return <Post key={post._id} name={post.owner.name} caption={post.caption} source={post.imageUrl}
+                     profile={post.owner.avatar || Image} likedby={post.likes} comments={post.comments}
+                     user={currentUser.name} owner={post.owner._id} postID = {post._id}/>;
     }) : []
     function getMoreItems(){
         if (hiddenPosts === null || hiddenPosts.length === Posts.length)
@@ -63,19 +66,21 @@ function Posts(){
     }
     
     return (
-        <InfiniteScroll
-            style={{paddingTop:'40px'}}
-            dataLength={hiddenPosts === null ? Posts.length: hiddenPosts.length} 
-            next={getMoreItems}
-            hasMore={MoreItems}
-            loader={<LinearProgress style={{ textAlign: 'center', marginBottom: '25px', marginLeft: '100px', marginRight: '100px' }}/>}
-            endMessage={
-                <p style={{ textAlign: 'center' }}>
-                    <b>You are up to date</b>
-                </p>}>
-            {users}
-        </InfiniteScroll>
-
+        <React.Fragment>
+            <Navbar />
+            <InfiniteScroll
+                style={{paddingTop:'40px'}}
+                dataLength={hiddenPosts === null ? Posts.length: hiddenPosts.length}
+                next={getMoreItems}
+                hasMore={MoreItems}
+                loader={<LinearProgress style={{ textAlign: 'center', marginBottom: '25px', marginLeft: '100px', marginRight: '100px' }}/>}
+                endMessage={
+                    <p style={{ textAlign: 'center' }}>
+                        <b>You are up to date</b>
+                    </p>}>
+                {users}
+            </InfiniteScroll>
+        </React.Fragment>
        );
 
 }

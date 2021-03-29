@@ -68,7 +68,6 @@ const Navbar = (props) => {
             // searchUser will be the old value at the moment the time was set
             // Fetch the db only when the user has stopped typing
             if (searchUser === inputRef.current.value) {
-                console.log('inside');
                 axios.get(`/users/search/${searchUser}`).then(response => {
                     console.log(response);
                     const array = [];
@@ -105,8 +104,8 @@ const Navbar = (props) => {
                     id="combo-box-demo"
                     onChange={(event, option) => {
                         if (option != undefined && option != null) {
-                            console.log('option: ', option);
-                            history.push(`profile/${option.uid}`);
+                            history.replace(`/profile/${option.uid}`);
+                            setSearchUser("");
                         }
                     }}
                     options={filteredUsers}

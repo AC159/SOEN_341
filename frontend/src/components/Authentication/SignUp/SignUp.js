@@ -1,18 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../../../AuthProvider';
-import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Button from '@material-ui/core/Button';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import classes from '../../Layout/Layout.module.css'
+// import TextField from '@material-ui/core/TextField';
+// import IconButton from '@material-ui/core/IconButton';
+// import OutlinedInput from '@material-ui/core/OutlinedInput';
+// import InputLabel from '@material-ui/core/InputLabel';
+// import InputAdornment from '@material-ui/core/InputAdornment';
+// import FormHelperText from '@material-ui/core/FormHelperText';
+// import FormControl from '@material-ui/core/FormControl';
+// import Button from '@material-ui/core/Button';
+// import Visibility from '@material-ui/icons/Visibility';
+// import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import axios from 'axios';
+import wallStreetBets from "../../../assets/images/wallStreetBets.jpg";
+import classes from './SignUp.module.css';
 
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
@@ -27,7 +28,7 @@ function SignUp() {
     const [errorPassword, setErrorPassword] = useState(false)
     const [errorConfirmPassword, setErrorConfirmPassword] = useState(false)
     const [name, changeName] = useState("")
-    const { signup } = useAuth();
+    const { signup, signin } = useAuth();
 
     const submitForm = async () => {
         signup(email, password).then(async (userData) => {
@@ -37,7 +38,11 @@ function SignUp() {
                 uid: userData.user.uid
             }).then(res => {
                 console.log(res);
-                history.push('/')
+                signin(email, password).then(() =>{
+                    history.replace('/');
+                }).catch(e => {
+                    console.log(e.message);
+                })
             });
         }).catch(e => {
             console.log(e.message)
@@ -60,81 +65,124 @@ function SignUp() {
     }, [password])
 
     return (
-        <table className={classes.SignUpTable}>
-            <tbody>
-            <tr>
-                <td>
-                    <h2>Sign up to see photos from your friends!</h2>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <TextField label="Email" variant="outlined" value={email} onChange={(event) => setEmail(event.target.value)} error={errorEmail} fullWidth style = {{width: 300}}/>
-                    <FormHelperText error margin='dense' className={classes.ErrorText}>{errorEmail ? "The email is not valid": " "}</FormHelperText>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <TextField label="Name" variant="outlined" value={name} onChange={(event) => changeName(event.target.value)} style = {{width: 300}}/>
-                    <FormHelperText error margin='dense' className={classes.ErrorText}> </FormHelperText>
-                </td>
-            </tr>
-            <tr>
-                <td>  
-                    <FormControl  variant="outlined" error={errorPassword} style = {{width: 300}}>
-                        <InputLabel>Password</InputLabel>
-                            <OutlinedInput 
-                                type={showPassword ? 'text' : 'password'}
-                                value={password}
-                                onChange={(event) => setPassword(event.target.value)}
-                                labelWidth={70}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton onMouseDown={(event) => {event.preventDefault()}} onClick={() => changeShowPassword(!showPassword)}>
-                                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                             />
-                    </FormControl>
-                    <FormHelperText error margin='dense' className={classes.ErrorText}>{errorPassword ? "The password must contain at least eight characters, at least one number, at least one special character, and both lower and upper case letters" : " "}</FormHelperText>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                <FormControl  variant="outlined" error={errorConfirmPassword} style = {{width: 300}}>
-                        <InputLabel>Confirm Password</InputLabel>
-                            <OutlinedInput 
-                                type={showPassword ? 'text' : 'password'}
-                                value={confirmPassword}
-                                onChange={(event) => setConfirmPassword(event.target.value)}
-                                labelWidth={135}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton onMouseDown={(event) => {event.preventDefault()}} onClick={() => changeShowPassword(!showPassword)}>
-                                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                             />
-                    </FormControl>
-                    <FormHelperText error margin='dense' className={classes.ErrorText}>{errorConfirmPassword ? "The password do not match" : " "}</FormHelperText>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <Button variant="outlined" size="large" color="primary" onClick={submitForm} disabled={errorEmail || name === "" || errorPassword || email === "" || password === "" || confirmPassword === "" || errorConfirmPassword}>
-                        Sign up
-                    </Button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h3>Already have an account? <Link to="/signin"> Sign in</Link></h3>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+
+        <div className={classes.super_container}>
+            <div className={classes.container}>
+
+                <div className={classes.container_image}>
+                    <img src={wallStreetBets} alt="WallStreet Bets logo"/>
+                </div>
+
+                <div className={classes.container_title}>Sign up to see pictures of your friends!</div>
+
+                <form className={classes.container_item}>
+
+                    <label>email</label>
+                    <input type="text" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="email"/>
+                    {errorEmail ? <div className={classes.container_error}>The email is not valid</div> : null}
+
+                    <label>name</label>
+                    <input type="text" value={name} onChange={(event) => changeName(event.target.value)} placeholder="name"/>
+
+                    <label>password</label>
+                    <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="password"/>
+                    {errorPassword ? <div className={classes.container_error}>
+                        The password must contain at least eight characters, at least one number, at least one special character, and both lower and upper case letters
+                    </div> : null}
+
+                    <label>confirm password</label>
+                    <input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)}
+                           placeholder="confirm password"/>
+                    {errorConfirmPassword ? <div className={classes.container_error}>The passwords do not match</div> : null}
+
+                </form>
+
+                <button type="submit" className={classes.submit_button} onClick={submitForm}
+                        disabled={errorEmail || name === "" || errorPassword || email === "" || password === "" || confirmPassword === "" || errorConfirmPassword}>
+                    Sign up!
+                </button>
+                <div className={classes.container_footer}>Already have an account? <Link to="/signin"> Sign in!</Link></div>
+
+            </div>
+        </div>
+
+        // <table className={classes.SignUpTable}>
+        //     <tbody>
+        //     <tr>
+        //         <td>
+        //             <h2>Sign up to see photos from your friends!</h2>
+        //         </td>
+        //     </tr>
+        //     <tr>
+        //         <td>
+        //             <TextField label="Email" variant="outlined" value={email} onChange={(event) => setEmail(event.target.value)} error={errorEmail} fullWidth style = {{width: 300}}/>
+        //             <FormHelperText error margin='dense' className={classes.ErrorText}>{errorEmail ? "The email is not valid": " "}</FormHelperText>
+        //         </td>
+        //     </tr>
+        //     <tr>
+        //         <td>
+        //             <TextField label="Name" variant="outlined" value={name} onChange={(event) => changeName(event.target.value)} style = {{width: 300}}/>
+        //             <FormHelperText error margin='dense' className={classes.ErrorText}> </FormHelperText>
+        //         </td>
+        //     </tr>
+        //     <tr>
+        //         <td>
+        //             <FormControl  variant="outlined" error={errorPassword} style = {{width: 300}}>
+        //                 <InputLabel>Password</InputLabel>
+        //                     <OutlinedInput
+        //                         type={showPassword ? 'text' : 'password'}
+        //                         value={password}
+        //                         onChange={(event) => setPassword(event.target.value)}
+        //                         labelWidth={70}
+        //                             endAdornment={
+        //                                 <InputAdornment position="end">
+        //                                     <IconButton onMouseDown={(event) => {event.preventDefault()}} onClick={() => changeShowPassword(!showPassword)}>
+        //                                         {showPassword ? <Visibility /> : <VisibilityOff />}
+        //                                     </IconButton>
+        //                                 </InputAdornment>
+        //                             }
+        //                      />
+        //             </FormControl>
+        //             <FormHelperText error margin='dense' className={classes.ErrorText}>{errorPassword ?
+        //             "The password must contain at least eight characters, at least one number, at least one special character, and both lower and upper case letters" : " "}</FormHelperText>
+        //         </td>
+        //     </tr>
+        //     <tr>
+        //         <td>
+        //         <FormControl  variant="outlined" error={errorConfirmPassword} style = {{width: 300}}>
+        //                 <InputLabel>Confirm Password</InputLabel>
+        //                     <OutlinedInput
+        //                         type={showPassword ? 'text' : 'password'}
+        //                         value={confirmPassword}
+        //                         onChange={(event) => setConfirmPassword(event.target.value)}
+        //                         labelWidth={135}
+        //                             endAdornment={
+        //                                 <InputAdornment position="end">
+        //                                     <IconButton onMouseDown={(event) => {event.preventDefault()}} onClick={() => changeShowPassword(!showPassword)}>
+        //                                         {showPassword ? <Visibility /> : <VisibilityOff />}
+        //                                     </IconButton>
+        //                                 </InputAdornment>
+        //                             }
+        //                      />
+        //             </FormControl>
+        //             <FormHelperText error margin='dense' className={classes.ErrorText}>{errorConfirmPassword ? "The password do not match" : " "}</FormHelperText>
+        //         </td>
+        //     </tr>
+        //     <tr>
+        //         <td>
+        //             <Button variant="outlined" size="large" color="primary" onClick={submitForm}
+        //             disabled={errorEmail || name === "" || errorPassword || email === "" || password === "" || confirmPassword === "" || errorConfirmPassword}>
+        //                 Sign up
+        //             </Button>
+        //         </td>
+        //     </tr>
+        //     <tr>
+        //         <td>
+        //             <h3>Already have an account? <Link to="/signin"> Sign in</Link></h3>
+        //         </td>
+        //     </tr>
+        //     </tbody>
+        // </table>
     )
 }
 

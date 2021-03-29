@@ -14,6 +14,7 @@ import axios from 'axios'
 import Dialog from "./Followers_Following_Dialog/Dialog";
 import IconButton from '@material-ui/core/IconButton'
 import { DropzoneDialog } from 'material-ui-dropzone'
+import Navbar from "../Navbar/Navbar";
 
 function Profile(props) {
     const [picture, setPicture] = useState(null)
@@ -27,7 +28,7 @@ function Profile(props) {
     const [comments, changeComments] = useState(null)
     const [like, changeLike] = useState(null)
     const [text, changeText] = useState("")
-    const { currentUser, signout } = useAuth();
+    const { currentUser } = useAuth();
     const history = useHistory();
     const params = useParams();
     const { openFollowersModal, openFollowingModal, openFollowersDialog, openFollowingDialog } = useContext(ModalContext);
@@ -58,7 +59,7 @@ function Profile(props) {
                 })
             axios.get(`/posts/${params.id}`).then((res) => {
                 const { data } = res;
-                changePictures(data)
+                changePictures(data);
             })
         }
     }, [currentUser, history, params.id])
@@ -140,7 +141,10 @@ function Profile(props) {
         formData.append('avatar', event[0]);
         formData.append('uid', currentUser.uid);
         axios.post('/users/avatar', formData
-        ).then((res) => {console.log(res)});
+        ).then((res) => {
+            console.log(res);
+            setPicture(res.data.data);
+        });
         setShown(false);
     }
 
@@ -170,6 +174,8 @@ function Profile(props) {
     }
 
     return (
+        <React.Fragment>
+            <Navbar />
         <div className={classes.ProfileContainer}>
             <div className={classes.ProfileTop}>
                 {clickableAvatar}
@@ -200,7 +206,7 @@ function Profile(props) {
                             <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>
                 }
             </div>
-            <GridList cellHeight={250} style={{ width: "100%" }} cols={3}>
+            <GridList cellHeight={250} style={{ width: "100%", cursor: 'pointer' }} cols={3}>
                 {pictures.map((tile) => (<GridListTile key={tile._id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => {
                     setAttributes(event.target.attributes)
                 }}>
@@ -208,7 +214,7 @@ function Profile(props) {
                 </GridListTile>))}
             </GridList>
 
-            {openFollowersModal ? <Dialog type={"followers"} data={folllowersFollowing.followers} /> : null}
+            {openFollowersModal ? <Dialog contentStyle={{maxWidth: 300}}type={"followers"} data={folllowersFollowing.followers} /> : null}
 
             {openFollowingModal ? <Dialog type={"following"} data={folllowersFollowing.following} /> : null}
 
@@ -248,6 +254,7 @@ function Profile(props) {
 
             </Modal>
         </div>
+        </React.Fragment>
     )
 }
 
