@@ -31,6 +31,7 @@ function SignUp() {
     const { signup, signin } = useAuth();
 
     const submitForm = async () => {
+        // signup an user, then sign the user in and finally redirects user to the main page
         signup(email, password).then(async (userData) => {
             await axios.post('/users/signup', {
                 email: email,
