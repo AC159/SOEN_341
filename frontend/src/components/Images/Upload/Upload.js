@@ -40,6 +40,8 @@ class Upload extends Component {
         formData.append('avatar', this.props.currentUser.avatar);
         axios.post('/posts/new', formData).then(res => {
             console.log(res);
+            // eslint-disable-next-line no-restricted-globals
+            location.reload(); 
         });
     };
 

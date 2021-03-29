@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../../../AuthProvider';
 import wallStreetBets from "../../../../src/assets/images/wallStreetBets.jpg";
@@ -8,17 +8,24 @@ function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
-    const { signin } = useAuth();
+    const { signin, currentUser } = useAuth();
     const history = useHistory();
 
     const submitForm = () => {
         signin(email, password).then(() =>{
-            history.replace('/');
+            setTimeout(() =>{
+                history.replace('/');
+            }, 500)
         })
         .catch(e => {
             setError(e.message)
         })
     }
+    useEffect(() => {
+        if (currentUser !== null){
+            history.push('/')
+        }
+    }, [currentUser, history])
 
     return (
 
