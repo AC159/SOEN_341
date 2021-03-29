@@ -1,16 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../../../AuthProvider';
-// import TextField from '@material-ui/core/TextField';
-// import IconButton from '@material-ui/core/IconButton';
-// import OutlinedInput from '@material-ui/core/OutlinedInput';
-// import InputLabel from '@material-ui/core/InputLabel';
-// import InputAdornment from '@material-ui/core/InputAdornment';
-// import FormHelperText from '@material-ui/core/FormHelperText';
-// import FormControl from '@material-ui/core/FormControl';
-// import Button from '@material-ui/core/Button';
-// import Visibility from '@material-ui/icons/Visibility';
-// import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import axios from 'axios';
 import wallStreetBets from "../../../assets/images/wallStreetBets.jpg";
 import classes from './SignUp.module.css';
@@ -106,83 +96,6 @@ function SignUp() {
             </div>
         </div>
 
-        // <table className={classes.SignUpTable}>
-        //     <tbody>
-        //     <tr>
-        //         <td>
-        //             <h2>Sign up to see photos from your friends!</h2>
-        //         </td>
-        //     </tr>
-        //     <tr>
-        //         <td>
-        //             <TextField label="Email" variant="outlined" value={email} onChange={(event) => setEmail(event.target.value)} error={errorEmail} fullWidth style = {{width: 300}}/>
-        //             <FormHelperText error margin='dense' className={classes.ErrorText}>{errorEmail ? "The email is not valid": " "}</FormHelperText>
-        //         </td>
-        //     </tr>
-        //     <tr>
-        //         <td>
-        //             <TextField label="Name" variant="outlined" value={name} onChange={(event) => changeName(event.target.value)} style = {{width: 300}}/>
-        //             <FormHelperText error margin='dense' className={classes.ErrorText}> </FormHelperText>
-        //         </td>
-        //     </tr>
-        //     <tr>
-        //         <td>
-        //             <FormControl  variant="outlined" error={errorPassword} style = {{width: 300}}>
-        //                 <InputLabel>Password</InputLabel>
-        //                     <OutlinedInput
-        //                         type={showPassword ? 'text' : 'password'}
-        //                         value={password}
-        //                         onChange={(event) => setPassword(event.target.value)}
-        //                         labelWidth={70}
-        //                             endAdornment={
-        //                                 <InputAdornment position="end">
-        //                                     <IconButton onMouseDown={(event) => {event.preventDefault()}} onClick={() => changeShowPassword(!showPassword)}>
-        //                                         {showPassword ? <Visibility /> : <VisibilityOff />}
-        //                                     </IconButton>
-        //                                 </InputAdornment>
-        //                             }
-        //                      />
-        //             </FormControl>
-        //             <FormHelperText error margin='dense' className={classes.ErrorText}>{errorPassword ?
-        //             "The password must contain at least eight characters, at least one number, at least one special character, and both lower and upper case letters" : " "}</FormHelperText>
-        //         </td>
-        //     </tr>
-        //     <tr>
-        //         <td>
-        //         <FormControl  variant="outlined" error={errorConfirmPassword} style = {{width: 300}}>
-        //                 <InputLabel>Confirm Password</InputLabel>
-        //                     <OutlinedInput
-        //                         type={showPassword ? 'text' : 'password'}
-        //                         value={confirmPassword}
-        //                         onChange={(event) => setConfirmPassword(event.target.value)}
-        //                         labelWidth={135}
-        //                             endAdornment={
-        //                                 <InputAdornment position="end">
-        //                                     <IconButton onMouseDown={(event) => {event.preventDefault()}} onClick={() => changeShowPassword(!showPassword)}>
-        //                                         {showPassword ? <Visibility /> : <VisibilityOff />}
-        //                                     </IconButton>
-        //                                 </InputAdornment>
-        //                             }
-        //                      />
-        //             </FormControl>
-        //             <FormHelperText error margin='dense' className={classes.ErrorText}>{errorConfirmPassword ? "The password do not match" : " "}</FormHelperText>
-        //         </td>
-        //     </tr>
-        //     <tr>
-        //         <td>
-        //             <Button variant="outlined" size="large" color="primary" onClick={submitForm}
-        //             disabled={errorEmail || name === "" || errorPassword || email === "" || password === "" || confirmPassword === "" || errorConfirmPassword}>
-        //                 Sign up
-        //             </Button>
-        //         </td>
-        //     </tr>
-        //     <tr>
-        //         <td>
-        //             <h3>Already have an account? <Link to="/signin"> Sign in</Link></h3>
-        //         </td>
-        //     </tr>
-        //     </tbody>
-        // </table>
     )
 }
 

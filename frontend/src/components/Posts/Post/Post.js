@@ -100,13 +100,13 @@ function Post(props){
                 <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
             </div>
             {inputBox ? <div className = "Post-Comments">
+                <div className = "Post-Comments2">
                 {comments.map((item, index) => {
-                    if (comments.length - index < 6)
                         return(
                             <p className="Post-comments"><b>{item.person}</b>{item.content}</p>
                         )
-                    else {}
                 })}
+                </div>
                 <div className="Post-comment">
                     <TextField id="outlined-basic" label="Comment..." variant="outlined" style={{width: "85%"}} value={text} onChange={(event) => changeText(event.target.value)}/>
                     <Button disabled={text === ""} variant="outlined" onClick={postComment} style={{width: "15%"}} >Post</Button>
