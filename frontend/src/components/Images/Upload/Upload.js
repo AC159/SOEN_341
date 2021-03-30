@@ -22,13 +22,7 @@ class Upload extends Component {
         };
     }
 
-
-    dialogOpen() {
-        this.setState({
-            isShown: true
-        });
-    };
-
+    //Create a POST request to upload the image
     dialogSubmit() {
         this.setState({
             isShown: false
@@ -40,8 +34,14 @@ class Upload extends Component {
         formData.append('avatar', this.props.currentUser.avatar);
         axios.post('/posts/new', formData).then(res => {
             console.log(res);
-            // eslint-disable-next-line no-restricted-globals
-            location.reload(); 
+            location.reload(); //Profile and feed update
+        });
+    };
+
+    //Modal handlers
+    dialogOpen() {
+        this.setState({
+            isShown: true
         });
     };
 
@@ -74,7 +74,7 @@ class Upload extends Component {
             files: files,
             open: false
         });
-        this.dialogOpen();
+        this.dialogOpen(); //Caption modal
     }
 
     render() {
