@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const multer = require('multer');
 const cloudHelpers = require('../cloudStorage/helpers');
 const Post = require('../Database/Models/Post');
@@ -12,12 +12,12 @@ const upload = multer({
   limits: {
     fileSize: 10 * 1024 * 1024, // Max image size is 10mb
   },
-})
+});
 
 router.get('/:uid/followers', async (req, res) => {
   const users = await User.find({});
   return res.json(users);
-})
+});
 
 /* GET a user's information:
 *
@@ -69,7 +69,7 @@ router.post('/signup', async function (req, res) {
       res.status(400).send({ error });
     }
 
-})
+});
 
 /* POST an image for a user:
 *
@@ -155,7 +155,7 @@ router.post('/follow', async function (req, res) {
       res.send(error);
     }
 
-})
+});
 
 /* POST request to unfollow a user:
 *
@@ -186,7 +186,7 @@ router.post('/unfollow', async function (req, res) {
     res.send(error);
   }
 
-})
+});
 
 router.get('/search/:filter', async function (req, res) {
 
@@ -203,7 +203,6 @@ router.get('/search/:filter', async function (req, res) {
   } catch (error) {
     res.send(error);
   }
-
 
 });
 
