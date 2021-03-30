@@ -15,6 +15,7 @@ import Dialog from "./Followers_Following_Dialog/Dialog";
 import IconButton from '@material-ui/core/IconButton'
 import { DropzoneDialog } from 'material-ui-dropzone'
 import Navbar from "../Navbar/Navbar";
+import BootstrapTooltips from "../Posts/Post/BootstrapTooltip";
 
 function Profile(props) {
     const [picture, setPicture] = useState(null)
@@ -32,6 +33,13 @@ function Profile(props) {
     const history = useHistory();
     const params = useParams();
     const { openFollowersModal, openFollowingModal, openFollowersDialog, openFollowingDialog } = useContext(ModalContext);
+
+
+    useEffect(() => {
+        // Fetch
+
+
+    }, [])
 
     useEffect(() => {
         // Verify if the current user is already following the other user and change state accordingly
@@ -130,9 +138,30 @@ function Profile(props) {
             if (like === null && !JSON.parse(attributes.getNamedItem("likedby").value).includes(currentUser.name))
                 changeLike(JSON.parse(attributes.getNamedItem("likedby").value).concat(currentUser.name))
             else if (like !== null && !like.includes(currentUser.name))
-                changeLike(like.concat(currentUser.name))
+                changeLike(like.concat(currentUser.name));
+            window.location.reload(false);
         }).catch((error) => {
             console.log(error)
+        });
+    }
+
+    const postUnlike = () => {
+        axios.post('/posts/unlike', {
+            uid: currentUser.uid,
+            name: currentUser.name,
+            postID: attributes.getNamedItem("id").value
+        }).then((response) => {
+            console.log('Like', like);
+            // Remove the current user name from the list of "likes" for this post since he just unliked
+            if (like !== null && !JSON.parse(attributes.getNamedItem("likedby").value).includes(currentUser.name)) {
+                changeLike(JSON.parse(attributes.getNamedItem("likedby").value).filter(name => name !== currentUser.name))
+            }
+            else if (like !== null && !like.includes(currentUser.name)) {
+                changeLike(like.filter(name => name !== currentUser.name));
+            }
+            window.location.reload(false);
+        }).catch((error) => {
+            console.log(error);
         });
     }
 
@@ -214,7 +243,7 @@ function Profile(props) {
                 </GridListTile>))}
             </GridList>
 
-            {openFollowersModal ? <Dialog contentStyle={{maxWidth: 300}}type={"followers"} data={folllowersFollowing.followers} /> : null}
+            {openFollowersModal ? <Dialog contentStyle={{maxWidth: 300}} type={"followers"} data={folllowersFollowing.followers} /> : null}
 
             {openFollowingModal ? <Dialog type={"following"} data={folllowersFollowing.following} /> : null}
 
@@ -231,10 +260,29 @@ function Profile(props) {
                             </div>
                             <h3 style={{ marginTop: '5px', marginBottom: '-10px' }}>{attributes.getNamedItem("alt").value}</h3>
                             <div className={classes.ProfileCaption}>
-                                {/* <h4>Liked by {attributes.getNamedItem("likedby").value}</h4> */}
-                                <h4>{like === null ? JSON.parse(attributes.getNamedItem("likedby").value).length > 2 ? "Liked by " + JSON.parse(attributes.getNamedItem("likedby").value)[0] + ", " + JSON.parse(attributes.getNamedItem("likedby").value)[1] + " and many others" : JSON.parse(attributes.getNamedItem("likedby").value).length === 0 ? "" : "Liked by " + JSON.parse(attributes.getNamedItem("likedby").value).join(", ") :
-                                    like.length > 2 ? "Liked by " + like[0] + ", " + like[1] + " and many others" : like.length === 0 ? "" : "Liked by " + like.join(", ")}</h4>
-                                <Button variant="outlined" size="small" style={{ height: 40, marginLeft: 'auto' }} onClick={() => postLike()}>Like</Button>
+
+                                <BootstrapTooltips title={JSON.parse(attributes.getNamedItem("likedby").value).join(', ')}>
+                                    <h4>{JSON.parse(attributes.getNamedItem("likedby").value).length + " like(s)"}</h4>
+                                </BootstrapTooltips>
+
+                                { (attributes.getNamedItem("likedby").value).includes(currentUser.name) ? <Button variant="outlined"
+                                        size="small" onClick={() => postUnlike(props.postID)}
+                                        style={{height: 40, marginLeft:'auto'}}>Unlike</Button> : <Button variant="outlined"
+                                          size="small"
+                                          onClick={() => postLike(props.postID)}
+                                          style={{height: 40, marginLeft:'auto'}}>Like</Button>
+                                }
+
+                                {/*<h4>{like === null ? JSON.parse(attributes.getNamedItem("likedby").value).length > 2 ?*/}
+                                {/*    "Liked by " + JSON.parse(attributes.getNamedItem("likedby").value)[0] + ", " +*/}
+                                {/*    JSON.parse(attributes.getNamedItem("likedby").value)[1] + " and many others" :*/}
+                                {/*    JSON.parse(attributes.getNamedItem("likedby").value).length === 0 ? "" :*/}
+                                {/*        "Liked by " + JSON.parse(attributes.getNamedItem("likedby").value).join(", ") :*/}
+                                {/*    like.length > 2 ? "Liked by " + like[0] + ", " + like[1] + " and many others" :*/}
+                                {/*        like.length === 0 ? "" : "Liked by " + like.join(", ")}</h4>*/}
+
+                                {/*<Button variant="outlined" size="small" style={{ height: 40, marginLeft: 'auto' }} onClick={() => postLike()}>Like</Button>*/}
+
                             </div>
                         </div>
                         <div className={classes.ProfileComment}>

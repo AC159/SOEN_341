@@ -29,7 +29,7 @@ const uploadImage = (image) => new Promise((resolve, reject) => {
 
     stream.end(image.buffer);
 
-})
+});
 
 
 const deleteImage = (imageUrl) => new Promise((resolve, reject) => {
@@ -44,7 +44,7 @@ const deleteImage = (imageUrl) => new Promise((resolve, reject) => {
         reject(error);
     });
 
-})
+});
 
 
 module.exports.uploadImage = uploadImage;

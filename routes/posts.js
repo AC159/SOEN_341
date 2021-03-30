@@ -4,13 +4,21 @@ const cloudHelpers = require('../cloudStorage/helpers');
 const Post = require('../Database/Models/Post');
 const User = require('../Database/Models/User.js');
 
-// Middleware to check for image size an
+// Middleware to check for image size
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: {
       fileSize: 10 * 1024 * 1024, // Max image size is 10mb
     },
   })
+
+
+// Route to post a new picture
+/* POST a picture for a user:
+*
+* REQUEST PARAMS: req.body.uid + req.body.caption + image file with name 'image'
+*
+*  */
 
 router.post('/new', upload.single('image'), async function(req, res, next) {
     try {
@@ -75,11 +83,11 @@ router.post('/comment', async function (req, res) {
     res.send(error);
   }
 
-})
+});
 
   /* DELETE an image for a user:
 *
-* REQUEST PARAMS: req.body.name + req.body.imageUrl
+* REQUEST PARAMS: req.body.imageUrl
 *
 *  */
 
@@ -113,18 +121,40 @@ router.delete('/:id', async function (req, res) {
       res.send(error);
     }
   
-  })
+  });
+
+
+// Route to get a post
+/* GET a post for a user:
+*
+* REQUEST PARAMS: req.params.uid
+*
+*  */
 
 router.get('/:uid', async (req, res) => {
   const posts = await Post.find({owner: req.params.uid}).populate('owner', '_id name avatar');
   return res.json(posts);
-})
+});
 
+
+
+/* GET all posts from database:
+*
+* REQUEST PARAMS: No params
+*
+*/
 router.get('/', async (req, res) => {
     const posts = await Post.find({}).populate('owner', '_id name avatar');
     return res.json(posts);
-})
+});
 
+
+// Route to like a post
+/* POST a like on a post:
+*
+* REQUEST PARAMS: req.body.name + req.body.postID
+*
+*  */
 router.post('/like', async (req, res) => {
 
   try {
@@ -140,7 +170,15 @@ router.post('/like', async (req, res) => {
     res.send(error);
   }
 
-})
+});
+
+
+// Route to unlike a post
+/* POST an unlike on a post:
+*
+* REQUEST PARAMS: req.body.name + req.body.postID
+*
+*  */
 
 router.post('/unlike', async (req, res) => {
 
@@ -157,6 +195,6 @@ router.post('/unlike', async (req, res) => {
     res.send(error);
   }
 
-})
+});
   
 module.exports.router = router;
