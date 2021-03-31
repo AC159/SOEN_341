@@ -1,0 +1,64 @@
+
+
+.PictureModal_profileTop{
+    display: flex;
+    justify-content: space-between!important;
+    margin: 10px;
+    padding-bottom: 20px;
+}
+
+.PictureModal_stats{
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+    margin: 10px;
+     font-size: large;
+}
+
+.PictureModal_loading{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.PictureModal_popup{
+    background-color: white;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    padding: 20px;
+    min-width: 50vw;
+    max-width: 80vw;
+    display: flex;
+}
+
+.PictureModal_picture{
+    text-align: center;
+}
+
+.PictureModal_comment{
+    width: 30vw;
+    word-wrap: break-word;
+    margin-left: 10px;
+  }
+  
+.PictureModal_comment b{
+    margin-right: 10px;
+}
+  .PictureModal_commentsScroll{
+      overflow-y: auto;
+      overflow-x: hidden;
+      max-height: 75vh;
+  }
+
+  .PictureModal_caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.PictureModal_commentBox{
+    margin-top: 10px;
+    display: flex;
+}
