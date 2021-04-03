@@ -5,7 +5,6 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
-import TextField from '@material-ui/core/TextField';
 import { useAuth } from '../../AuthProvider';
 import { ModalContext } from './ModalContextProvider/ModalContextProvider';
 import { useHistory, useParams } from "react-router-dom";
@@ -15,7 +14,7 @@ import Dialog from "./Followers_Following_Dialog/Dialog";
 import IconButton from '@material-ui/core/IconButton'
 import { DropzoneDialog } from 'material-ui-dropzone'
 import Navbar from "../Navbar/Navbar";
-import BootstrapTooltips from "../Posts/Post/BootstrapTooltip";
+import PictureModal from './PictureModal/PictureModal'
 
 function Profile(props) {
     const [picture, setPicture] = useState(null)
@@ -24,32 +23,22 @@ function Profile(props) {
     const [includesID, setIncludesID] = useState(false);
     const [pictures, changePictures] = useState(null)
     const [open, setOpen] = useState(false)
-    const [shown, setShown] = useState(false) 
+    const [shown, setShown] = useState(false)
     const [attributes, setAttributes] = useState("")
-    const [comments, changeComments] = useState(null)
-    const [like, changeLike] = useState(null)
-    const [text, changeText] = useState("")
     const { currentUser } = useAuth();
     const history = useHistory();
     const params = useParams();
     const { openFollowersModal, openFollowingModal, openFollowersDialog, openFollowingDialog } = useContext(ModalContext);
 
-
-    useEffect(() => {
-        // Fetch
-
-
-    }, [])
-
     useEffect(() => {
         // Verify if the current user is already following the other user and change state accordingly
-
         if (folllowersFollowing !== null) {
             setIncludesID(folllowersFollowing.followers.some(user => user._id === currentUser.uid));
         }
 
     }, [folllowersFollowing, changeFollowersFollowing, setIncludesID, includesID]);
 
+    //fetching the data for the profile only if the user is logged in
     useEffect(() => {
         if (currentUser === null) {
             history.push('/signin')
@@ -72,36 +61,8 @@ function Profile(props) {
         }
     }, [currentUser, history, params.id])
 
-    useEffect(() => {
-        if (attributes === "");
-        else {
-            setOpen(true);
-        }
-    }, [attributes])
-
-    function postComment() {
-        let temp = comments || JSON.parse(attributes.getNamedItem("comments").value)
-        temp.push({ id: temp.length + 1, person: currentUser.name, content: text })
-        changeComments(temp)
-        changeText("")
-        axios.post('/posts/comment', {
-            comment: text,
-            imageUrl: attributes.getNamedItem("src").value,
-            uid: currentUser.uid,
-            name: currentUser.name,
-            ImageOwnerName: params.id,
-        })
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
-
     function TryFollow() {
         // Here the current user is looking at another user's profile page
-
         if (includesID) {
             axios.post('/users/unfollow', {
                 uid: currentUser.uid,
@@ -129,43 +90,16 @@ function Profile(props) {
         }
     }
 
-    const postLike = () => {
-        axios.post('/posts/like', {
-            uid: currentUser.uid,
-            name: currentUser.name,
-            postID: attributes.getNamedItem("id").value
-        }).then((response) => {
-            if (like === null && !JSON.parse(attributes.getNamedItem("likedby").value).includes(currentUser.name))
-                changeLike(JSON.parse(attributes.getNamedItem("likedby").value).concat(currentUser.name))
-            else if (like !== null && !like.includes(currentUser.name))
-                changeLike(like.concat(currentUser.name));
-            window.location.reload(false);
-        }).catch((error) => {
-            console.log(error)
-        });
-    }
+    //the popup needs to get the props from the clicked picture before opening
+    useEffect(() => {
+        if (attributes === "")
+            setOpen(false)
+        else 
+            setOpen(true)
+    }, [attributes])
 
-    const postUnlike = () => {
-        axios.post('/posts/unlike', {
-            uid: currentUser.uid,
-            name: currentUser.name,
-            postID: attributes.getNamedItem("id").value
-        }).then((response) => {
-            console.log('Like', like);
-            // Remove the current user name from the list of "likes" for this post since he just unliked
-            if (like !== null && !JSON.parse(attributes.getNamedItem("likedby").value).includes(currentUser.name)) {
-                changeLike(JSON.parse(attributes.getNamedItem("likedby").value).filter(name => name !== currentUser.name))
-            }
-            else if (like !== null && !like.includes(currentUser.name)) {
-                changeLike(like.filter(name => name !== currentUser.name));
-            }
-            window.location.reload(false);
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
-
-    const saveAvatar = (event) =>{
+    //similar working to the upload component that receives a picture to change the avatar
+    function saveAvatar(event){
         const formData = new FormData();
         formData.append('avatar', event[0]);
         formData.append('uid', currentUser.uid);
@@ -178,14 +112,14 @@ function Profile(props) {
     }
 
     if (picture === null || name === null || folllowersFollowing == null || pictures == null)
-        return (<div className={classes.loading}>
-            <CircularProgress size='100px' />
+        return (<div className={classes.Profile_loading}>
+            <CircularProgress size='100px'/>
         </div>)
 
     let clickableAvatar = null;
     if (currentUser.uid === params.id) {
-            clickableAvatar = <IconButton>
-            <Avatar alt={name} src={picture} onClick={() => {setShown(true)}} style={{ height: '150px', width: '150px' }} />
+        clickableAvatar = <IconButton>
+            <Avatar alt={name} src={picture} onClick={() => { setShown(true) }} style={{ height: '150px', width: '150px' }} />
             <DropzoneDialog
                 open={shown}
                 onSave={saveAvatar}
@@ -194,7 +128,7 @@ function Profile(props) {
                 showPreviewsInDropzone={true}
                 maxFileSize={1000000}
                 filesLimit={1}
-                onClose={() => {setShown(false)}}>
+                onClose={() => { setShown(false) }}>
             </DropzoneDialog>
         </IconButton>
 
@@ -202,106 +136,77 @@ function Profile(props) {
         clickableAvatar = <Avatar alt={name} src={picture} style={{ height: '150px', width: '150px' }} />
     }
 
+    //like function for the popup's props
+    function handleLike(index){
+        let temp = pictures
+        if (temp[index].likes.includes(currentUser.name)){
+            for (let i = 0; i < temp[index].likes.length; i++){
+                if (temp[index].likes[i] === currentUser.name){
+                    temp[index].likes.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        else {
+            temp[index].likes.push(currentUser.name)
+        }
+        changePictures(temp)
+    }
+
+    //comment function for the popup's props
+    function handleComment(index, content){
+        let temp = pictures
+        temp[index].comments.push({"person": currentUser.name, "content": content})
+        changePictures(temp)
+    }
+
     return (
         <React.Fragment>
             <Navbar />
-        <div className={classes.ProfileContainer}>
-            <div className={classes.ProfileTop}>
-                {clickableAvatar}
-                <table className={classes.ProfileStats}>
-                    <tbody>
-                        <tr>
-                            <td colSpan="2">
-                                <h1 className={classes.ProfileName}>{name}</h1>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span className={classes.ProfileStats} onClick={() => openFollowersDialog(true)} style={{ cursor: 'pointer' }}>
-                                    Followers: {folllowersFollowing.followers.length}
-                                </span>
-                            </td>
-                            <td>
-                                <span className={classes.ProfileStats} onClick={() => openFollowingDialog(true)} style={{ cursor: 'pointer' }}>
-                                    Following: {folllowersFollowing.following.length}
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                {
-                    currentUser.uid === params.id ? <div /> :
-                        includesID ? <div><Button variant="outlined" onClick={TryFollow}>Unfollow</Button></div> :
-                            <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>
-                }
-            </div>
-            <GridList cellHeight={250} style={{ width: "100%", cursor: 'pointer' }} cols={3}>
-                {pictures.map((tile) => (<GridListTile key={tile._id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => {
-                    setAttributes(event.target.attributes)
+            <div className={classes.Profile_container}>
+                <div className={classes.Profile_top}>
+                    {clickableAvatar}
+                    <table className={classes.Profile_stats}>
+                        <tbody>
+                            <tr>
+                                <td colSpan="2">
+                                    <h1 className={classes.Profile_name}>{name}</h1>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span className={classes.Profile_stats} onClick={() => openFollowersDialog(true)} style={{ cursor: 'pointer' }}>
+                                        Followers: {folllowersFollowing.followers.length}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span className={classes.Profile_stats} onClick={() => openFollowingDialog(true)} style={{ cursor: 'pointer' }}>
+                                        Following: {folllowersFollowing.following.length}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {
+                        currentUser.uid === params.id ? <div /> :
+                            includesID ? <div><Button variant="outlined" onClick={TryFollow}>Unfollow</Button></div> :
+                                <div> <Button variant="outlined" onClick={TryFollow}>Follow</Button></div>
+                    }
+                </div>
+                <GridList cellHeight={250} style={{ width: "100%", cursor: 'pointer' }} cols={3}>
+                    {pictures.map((tile, index) => (<GridListTile key={tile._id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => setAttributes(event.target.attributes)}>
+                        <img src={tile.imageUrl} alt={tile.caption} likedby={JSON.stringify(tile.likes)} comments={JSON.stringify(tile.comments)} id={tile._id} index={index} />
+                    </GridListTile>))}
+                </GridList>
+                {openFollowersModal ? <Dialog contentStyle={{ maxWidth: 300 }} type={"followers"} data={folllowersFollowing.followers} /> : null}
+                {openFollowingModal ? <Dialog type={"following"} data={folllowersFollowing.following} /> : null}
+                <Modal open={open} onClose={() => {
+                    setOpen(false)
+                    setAttributes("")
                 }}>
-                    <img src={tile.imageUrl} alt={tile.caption} likedby={JSON.stringify(tile.likes)} comments={JSON.stringify(tile.comments)} id={tile._id} />
-                </GridListTile>))}
-            </GridList>
-
-            {openFollowersModal ? <Dialog contentStyle={{maxWidth: 300}} type={"followers"} data={folllowersFollowing.followers} /> : null}
-
-            {openFollowingModal ? <Dialog type={"following"} data={folllowersFollowing.following} /> : null}
-
-            <Modal open={open} onClose={() => {
-                setOpen(false)
-                setAttributes("")
-                changeComments(null)
-            }}>
-                {attributes === "" ? null :
-                    <div className={classes.Popup}>
-                        <div>
-                            <div className={classes.PopupPicture}>
-                                <img src={attributes.getNamedItem("src").value} alt={attributes.getNamedItem("alt").value} style={{ maxHeight: '75vh', maxWidth: "80vw" }} />
-                            </div>
-                            <h3 style={{ marginTop: '5px', marginBottom: '-10px' }}>{attributes.getNamedItem("alt").value}</h3>
-                            <div className={classes.ProfileCaption}>
-
-                                <BootstrapTooltips title={JSON.parse(attributes.getNamedItem("likedby").value).join(', ')}>
-                                    <h4>{JSON.parse(attributes.getNamedItem("likedby").value).length + " like(s)"}</h4>
-                                </BootstrapTooltips>
-
-                                { (attributes.getNamedItem("likedby").value).includes(currentUser.name) ? <Button variant="outlined"
-                                        size="small" onClick={() => postUnlike(props.postID)}
-                                        style={{height: 40, marginLeft:'auto'}}>Unlike</Button> : <Button variant="outlined"
-                                          size="small"
-                                          onClick={() => postLike(props.postID)}
-                                          style={{height: 40, marginLeft:'auto'}}>Like</Button>
-                                }
-
-                                {/*<h4>{like === null ? JSON.parse(attributes.getNamedItem("likedby").value).length > 2 ?*/}
-                                {/*    "Liked by " + JSON.parse(attributes.getNamedItem("likedby").value)[0] + ", " +*/}
-                                {/*    JSON.parse(attributes.getNamedItem("likedby").value)[1] + " and many others" :*/}
-                                {/*    JSON.parse(attributes.getNamedItem("likedby").value).length === 0 ? "" :*/}
-                                {/*        "Liked by " + JSON.parse(attributes.getNamedItem("likedby").value).join(", ") :*/}
-                                {/*    like.length > 2 ? "Liked by " + like[0] + ", " + like[1] + " and many others" :*/}
-                                {/*        like.length === 0 ? "" : "Liked by " + like.join(", ")}</h4>*/}
-
-                                {/*<Button variant="outlined" size="small" style={{ height: 40, marginLeft: 'auto' }} onClick={() => postLike()}>Like</Button>*/}
-
-                            </div>
-                        </div>
-                        <div className={classes.ProfileComment}>
-                            <div className={classes.ProfileCommentScroll}>
-                                {comments === null ? JSON.parse(attributes.getNamedItem("comments").value).map(item => {
-                                    return (<p className="Post-comments"><b>{item.person}</b>{item.content}</p>)
-                                }) : comments.map(item => {
-                                    return (<p className="Post-comments"><b>{item.person}</b>{item.content}</p>)
-                                })}
-                            </div>
-                            <div style={{ marginTop: '10px' }}>
-                                <TextField id="outlined-basic" label="Comment..." variant="outlined" style={{ marginLeft: "10px", width: '80%' }} value={text} onChange={(event) => changeText(event.target.value)} />
-                                <Button variant="outlined" onClick={postComment} style={{ height: 56 }} >Post</Button>
-                            </div>
-                        </div>
-                    </div>}
-
-            </Modal>
-        </div>
+                   {open ?  <PictureModal commentFunction={handleComment} likeFunction={handleLike} comments={JSON.parse(attributes.getNamedItem("comments").value)} likedBy={JSON.parse(attributes.getNamedItem("likedby").value)} postID={attributes.getNamedItem("id").value} caption={attributes.getNamedItem("alt").value} source={attributes.getNamedItem("src").value} index={attributes.getNamedItem("index").value}/>: null}
+                </Modal>
+            </div>
         </React.Fragment>
     )
 }

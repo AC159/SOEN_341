@@ -34,7 +34,7 @@ class Upload extends Component {
         formData.append('avatar', this.props.currentUser.avatar);
         axios.post('/posts/new', formData).then(res => {
             console.log(res);
-            location.reload(); //Profile and feed update
+            window.location.reload(); //Profile and feed update
         });
     };
 

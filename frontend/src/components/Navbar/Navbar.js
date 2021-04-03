@@ -116,9 +116,6 @@ const Navbar = (props) => {
                         label="Search user..." variant="outlined" margin='dense' style={{ height: 40, marginTop: '5px' }} />
                         )}
                 />
-
-                {/*<Button variant="outlined" style={{ height: 40, marginTop: '5px' }} >Search</Button>*/}
-
             </div>
             <nav className={classes.NavigationItem}>
                 <BottomNavigation showLabels value={page} onChange={(event, newPage) => { changePage(newPage); }}>
