@@ -3,7 +3,7 @@ import Post from './Post/Post';
 import axios from "axios";
 import Image from '../../assets/images/anonymous.jpg'
 import CircularProgress from '@material-ui/core/CircularProgress';
-import '../Posts/Post/Post.css'
+import classes from '../Posts/Post/Post.module.css'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { useAuth } from '../../AuthProvider';
@@ -51,7 +51,7 @@ const Posts = (props) => {
     }, [Posts, hiddenPosts])
 
     if (Posts === null && hiddenPosts === null)
-        return <div className="loading">
+        return <div className={classes.Posts_loading}>
             <CircularProgress size='100px'/>
         </div>
 

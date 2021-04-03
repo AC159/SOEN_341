@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import './Post.css';
+import classes from'./Post.module.css';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import BootstrapTooltips from './BootstrapTooltip';
@@ -15,9 +15,7 @@ function Post(props){
     const { currentUser } = useAuth();
 
     function postComment() {
-
         // Post a comment (send the data to the backend) and change state so that it triggers a re-render of the component
-
         let temp = comments
         temp.push({id: comments.length + 1, person: props.user, content: text})
         changeComments(temp)
@@ -77,24 +75,22 @@ function Post(props){
         });
     }
 
-        return <article className="Post">
+        return <article className={classes.Post}>
             {props.modal ? null: <header>
-                <div className="Post-user">
-                    <div className="Post-user-avatar">
+                <div className={classes.Post_user}>
+                    <div className={classes.Post_userAvatar}>
                         <Link to={"/profile/" + props.owner}> <img src={props.profile} alt="Anonymous"/></Link>
                     </div>
-                    <div className="Post-user-nickname">
+                    <div className={classes.Post_userNickname}>
                         <Link to={"/profile/" + props.owner}><p style={{textDecoration:'none', color:'black'}}>{props.name}</p></Link>
                     </div>
                 </div>
             </header>}
-            <div className="Post-image">
-                <div className="Post-image-bg">
-                    <img src={props.source} alt="Anonymous"/>
-                </div>
+            <div className={classes.Post_image}>
+                <img src={props.source} alt="Anonymous"/>
             </div>
-            <h3 className="Post-caption">{props.caption}</h3>
-            <div className="Post-like">
+            <h3 className={classes.Post_caption}>{props.caption}</h3>
+            <div className={classes.Post_like}>
                 <BootstrapTooltips title={like.join(",\n")}>
                     <h4>{like.length + " like(s)"}</h4>
                 </BootstrapTooltips>
@@ -107,16 +103,16 @@ function Post(props){
                 }
                 <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
             </div>
-            {inputBox ? <div className = "Post-Comments">
-                <div className = "Post-Comments2">
+            {inputBox ? <div className = {classes.Post_comments}>
+                <div className = {classes.Post_commentsBox}>
                 {comments.map((item, index) => {
                         return(
-                            <p className="Post-comments"><b>{item.person}</b>{item.content}</p>
+                            <p className={classes.Post_comment}><b>{item.person}</b>{item.content}</p>
                         )
                 })}
                 </div>
-                <div className="Post-comment">
-                    <TextField id="outlined-basic" label="Comment..." variant="outlined" style={{width: "85%"}} value={text} onChange={(event) => changeText(event.target.value)}/>
+                <div className={classes.Post_commentBox}>
+                    <TextField id="outlined_basic" label="Comment..." variant="outlined" style={{width: "85%"}} value={text} onChange={(event) => changeText(event.target.value)}/>
                     <Button disabled={text === ""} variant="outlined" onClick={postComment} style={{width: "15%"}} >Post</Button>
                 </div>
             </div>: null}
