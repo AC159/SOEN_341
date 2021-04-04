@@ -15,7 +15,7 @@ function App() {
         <BrowserRouter>
             <AuthProvider>
                 <div>
-                    <main className={classes.Content}>
+                    <main className={classes.content}>
                         <ModalContextProvider>
                         <Switch>
                             <Route exact path="/profile/:id" component={Profile}/>

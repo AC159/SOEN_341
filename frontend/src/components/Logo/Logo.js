@@ -6,7 +6,7 @@ import instagramLogo from '../../assets/images/insta_logo.png';
 const logo = (props) => {
 
     return (
-        <div className={classes.Logo} >
+        <div className={classes.logo} >
             <img src={instagramLogo} alt="Instagram Logo"/>
         </div>
     );

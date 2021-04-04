@@ -1,4 +1,4 @@
-.Profile_container{
+.profile_container{
     margin-top: 100px;
     border-radius: 10px;
     margin-left: auto;
@@ -9,25 +9,25 @@
     width: 50%;
 }
 
-.Profile_top{
+.profile_top{
     display: flex;
     justify-content: space-between!important;
     margin: 10px;
     padding-bottom: 20px;
 }
 
-.Profile_stats{
+.profile_stats{
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
     margin: 10px;
      font-size: large;
 }
 
-.Profile_grid{
+.profile_grid{
     width: 100%!important;
     height: 450px;
 }
 
-.Popup{
+.popup{
     background-color: white;
     position: fixed;
     top: 50%;
@@ -39,11 +39,11 @@
     display: flex;
 }
 
-.Popup_picture{
+.popup_picture{
     text-align: center;
 }
 
-.Profile_loading{
+.profile_loading{
     position: fixed;
     top: 50%;
     left: 50%;
