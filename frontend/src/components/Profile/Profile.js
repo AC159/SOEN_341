@@ -112,7 +112,7 @@ function Profile(props) {
     }
 
     if (picture === null || name === null || folllowersFollowing == null || pictures == null)
-        return (<div className={classes.Profile_loading}>
+        return (<div className={classes.profile_loading}>
             <CircularProgress size='100px'/>
         </div>)
 
@@ -163,24 +163,24 @@ function Profile(props) {
     return (
         <React.Fragment>
             <Navbar />
-            <div className={classes.Profile_container}>
-                <div className={classes.Profile_top}>
+            <div className={classes.profile_container}>
+                <div className={classes.profile_top}>
                     {clickableAvatar}
-                    <table className={classes.Profile_stats}>
+                    <table className={classes.profile_stats}>
                         <tbody>
                             <tr>
                                 <td colSpan="2">
-                                    <h1 className={classes.Profile_name}>{name}</h1>
+                                    <h1 className={classes.profile_name}>{name}</h1>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span className={classes.Profile_stats} onClick={() => openFollowersDialog(true)} style={{ cursor: 'pointer' }}>
+                                    <span className={classes.profile_stats} onClick={() => openFollowersDialog(true)} style={{ cursor: 'pointer' }}>
                                         Followers: {folllowersFollowing.followers.length}
                                     </span>
                                 </td>
                                 <td>
-                                    <span className={classes.Profile_stats} onClick={() => openFollowingDialog(true)} style={{ cursor: 'pointer' }}>
+                                    <span className={classes.profile_stats} onClick={() => openFollowingDialog(true)} style={{ cursor: 'pointer' }}>
                                         Following: {folllowersFollowing.following.length}
                                     </span>
                                 </td>
