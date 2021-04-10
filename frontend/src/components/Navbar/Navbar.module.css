@@ -1,4 +1,4 @@
-.Navbar {
+.navbar {
     width: 100%;
     height: 56px;
     position: fixed;
@@ -13,16 +13,16 @@
     z-index: 90;
 }
 
-.Navbar nav {
+.navbar nav {
     height: 100%;
     display: block;
 }
 
-.Logo {
+.logo {
     height: 80%;
 }
 
-.NavigationItem  {
+.navigationItem  {
     width: 500px;
     margin: 0;
     padding: 0;
@@ -30,12 +30,12 @@
     text-decoration: none;
 }
 
-.NavbarButton:hover{
+.navbarButton:hover{
     background-color: #F4F4F4;
     border-radius: 10px;
 }
 
-.UploadButton{
+.uploadButton{
     height: 100%!important;
     padding: 0px;
     vertical-align: top!important;

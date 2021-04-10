@@ -1,26 +1,26 @@
 
 
-.PictureModal_profileTop{
+.pictureModal_profileTop{
     display: flex;
     justify-content: space-between!important;
     margin: 10px;
     padding-bottom: 20px;
 }
 
-.PictureModal_stats{
+.pictureModal_stats{
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
     margin: 10px;
      font-size: large;
 }
 
-.PictureModal_loading{
+.pictureModal_loading{
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.PictureModal_popup{
+.pictureModal_popup{
     background-color: white;
     position: fixed;
     top: 50%;
@@ -33,32 +33,32 @@
     display: flex;
 }
 
-.PictureModal_picture{
+.pictureModal_picture{
     text-align: center;
 }
 
-.PictureModal_comment{
+.pictureModal_comment{
     width: 30vw;
     word-wrap: break-word;
     margin-left: 10px;
   }
   
-.PictureModal_comment b{
+.pictureModal_comment b{
     margin-right: 10px;
 }
-  .PictureModal_commentsScroll{
+  .pictureModal_commentsScroll{
       overflow-y: auto;
       overflow-x: hidden;
       max-height: 75vh;
   }
 
-  .PictureModal_caption {
+  .pictureModal_caption {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.PictureModal_commentBox{
+.pictureModal_commentBox{
     margin-top: 10px;
     display: flex;
 }

@@ -77,20 +77,20 @@ function Post(props){
 
         return <article className={classes.Post}>
             {props.modal ? null: <header>
-                <div className={classes.Post_user}>
-                    <div className={classes.Post_userAvatar}>
+                <div className={classes.post_user}>
+                    <div className={classes.post_userAvatar}>
                         <Link to={"/profile/" + props.owner}> <img src={props.profile} alt="Anonymous"/></Link>
                     </div>
-                    <div className={classes.Post_userNickname}>
+                    <div className={classes.post_userNickname}>
                         <Link to={"/profile/" + props.owner}><p style={{textDecoration:'none', color:'black'}}>{props.name}</p></Link>
                     </div>
                 </div>
             </header>}
-            <div className={classes.Post_image}>
+            <div className={classes.post_image}>
                 <img src={props.source} alt="Anonymous"/>
             </div>
-            <h3 className={classes.Post_caption}>{props.caption}</h3>
-            <div className={classes.Post_like}>
+            <h3 className={classes.post_caption}>{props.caption}</h3>
+            <div className={classes.post_like}>
                 <BootstrapTooltips title={like.join(",\n")}>
                     <h4>{like.length + " like(s)"}</h4>
                 </BootstrapTooltips>
@@ -103,15 +103,15 @@ function Post(props){
                 }
                 <Button variant="outlined" size="small"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>
             </div>
-            {inputBox ? <div className = {classes.Post_comments}>
-                <div className = {classes.Post_commentsBox}>
+            {inputBox ? <div className = {classes.post_comments}>
+                <div className = {classes.post_commentsBox}>
                 {comments.map((item, index) => {
                         return(
-                            <p className={classes.Post_comment}><b>{item.person}</b>{item.content}</p>
+                            <p className={classes.post_comment}><b>{item.person}</b>{item.content}</p>
                         )
                 })}
                 </div>
-                <div className={classes.Post_commentBox}>
+                <div className={classes.post_commentBox}>
                     <TextField id="outlined_basic" label="Comment..." variant="outlined" style={{width: "85%"}} value={text} onChange={(event) => changeText(event.target.value)}/>
                     <Button disabled={text === ""} variant="outlined" onClick={postComment} style={{width: "15%"}} >Post</Button>
                 </div>

@@ -51,7 +51,7 @@ const Posts = (props) => {
     }, [Posts, hiddenPosts])
 
     if (Posts === null && hiddenPosts === null)
-        return <div className={classes.Posts_loading}>
+        return <div className={classes.posts_loading}>
             <CircularProgress size='100px'/>
         </div>
 

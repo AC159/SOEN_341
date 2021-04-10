@@ -1,4 +1,4 @@
-.Post {
+.post {
     border-radius: 10px;
     border: 1px solid #e6e6e6;
     background-color: #fff;
@@ -6,36 +6,36 @@
     margin-left : 30%;
     margin-right: 30%;
 }
-.Post_user {
+.post_user {
     display: flex;
     padding: 16px;
     align-items: center;
 }
-.Post_userAvatar {
+.post_userAvatar {
     width: 30px;
     height: 30px;
 }
-.Post_userAvatar img {
+.post_userAvatar img {
     width: 100%;
     height: 100%;
     border-radius: 50%;
 }
-.Post_userNickname {
+.post_userNickname {
     margin-left: 12px;
     font-family: 'PT Sans', sans-serif;
     font-weight: bold;
 }
-.Post_image{
+.post_image{
     background-color: white;
     margin: -10px 15px 15px 15px;
     text-align: center;
     overflow: hidden
 }
-.Post_image img {
+.post_image img {
     display: block;
     width: 100%;
 }
-.Post_like {
+.post_like {
     padding: 0px 16px;
     display: flex;
     justify-content: space-between;
@@ -43,10 +43,10 @@
     margin-bottom: 10px;
 }
 
-.Post_like h4{
+.post_like h4{
     margin: 0px;
 }
-.Post_like strong {
+.post_like strong {
     font-family: 'PT Sans', sans-serif;
     font-weight: bold;
 }
@@ -62,43 +62,43 @@
     cursor: pointer;
 }
 
-.Post_commentBox{
+.post_commentBox{
     margin: 0px 0px 10px 0px;
     display: flex;
     justify-content: space-between;
 }
 
-.Posts_loading{
+.posts_loading{
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.Post_comments{
+.post_comments{
     margin: 0px 16px 5px 16px;
     padding: 0px;
     font-family: Arial, Helvetica, sans-serif;
     
 }
 
-.Post_comment{
+.post_comment{
     margin: 0px 16px 5px 0px;
     padding: 0px;
     font-family: Arial, Helvetica, sans-serif;
     
 }
 
-.Post_comment b{
+.post_comment b{
     margin-right: 10px;
 }
 
-.Post_caption{
+.post_caption{
     padding: 0px 16px;
     margin: 0px
 }
 
-.Post_commentsBox{
+.post_commentsBox{
     max-height: 10rem;
     margin-bottom: 10px;
     overflow-y:auto;

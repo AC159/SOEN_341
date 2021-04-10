@@ -67,13 +67,13 @@ function PictureModal(props){
     }
 
     return (
-        <div className={classes.PictureModal_popup}>
+        <div className={classes.pictureModal_popup}>
         <div>
-            <div className={classes.PictureModal_picture}>
+            <div className={classes.pictureModal_picture}>
                 <img src={props.source} alt={props.caption} style={{ maxHeight: '50vh', maxWidth: "60vw" }} />
             </div>
             <h3 style={{ marginTop: '5px', marginBottom: '-10px' }}>{props.caption}</h3>
-            <div className={classes.PictureModal_caption}>
+            <div className={classes.pictureModal_caption}>
 
                 <BootstrapTooltips title={likedBy.join(', ')}>
                     <h4>{likedBy.length + " like(s)"}</h4>
@@ -88,13 +88,13 @@ function PictureModal(props){
                 }
             </div>
         </div>
-        <div className={classes.PictureModal_comments}>
-            <div className={classes.PictureModal_commentsScroll}>
+        <div className={classes.pictureModal_comments}>
+            <div className={classes.pictureModal_commentsScroll}>
                 {comments.map((item,index) => {
-                    return (<p key={index} className={classes.PictureModal_comment}><b>{item.person}</b>{item.content}</p>)
+                    return (<p key={index} className={classes.pictureModal_comment}><b>{item.person}</b>{item.content}</p>)
                 })}
             </div>
-            <div className={classes.PictureModal_commentBox}>
+            <div className={classes.pictureModal_commentBox}>
                 <TextField id="outlined-basic" label="Comment..." variant="outlined" style={{ marginLeft: "10px", width: '80%' }} value={text} onChange={(event) => changeText(event.target.value)} />
                 <Button variant="outlined" onClick={postComment} style={{ height: 56 }} >Post</Button>
             </div>

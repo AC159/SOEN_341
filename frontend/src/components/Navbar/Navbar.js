@@ -45,7 +45,7 @@ const Navbar = (props) => {
     function Upload() {
         if (currentUser == null) {
             return (
-                <Button onClick={() => {history.push("/signin")}} classes={{ root: classes.UploadButton }} >
+                <Button onClick={() => {history.push("/signin")}} classes={{ root: classes.uploadButton }} >
                     <AddAPhotoIcon />
                 </Button>
             );
@@ -92,9 +92,9 @@ const Navbar = (props) => {
     }, [searchUser, inputRef]);
 
     return (
-        <header className={classes.Navbar}>
+        <header className={classes.navbar}>
 
-            <div className={classes.Logo}>
+            <div className={classes.logo}>
                 <Logo />
             </div>
             <Upload />
@@ -117,9 +117,9 @@ const Navbar = (props) => {
                         )}
                 />
             </div>
-            <nav className={classes.NavigationItem}>
+            <nav className={classes.navigationItem}>
                 <BottomNavigation showLabels value={page} onChange={(event, newPage) => { changePage(newPage); }}>
-                    {getButtons().map((button, index) => <BottomNavigationAction key={index} label={button.label} icon={button.icon} onClick={() => { history.push(button.link) }} classes={{ wrapper: classes.NavbarButton }} />)}
+                    {getButtons().map((button, index) => <BottomNavigationAction key={index} label={button.label} icon={button.icon} onClick={() => { history.push(button.link) }} classes={{ wrapper: classes.navbarButton }} />)}
                 </BottomNavigation>
             </nav>
         </header>
