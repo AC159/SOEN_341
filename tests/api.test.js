@@ -1,5 +1,11 @@
+import { useAuth } from '../../../AuthProvider';
+import { SignOut } from 'frontend/src/components/Authentication/SignOut/SignOut.js';
+import { signup } from 'frontend/src/AuthProvider.js'
+import { signin } from 'frontend/src/AuthProvider.js'
+import { signout } from 'frontend/src/AuthProvider.js'
+import { auth } from './firebase';
 
-const app = require("../app");
+//const app = require("../app");
 
 function sum(a, b) {
     return a + b;
@@ -10,6 +16,27 @@ test('random test case', () => {
     expect(sum(1,1)).toBe(2);
 })
 
+test('SignOut() should return null if it does not catch an exception', () => {
+    expect(SignOut()).toBeNull();
+})
+
+test('signup should use the auth firebase method to create a new authorized user', () => {
+    expect(signup("ryanmesservey@gmail.com", "RyanDev1234$")).toBe(auth.createUserWithEmailAndPassword("ryanmesservey@gmail.com", "RyanDev1234$"));
+}) //testing signup with credentials that are not already attributed to a user
+
+test('signin should use the auth firebase method to verify the credentials entered by the user', () => {
+    expect(signin("ryanmesservey1@gmail.com", "RyanDev1234$")).toBe(auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$"));
+}) //testing signing with an existing user's credentials
+
+test('signin should use the auth firebase method to verify the credentials entered by the user', () => {
+    expect(signin("ryanmesservey2@gmail.com", "RyanDev1234$")).toBe(auth.signInWithEmailAndPassword("ryanmesservey2@gmail.com", "RyanDev1234$"));
+}) //testing signing with invalid credentials
+
+test('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {
+    expect(signout()).toBe(auth.signOut());
+})
+
+/*
 describe("POST /like ", () => {
     test('test expected status code for like route', () => {
         return request(app)
@@ -79,3 +106,4 @@ describe("GET /signout ", () => {
         });
     });
 });
+*/
