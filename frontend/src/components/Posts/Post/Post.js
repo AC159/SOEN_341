@@ -75,7 +75,7 @@ function Post(props){
         });
     }
 
-        return <article className={classes.Post}>
+        return <article className={classes.post}>
             {props.modal ? null: <header>
                 <div className={classes.post_user}>
                     <div className={classes.post_userAvatar}>
