@@ -29,10 +29,6 @@ function sum(a, b) {
 //     expect(sum(1,1)).toBe(2);
 // })
 
-// test('SignOut() should return null if it does not catch an exception', () => {
-//     expect(SignOut()).toBeNull();
-// })
-
 // test('signup should use the auth firebase method to create a new authorized user', () => {
 //     expect(auth.createUserWithEmailAndPassword("ryanmesservey@gmail.com", "RyanDev1234$"));
 // }) //testing signup with credentials that are not already attributed to a user
@@ -53,80 +49,107 @@ test('signin should use the auth firebase method to verify the credentials enter
 }) //testing signing with invalid credentials
 
 test('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {
-    const authentication = async () => auth.signOut
-    authentication().then(() =>{
-        expect(firebase.auth().currentUser).toBeNull()
+    const signIn = async () => auth.signOutauth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$")
+    const signOut = async () => auth.signOut
+    signIn().then(() =>{
+        signOut().then(() =>{
+            expect(firebase.auth().currentUser).toBeNull()
+        }) 
     })
 })
 
-/*
-describe("POST /like ", () => {
-    test('test expected status code for like route', () => {
-        return request(app)
-        .post('/like')
-        .then((response) => {
-            expect(response.statusCode).toBe(200});
-        });
-    });
-});
+// test('Uploading a new image', () => {
+//     return request(posts)
+//     .post('/new')
+//     .then((response) => {
+//         expect(response.message).toBe("Upload was successful!");
+//     });
+// });
 
-describe("POST /follow ", () => {
-    test('test expected status code for follow route', () => {
-        return request(app)
-        .post('/follow')
-        .then((response) => {
-            expect(response.statusCode).toBe(200);
-        });
-    });
-});
+// test('Commenting', () => {
+//     return request(posts)
+//     .post('/comment')
+//     .then((response) => {
+//         expect(image.comments).toContain({person: req.body.name, content: req.body.comment, uid: req.body.uid}),
+//         expect(response.image).toBe(image);  
+//     });
+// });
 
-describe("GET /search/:filter ", () => {
-    test('test expected status code for search route', () => {
-        return request(app)
-        .get('/search/:filter')
-        .then((response) => {
-            expect(response.statusCode).toBe(200);
-        });
-    });
-});
+// test('Liking', () => {
+//     return request(posts)
+//     .post('/like')
+//     .then((response) => {
+//         expect(post).toBe(Post.findOneAndUpdate({ _id: req.body.postID },
+//                             { "$addToSet": { likes: req.body.name } }, { new: true })),
+//         expect(respose.post).toBe(post);
+//     });
+// });
 
-describe("GET /profile/:id ", () => {
-    test('This route should lead to the profile page', () => {
-        return request(app)
-        .get('/profile/:id')
-        .then((response) => {
-            expect(response.statusCode).toBe(401);
-        });
-    });
-});
+// test('Setting Avatar', () => {
+//     return request(users)
+//     .post('/avatar')
+//     .then((response) => {
+//         expect(response.message).toBe("Upload was successful!")
+//     });
+// });
 
-describe("POST /avatar ", () => {
-    test('test expected status code for sign up route', () => {
-        return request(app)
-        .post('/avatar')
-        .then((response) => {
-            expect(response.statusCode).toBe(200);
-        });
-    });
-});
+// test('Following', () => {
+//     return request(users)
+//     .post('/follow')
+//     .then((response) => {
+//         expect(user).toBe(User.findOne({ _id: req.body.uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar')),
+//         expect(followedUser).toBe(User.findOne({ _id: req.body.following_uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar')),
+//         expect(response.user).toBe(user),
+//         expect(response.followedUser).toBe(followedUser);
+//     });
+// });
 
-describe("POST /signup ", () => {
-    test('test expected status code for sign up route', () => {
-        return request(app)
-        .post('/signin')
-        .then((response) => {
-            expect(response.statusCode).toBe(201);
-        });
-    });
-});
+// describe("GET /search/:filter ", () => {
+//     test('test expected status code for search route', () => {
+//         return request(app)
+//         .get('/search/:filter')
+//         .then((response) => {
+//             expect(response.statusCode).toBe(200);
+//         });
+//     });
+// });
 
-describe("GET /signout ", () => {
-    test('This route should lead to the sign out page', () => {
-        return request(app)
-        .get('/signout')
-        .then((response) => {
-            expect(response.statusCode).toBe(401);
-        });
-    });
-});
-*/
+// describe("GET /profile/:id ", () => {
+//     test('This route should lead to the profile page', () => {
+//         return request(app)
+//         .get('/profile/:id')
+//         .then((response) => {
+//             expect(response.statusCode).toBe(401);
+//         });
+//     });
+// });
+
+// describe("POST /avatar ", () => {
+//     test('test expected status code for sign up route', () => {
+//         return request(app)
+//         .post('/avatar')
+//         .then((response) => {
+//             expect(response.statusCode).toBe(200);
+//         });
+//     });
+// });
+
+// describe("POST /signup ", () => {
+//     test('test expected status code for sign up route', () => {
+//         return request(app)
+//         .post('/signin')
+//         .then((response) => {
+//             expect(response.statusCode).toBe(201);
+//         });
+//     });
+// });
+
+// describe("GET /signout ", () => {
+//     test('This route should lead to the sign out page', () => {
+//         return request(app)
+//         .get('/signout')
+//         .then((response) => {
+//             expect(response.statusCode).toBe(401);
+//         });
+//     });
+// }); 
