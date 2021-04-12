@@ -21,7 +21,7 @@ function sum(a, b) {
 test('random test case', () => {
     expect(sum(1,1)).toBe(2);
 });
-/*
+
 test('SignOut() should return null if it does not catch an exception', () => {
     expect(SignOut()).toBeNull();
 });
@@ -46,7 +46,7 @@ test('signing in with an invalid password', () => {
     expect(AuthProvider.signin("ryanmesservey1@gmail.com", "RyanDev1234$$")).toBe("The password is invalid or the user does not have a password.");
 }); //testing signing with an valid email but an invalid password
 
-
+/*
 test('signing out', () => {
     expect(AuthProvider.signout()).toBe(auth.signOut());
 }); //testing that the signout() method correctly signs out the user
