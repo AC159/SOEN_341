@@ -1,11 +1,13 @@
-//const AuthProvider = require('frontend/src/AuthProvider'); 
-
+const AuthProvider = require('frontend/src/AuthProvider'); 
+const auth = require('./firebase');
+/*
 import { useAuth } from '../../../AuthProvider';
 import { SignOut } from 'frontend/src/components/Authentication/SignOut/SignOut';
 import { signup } from 'frontend/src/AuthProvider';
 import { signin } from 'frontend/src/AuthProvider';
 import { signout } from 'frontend/src/AuthProvider';
 import { auth } from './firebase';
+*/
 //const app = require("../app");
 const posts = require('../routes/posts');
 const Post = require('../Database/Models/Post');
