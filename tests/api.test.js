@@ -1,4 +1,4 @@
-const AuthProvider = require('frontend/src/AuthProvider'); 
+//const AuthProvider = require('frontend/src/AuthProvider'); 
 /*
 import { useAuth } from '../../../AuthProvider';
 import { SignOut } from 'frontend/src/components/Authentication/SignOut/SignOut';
@@ -8,6 +8,10 @@ import { signout } from 'frontend/src/AuthProvider'
 import { auth } from './firebase';
 */
 //const app = require("../app");
+const posts = require('../routes/posts');
+const Post = require('../Database/Models/Post');
+const users = require('../routes/users')
+const User = require('../Database/Models/User.js');
 
 function sum(a, b) {
     return a + b;
@@ -16,27 +20,85 @@ function sum(a, b) {
 
 test('random test case', () => {
     expect(sum(1,1)).toBe(2);
-})
+});
 /*
 test('SignOut() should return null if it does not catch an exception', () => {
     expect(SignOut()).toBeNull();
-})
-*/
-test('signup should use the auth firebase method to create a new authorized user', () => {
-    expect(AuthProvider.signup("ryanmesservey@gmail.com", "RyanDev1234$")).toBe(auth.createUserWithEmailAndPassword("ryanmesservey@gmail.com", "RyanDev1234$"));
-}) //testing signup with credentials that are not already attributed to a user
+});
 
-test('signin should use the auth firebase method to verify the credentials entered by the user', () => {
+test('registering new use', () => {
+    expect(AuthProvider.signup("ryanmesservey3@gmail.com", "RyanDev1234$").statusText).toBe("Created");
+}); //testing the result of registering a new user with signup()
+
+test('registering new user with an email already in use', () => {
+    expect(AuthProvider.signup("ryanmesservey1@gmail.com", "RyanDev1234$")).toBe("The email address is already in use by another account.");
+}); //testing the result of registering a new user with signup() using an email already in use
+
+test('signing in a registered user', () => {
     expect(AuthProvider.signin("ryanmesservey1@gmail.com", "RyanDev1234$")).toBe(auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$"));
-}) //testing signing with an existing user's credentials
+}); //testing the result of signing in an already registerd user using signin, which calles the auth fire base method
 
-test('signin should use the auth firebase method to verify the credentials entered by the user', () => {
-    expect(AuthProvider.signin("ryanmesservey2@gmail.com", "RyanDev1234$")).toBe(auth.signInWithEmailAndPassword("ryanmesservey2@gmail.com", "RyanDev1234$"));
-}) //testing signing with invalid credentials
+test('signing in with an invalid email', () => {
+    expect(AuthProvider.signin("ryanmesservey2@gmail.com", "RyanDev1234$")).toBe("The email address is badly formatted.");
+}); //testing the result of signing with an invalid email but valid password
 
-test('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {
+test('signing in with an invalid password', () => {
+    expect(AuthProvider.signin("ryanmesservey1@gmail.com", "RyanDev1234$$")).toBe("The password is invalid or the user does not have a password.");
+}); //testing signing with an valid email but an invalid password
+
+
+test('signing out', () => {
     expect(AuthProvider.signout()).toBe(auth.signOut());
-})
+}); //testing that the signout() method correctly signs out the user
+*/
+
+//the following tests do not pass yet
+
+test('Uploading a new image', () => {
+    return request(posts)
+    .post('/new')
+    .then((response) => {
+        expect(response.message).toBe("Upload was successful!");
+    });
+});
+
+test('Commenting', () => {
+    return request(posts)
+    .post('/comment')
+    .then((response) => {
+        expect(image.comments).toContain({person: req.body.name, content: req.body.comment, uid: req.body.uid}),
+        expect(response.image).toBe(image);  
+    });
+});
+
+test('Liking', () => {
+    return request(posts)
+    .post('/like')
+    .then((response) => {
+        expect(post).toBe(Post.findOneAndUpdate({ _id: req.body.postID },
+                            { "$addToSet": { likes: req.body.name } }, { new: true })),
+        expect(respose.post).toBe(post);
+    });
+});
+
+test('Setting Avatar', () => {
+    return request(users)
+    .post('/avatar')
+    .then((response) => {
+        expect(response.message).toBe("Upload was successful!")
+    });
+});
+
+test('Following', () => {
+    return request(users)
+    .post('/follow')
+    .then((response) => {
+        expect(user).toBe(User.findOne({ _id: req.body.uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar')),
+        expect(followedUser).toBe(User.findOne({ _id: req.body.following_uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar')),
+        expect(response.user).toBe(user),
+        expect(response.followedUser).toBe(followedUser);
+    });
+});
 
 /*
 describe("POST /like ", () => {
@@ -107,5 +169,4 @@ describe("GET /signout ", () => {
             expect(response.statusCode).toBe(401);
         });
     });
-});
-*/
+}); */
