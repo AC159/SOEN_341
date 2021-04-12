@@ -2,19 +2,21 @@ module.exports = {
   testEnvironment: 'node',
   verbose: true,
   preset: 'ts-jest',
-  //verbose: true,
   transform: {
-   '^.+\\.(ts|tsx)?$': 'ts-jest',
+    '^.+\\.(ts|tsx)?$': 'ts-jest',
     "^.+\\.(js|jsx)$": "babel-jest",
-  }
+    "^.+\\.(js?)$": "babel-jest"
+  },
+  testPathIgnorePatterns: ['node_modules', '\\.cache', '<rootDir>.*/public'],
+  transformIgnorePatterns: [ '/node_modules/(?!(@babel\/runtime|gatsby))', 'node_modules/(?!(gatsby)/)' ],
 };
-
-// Or async function
+/*
 module.exports = async () => {
   return {
     verbose: true,
   };
 };
+*/
 /*
 module.exports = {
     testEnvironment: 'node',
@@ -25,6 +27,7 @@ module.exports = {
       "^.+\\.(js|jsx)$": "babel-jest",
     }
 };//https://mongoosejs.com/docs/jest.html
+
 
 module.exports = {
   verbose: true,

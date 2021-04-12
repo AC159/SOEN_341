@@ -1,8 +1,8 @@
 import { useAuth } from '../../../AuthProvider';
-import { SignOut } from 'frontend/src/components/Authentication/SignOut/SignOut.js';
-import { signup } from 'frontend/src/AuthProvider.js'
-import { signin } from 'frontend/src/AuthProvider.js'
-import { signout } from 'frontend/src/AuthProvider.js'
+import { SignOut } from 'frontend/src/components/Authentication/SignOut/SignOut';
+import { signup } from 'frontend/src/AuthProvider'
+import { signin } from 'frontend/src/AuthProvider'
+import { signout } from 'frontend/src/AuthProvider'
 import { auth } from './firebase';
 
 //const app = require("../app");
