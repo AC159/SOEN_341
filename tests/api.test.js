@@ -223,6 +223,30 @@ describe("LIKE a post", () => {
 
 });
 
+describe("UNLIKE a post", () => {
+
+    beforeEach((done) => {
+        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        done();
+    });
+
+    it('should update the post object', async () => {
+        try {
+            const req = {
+                body: {
+                    name: 'my_name',
+                    postID: 'post_id'
+                }
+            }
+            let res = await likeFunction(req);
+            expect(res.message).toBe('error');
+        } catch (e) {
+
+        }
+    });
+
+});
+
 describe("DELETE an image", () => {
 
     it('should delete the logo image', async () => {
@@ -274,45 +298,41 @@ describe("DELETE a user object",  () => {
 
 
 test('signin should use the auth firebase method to verify the credentials entered by the user, valid password', async () => {
-    try {
+
         const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$")
 
         return authentication().then(() =>{
             expect(firebase.auth().currentUser).not.toBeNull()
+        }).catch(e => {
+
         })
-    } catch (e) {
-        
-    }
+
 }) //testing signing with an existing user's credentials
 
 test('signin should use the auth firebase method to verify the credentials entered by the user, invalid password', () => {
-    try {
+
         const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "badPassword")
 
         return auth.signOut().then(() => {
             authentication().then(() =>{
                 expect(firebase.auth().currentUser).toBeNull()
             })
+        }).catch(e => {
+
         })
-    } catch (e) {
-        
-    }
 }) //testing signing with invalid credentials
 
 test('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {
-    try {
+
         const signOut = async () => auth.signOut()
 
         return signOut().then(() => {
             expect(firebase.auth().currentUser).toBeNull()
-        })
-    } catch (e) {
-        
-    }
+        }).catch(e => {
+     })
 })
 
 test('signup should use the auth firebase method to create a new user in the database and be automatically signed in, user already exist', () => {
-    try {
         const signUp = async() => auth.createUserWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$");
 
         return auth.signOut().then(() => {
@@ -320,8 +340,7 @@ test('signup should use the auth firebase method to create a new user in the dat
             }).catch(function(error) {
                 expect(error.code).toBe("auth/email-already-in-use")
             })
+        }).catch(e => {
         })
-    } catch (e) {
-        
-    }
+
 })
