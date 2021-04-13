@@ -92,6 +92,7 @@ const Navbar = (props) => {
     }, [searchUser, inputRef]);
 
     return (
+
         <header className={classes.navbar}>
 
             <div className={classes.logo}>
@@ -113,8 +114,8 @@ const Navbar = (props) => {
                     style={{ width: 300 }}
                     renderInput={(params) => (
                         <TextField {...params} id="outlined-basic" inputRef={inputRef} value={searchUser} onChange={event => setSearchUser(event.target.value)}
-                        label="Search user..." variant="outlined" margin='dense' style={{ height: 40, marginTop: '5px' }} />
-                        )}
+                                   label="Search user..." variant="outlined" margin='dense' style={{ height: 40, marginTop: '5px' }} />
+                    )}
                 />
             </div>
             <nav className={classes.navigationItem}>
@@ -123,6 +124,7 @@ const Navbar = (props) => {
                 </BottomNavigation>
             </nav>
         </header>
+
     );
 
 }

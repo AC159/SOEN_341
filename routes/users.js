@@ -41,32 +41,47 @@ router.get('/:uid', async function(req, res) {
 *
 *  */
 
+const createUser = async (req) => {
+
+  if (!req.body.email || !req.body.name) {
+    return;
+  }
+
+  // Create new user:
+  console.log(req.body)
+
+  const user = new User({
+    _id: req.body.uid,
+    email: req.body.email,
+    name: req.body.name,
+    avatar: "",
+    images: [],
+    following: [],
+    followers: []
+  });
+
+  try {
+
+    await user.save();
+    return { user, message: 'Everything is clear!' };
+
+  } catch (error) {
+    return { error, message: 'error' };
+  }
+}
+
 router.post('/signup', async function (req, res) {
 
-    if (!req.body.email || !req.body.name) {
-      res.status(401).json({ error: "Name and email required" });
+    let response = await createUser(req);
+
+    if (response.message === 'error') {
+      res.status(404).send(response.error);
     }
-
-    // Create new user:
-    console.log(req.body)
-
-    const user = new User({
-      _id: req.body.uid,
-      email: req.body.email,
-      name: req.body.name,
-      avatar: "",
-      images: [],
-      following: [],
-      followers: []
-    });
-
-    try {
-
-      await user.save();
-      res.status(201).send({ user });
-
-    } catch (error) {
-      res.status(400).send({ error });
+    else if (response.message === 'Everything is clear!') {
+      res.status(201).send(response.user);
+    }
+    else {
+      res.status(401).json({ error: "Name and email required" });
     }
 
 });
@@ -130,30 +145,41 @@ router.post('/avatar', upload.single('avatar'), async function(req, res, next) {
 *
 *  */
 
+const followFunction = async (req) => {
+
+  try {
+
+    // Append to the 'following' field the name of the user the current user want to follow
+    await User.findOneAndUpdate({ _id: req.body.uid },
+        { "$addToSet": { following: req.body.following_uid } }, { new: true });
+
+    let user = await User.findOne({ _id: req.body.uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');
+
+    // Append to the 'followers' field of the other (followed) user the name of the current user
+    await User.findOneAndUpdate({ _id: req.body.following_uid },
+        { "$addToSet": { followers: req.body.uid  }}, { new: true });
+
+    let followedUser = await User.findOne({ _id: req.body.following_uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');
+
+    return {
+      user: user,
+      followedUser: followedUser
+    }
+
+  } catch (error) {
+    res.send(error);
+  }
+
+}
+
 router.post('/follow', async function (req, res) {
 
-    try {
+  let response = followFunction(req);
 
-      // Append to the 'following' field the name of the user the current user want to follow
-      await User.findOneAndUpdate({ _id: req.body.uid },
-          { "$addToSet": { following: req.body.following_uid } }, { new: true });
-
-      let user = await User.findOne({ _id: req.body.uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');
-
-      // Append to the 'followers' field of the other (followed) user the name of the current user
-      await User.findOneAndUpdate({ _id: req.body.following_uid },
-          { "$addToSet": { followers: req.body.uid  }}, { new: true });
-
-      let followedUser = await User.findOne({ _id: req.body.following_uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');
-
-      res.status(200).json({
-        user: user,
-        followedUser: followedUser
-      });
-
-    } catch (error) {
-      res.send(error);
-    }
+  res.status(200).json({
+    user: response.user,
+    followedUser: response.followedUser
+  });
 
 });
 
@@ -207,5 +233,8 @@ router.get('/search/:filter', async function (req, res) {
 });
 
 
-module.exports.router = router;
+module.exports = {
+  router: router,
+  createUser: createUser
+};
 

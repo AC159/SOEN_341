@@ -18,6 +18,7 @@ function AuthProvider({children}) {
 
     // signs in a user with email and password
     const signin = (email, password) => {
+        console.log('Signin', auth.signInWithEmailAndPassword(email, password));
         return auth.signInWithEmailAndPassword(email, password);
     }
 

@@ -3,14 +3,20 @@ const gc = require('../config/index');
 const bucketName = 'soen-341-instagram-pictures';
 const bucket = gc.bucket(bucketName);
 
-const uploadImage = (image) => new Promise((resolve, reject) => {
+const uploadImage = (image, test = false) => new Promise((resolve, reject) => {
 
     // Multer stores the image in req.file with upload.single('image')
     // console.log(image);
 
     // Multer stored the file (image) in a buffer
+    let gcsFileName = null;
 
-    const gcsFileName = `${Date.now()}_${image.originalname}`;
+    if (!test) {
+        gcsFileName = `${Date.now()}_${image.originalname}`;
+    } else {
+        gcsFileName = 'test_image';
+    }
+
     const file = bucket.file(gcsFileName);
 
     const stream = file.createWriteStream({
@@ -27,19 +33,27 @@ const uploadImage = (image) => new Promise((resolve, reject) => {
 
     });
 
-    stream.end(image.buffer);
+    if (!test) {
+        stream.end(image.buffer);
+    } else {
+        stream.end(image);
+    }
 
 });
 
 
-const deleteImage = (imageUrl) => new Promise((resolve, reject) => {
+const deleteImage = (imageUrl, test = false) => new Promise((resolve, reject) => {
 
     const filename = imageUrl.replace(`https://storage.googleapis.com/${bucketName}/`, '');
     const file = bucket.file(filename);
 
     console.log(filename);
     file.delete().then((data) => {
-        resolve(data);
+        if (!test) {
+            resolve(data);
+        } else {
+          resolve("Image deleted successfully");
+        }
     }).catch((error) => {
         reject(error);
     });
