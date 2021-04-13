@@ -184,11 +184,11 @@ router.post('/like', async (req, res) => {
   if (response.message !== 'error') {
 
     res.status(200).json({
-      post: post
+      post: response.post
     });
 
   } else {
-    res.send(error);
+    res.send(response.message);
   }
 
 });

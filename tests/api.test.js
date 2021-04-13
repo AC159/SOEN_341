@@ -20,21 +20,19 @@ const app = firebase.initializeApp(
     }
 );
 const auth = app.auth();
-
-
 beforeAll(done => {
-    done();
-})
-
-afterAll(async done => {
-    try {
-        await mongoose.connection.close();
-        done();
-        console.log("Connection closed!");
-    } catch (e) {
-
+    done()
+  })
+  
+  afterAll(async done => {
+    // Closing the DB connection allows Jest to exit successfully.
+    try{
+        await mongoose.connection.close()
+        done()
+    } catch{
+        console.log("error in ending the connection")
     }
-})
+  })
 
 describe("UPLOAD  an image", () => {
 
@@ -64,18 +62,18 @@ describe("UPLOAD  an image", () => {
             const avatarUrl = await cloudHelpers.uploadImage(file, true);
             expect(avatarUrl).toBe(baseUrl);
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error when uploading the logo image")
         }
     });
 
     it('should reject upload', async () => {
-
+        expect.assertions(1);
         try {
             let url = null;
 
             // Upload the image to google cloud and returns a public image url
             const res = await cloudHelpers.deleteImage(url, true);
-
+            // expect(res).toBe("Image upload rejected!");
         } catch (e) {
             expect(e).toBe("Image upload rejected!");
         }
@@ -88,7 +86,7 @@ describe("UPLOAD  an image", () => {
 describe("CREATE a user",  () => {
 
     beforeEach( async (done) => {
-        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))
         done();
     });
 
@@ -105,7 +103,7 @@ describe("CREATE a user",  () => {
 
             expect(res.message).toBe('Everything is clear!');
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error when creating a new user")
         }
     });
 
@@ -122,7 +120,7 @@ describe("CREATE a user",  () => {
 
             expect(res.message).toBe('Everything is clear!');
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error when creating a 2nd user")
         }
     });
 
@@ -136,10 +134,10 @@ describe("CREATE a user",  () => {
                 }
             }
             let res = await createUser(req);
-            // expect(res.message).toBe('error');
-        } catch (e) {
             expect(res.message).toBe('error');
-            console.log("Inside catch!!!!");
+        } catch (e) {
+            console.log("error, created the user when it shouldn't be possible since he already exists")
+
         }
     });
 
@@ -149,7 +147,7 @@ describe("CREATE a user",  () => {
 describe("FOLLOW a user", () => {
 
     beforeEach(async (done) => {
-        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))
         done();
     });
 
@@ -164,7 +162,7 @@ describe("FOLLOW a user", () => {
             let res = await followFunction(req);
             expect(res.user._id).toBe(req.body.uid);
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error in following the user")
         }
     });
 
@@ -174,7 +172,7 @@ describe("FOLLOW a user", () => {
 describe("UNFOLLOW a user", () => {
 
     beforeEach(async (done) => {
-        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))
         done();
     });
 
@@ -189,7 +187,7 @@ describe("UNFOLLOW a user", () => {
             let res = await followFunction(req);
             expect(res.followedUser._id).toBe(req.body.following_uid);
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error in unfollowing the user")
         }
     });
 
@@ -218,7 +216,7 @@ describe("UNFOLLOW a user", () => {
 describe("LIKE a post", () => {
 
     beforeEach(async (done) => {
-        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))
         done();
     });
 
@@ -233,7 +231,7 @@ describe("LIKE a post", () => {
             let res = await likeFunction(req);
             expect(res.message).toBe('error');
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error when liking a post")
         }
     });
 
@@ -242,7 +240,7 @@ describe("LIKE a post", () => {
 describe("UNLIKE a post", () => {
 
     beforeEach(async (done) => {
-        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))
         done();
     });
 
@@ -257,7 +255,7 @@ describe("UNLIKE a post", () => {
             let res = await likeFunction(req);
             expect(res.message).toBe('error');
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error when unliking a post")
         }
     });
 
@@ -277,7 +275,7 @@ describe("DELETE an image", () => {
 
             expect(response).toBe("Image deleted successfully");
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error when deleting an image")
         }
     });
 
@@ -293,7 +291,7 @@ describe("DELETE an image", () => {
             let res = await likeFunction(req);
             expect(res.message).toBe('error');
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error")
         }
     });
 
@@ -302,7 +300,7 @@ describe("DELETE an image", () => {
 describe("DELETE a user object",  () => {
 
     beforeEach(async (done) => {
-        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))
         done();
     });
 
@@ -312,7 +310,7 @@ describe("DELETE a user object",  () => {
             let res = await deleteUser('some_uid');
             expect(res.message).toBe('User has been deleted');
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error when deleting the user object")
         }
 
     });
@@ -323,79 +321,87 @@ describe("DELETE a user object",  () => {
             let res = await deleteUser('some_uid_2');
             expect(res.message).toBe('User has been deleted');
         } catch (e) {
-            console.log("Inside catch!!!!");
+            console.log("error when deleting the 2nd created user")
         }
     });
 
 });
 
-// describe("signing in with the firebase method to veryfy the user's credentials", () => {
-//     it('valid password, user should be signed in and not be null', async () => {
-//
-//         const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$")
-//
-//         return authentication().then(() =>{
-//             expect(firebase.auth().currentUser).not.toBeNull()
-//         }).catch(e => {
-//             console.log("Inside catch!!!!");
-//         })
-//     }) //testing signing with an existing user's credentials
-//
-//     it('invalid password, user shouldn\'t be signed in, should be null', () => {
-//
-//         const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "badPassword")
-//
-//         return auth.signOut().then(() => {
-//             authentication().then(() =>{
-//                 expect(firebase.auth().currentUser).toBeNull()
-//             })
-//         }).catch(e => {
-//             console.log("Inside catch!!!!");
-//         })
-//     }) //testing signing with invalid credentials
-// })
-//
-//
-//
-// describe('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {
-//     it('the current user is signed out and current user is null', () => {
-//         const signOut = async () => auth.signOut()
-//
-//         return signOut().then(() => {
-//                 expect(firebase.auth().currentUser).toBeNull()
-//             })
-//     })
-// })
-// describe("signup should use the firebase method to create a new account and be automatically signed it", () => {
-//     it('user does not exist, a new account should be created and signed in automatically, user should not be null', () => {
-//         const email = "ryanmesservey" + Date.now() + "@gmail.com"
-//         const password = "RyanDev1234$" + Date.now();
-//
-//         const signUp = async() => auth.createUserWithEmailAndPassword(email, password);
-//         const signOut = async () => auth.signOut()
-//
-//         return signOut().then(() => {
-//             signUp().then(() =>{
-//                 expect(firebase.auth().currentUser).not.toBeNull()
-//             }).catch(function(error) {
-//                 console.log("Inside catch!!!!");
-//             })
-//         })
-//     })
-//
-//     it( 'user already exist, an error message should be received', () => {
-//         const signUp = async() => auth.createUserWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$");
-//
-//         return auth.signOut().then(() => {
-//             signUp().then(() =>{
-//             }).catch(function(error) {
-//                 expect(error.code).toBe("auth/email-already-in-use")
-//             })
-//         }).catch(e => {
-//             console.log("Inside catch!!!!");
-//         })
-//     })
-// })
+describe("signing in with the firebase method to veryfy the user's credentials", () => {
+    it('valid password, user should be signed in and not be null', async () => {
+
+        const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$")
+
+        return authentication().then(() =>{
+            expect(firebase.auth().currentUser).not.toBeNull()
+        }).catch(e => {
+            console.log("error when signing in with firebase")
+        })
+    }) //testing signing with an existing user's credentials
+
+    it('invalid password, user shouldn\'t be signed in, should be null', () => {
+
+        const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "badPassword")
+
+        return (
+            auth.signOut()
+            .then(() => {
+                authentication()
+                .then(() =>{
+                    expect(firebase.auth().currentUser).toBeNull()
+                 }).catch(error => {
+                    // console.log(error.code)
+                })
+            }).catch(e => {
+                console.log("error, user got logged in when he shouldn't have")
+            })
+        )
+    }) //testing signing with invalid credentials
+})
+
+
+
+describe('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {
+    it('the current user is signed out and current user is null', () => {
+        const signOut = async () => auth.signOut()
+
+        return signOut().then(() => {
+                expect(firebase.auth().currentUser).toBeNull()
+            }).catch((e) => {
+                console.log("error when signing out the user")
+            })
+    })
+})
+describe("signup should use the firebase method to create a new account and be automatically signed it", () => {
+    it('user does not exist, a new account should be created and signed in automatically, user should not be null', () => {
+        const email = "ryanmesservey" + Date.now() + "@gmail.com"
+        const password = "RyanDev1234$" + Date.now();
+
+        const signUp = async() => auth.createUserWithEmailAndPassword(email, password);
+
+        return(
+            signUp(() => {
+
+            }).then(() =>{
+                expect(firebase.auth().currentUser).not.toBeNull();
+            }).catch((e) =>{
+                console.log("error when signing up")
+            })
+        )
+})
+    it( 'user already exist, an error message should be received', () => {
+        const signUp = async() => auth.createUserWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$");
+
+        return auth.signOut().then(() => {
+            signUp().then(() =>{
+            }).catch(function(error) {
+                expect(error.code).toBe("auth/email-already-in-use")
+            })
+        }).catch(e => {
+            console.log("error when signing up, the user shouldn't be able to create the same user but still did")
+        })
+    })
+})
 
 
 
