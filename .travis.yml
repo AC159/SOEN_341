@@ -6,7 +6,7 @@ install:
   - npm install
 
 before_script:
-  - openssl aes-256-cbc -K $encrypted_0a6446eb3ae3_key -iv $encrypted_0a6446eb3ae3_iv -in config/google_cloud_api_key_2.json.enc -out config/google_cloud_api_key_2.json -d
+  - openssl aes-256-cbc -K $encrypted_555b4132f40f_key -iv $encrypted_555b4132f40f_iv -in google_cloud_api_key_2.json.enc -out ./config/google_cloud_api_key_2.json -d
 
 script:
   - npm test
