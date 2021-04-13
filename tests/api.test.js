@@ -1,81 +1,367 @@
+const cloudHelpers = require('../cloudStorage/helpers');
+const request = require('request');
+const { _, createUser, deleteUser, followFunction, unfollowFunction } = require('../routes/users');
+const { r, likeFunction } = require('../routes/posts');
 
-const app = require("../app");
+require('dotenv').config();
+require('firebase/auth');
+const firebase = require('firebase/app');
+const mongoose = require('mongoose');
 
-function sum(a, b) {
-    return a + b;
-}
+const app = firebase.initializeApp(
+    {
+        apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+        authDomain: process.env.REACT_APP_FIREBASE_AUTHDOMAIN,
+        projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+        storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+        messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+        appId: process.env.REACT_APP_FIREBASE_APPID,
+        measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID
+    }
+);
+const auth = app.auth();
+
+describe("UPLOAD  an image", () => {
+
+    it('should upload the logo image', async () => {
+
+        try {
+            const bucketName = 'soen-341-instagram-pictures';
+            const gcsFileName = 'test_image';
+            const baseUrl = `https://storage.googleapis.com/${bucketName}/${gcsFileName}`;
+            let file = null;
+
+            let url = '../frontend/src/assets/images/wallStreetBets.jpg';
+            request({ url, encoding: null }, (err, resp, buffer) => {
+                // Use the buffer
+                // buffer contains the image data
+                // typeof buffer === 'object'
+
+                if (err) {
+                    file = null;
+                }
+                else {
+                    file = buffer;
+                }
+            });
+
+            // Upload the image to google cloud and returns a public image url
+            const avatarUrl = await cloudHelpers.uploadImage(file, true);
+            expect(avatarUrl).toBe(baseUrl);
+        } catch (e) {
+
+        }
+    });
+
+    it('should reject upload', async () => {
+
+        try {
+            let url = null;
+
+            // Upload the image to google cloud and returns a public image url
+            const res = await cloudHelpers.deleteImage(url, true);
+            expect(res).toBe("Image upload rejected!");
+        } catch (e) {
+            // expect(e).toBe("Image upload rejected!");
+        }
+    });
+
+});
 
 
-test('random test case', () => {
-    expect(sum(1,1)).toBe(2);
+
+describe("CREATE a user",  () => {
+
+    beforeEach( async (done) => {
+        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        done();
+    });
+
+    it('should create a user in the db', async () => {
+        try {
+            const req = {
+                body: {
+                    uid: 'some_uid',
+                    name: 'some_name',
+                    email: 'some_email'
+                }
+            }
+            let res = await createUser(req);
+
+            expect(res.message).toBe('Everything is clear!');
+        } catch (e) {
+
+        }
+    });
+
+    it('should create a second user in the db', async () => {
+        try {
+            const req = {
+                body: {
+                    uid: 'some_uid_2',
+                    name: 'some_name_2',
+                    email: 'some_email_2'
+                }
+            }
+            let res = await createUser(req);
+
+            expect(res.message).toBe('Everything is clear!');
+        } catch (e) {
+
+        }
+    });
+
+    it('should create an error when trying to make the same user', async () => {
+        try {
+            const req = {
+                body: {
+                    uid: 'some_uid',
+                    name: 'some_name',
+                    email: 'some_email'
+                }
+            }
+            let res = await createUser(req);
+            
+        } catch (e) {
+            console.log("BYE", e.message)
+            // expect(res.message).toBe('error');
+        }
+    });
+
+});
+
+
+describe("FOLLOW a user", () => {
+
+    beforeEach(async (done) => {
+        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        done();
+    });
+
+    it('should update the user object', async () => {
+        try {
+            const req = {
+                body: {
+                    uid: 'some_uid',
+                    following_uid: 'some_uid_2'
+                }
+            }
+            let res = await followFunction(req);
+            expect(res.user._id).toBe(req.body.uid);
+        } catch (e) {
+
+        }
+    });
+
+});
+
+
+describe("UNFOLLOW a user", () => {
+
+    beforeEach(async (done) => {
+        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        done();
+    });
+
+    it('should update the user object', async () => {
+        try {
+            const req = {
+                body: {
+                    uid: 'some_uid',
+                    following_uid: 'some_uid_2'
+                }
+            }
+            let res = await followFunction(req);
+            expect(res.followedUser._id).toBe(req.body.following_uid);
+        } catch (e) {
+
+        }
+    });
+
+});
+
+// describe("CREATE a post", () => {
+//
+//     beforeEach((done) => {
+//         mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+//         done();
+//     });
+//
+//     it('should create a post object', async () => {
+//         const req = {
+//             body: {
+//                 name: 'my_name',
+//                 postID: 'post_id'
+//             }
+//         }
+//         let res = await likeFunction(req);
+//         expect(res.postID).toBe(req.body.postID);
+//     });
+//
+// });
+
+describe("LIKE a post", () => {
+
+    beforeEach(async (done) => {
+        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        done();
+    });
+
+    it('should update the post object', async () => {
+        try {
+            const req = {
+                body: {
+                    name: 'my_name',
+                    postID: 'post_id'
+                }
+            }
+            let res = await likeFunction(req);
+            expect(res.message).toBe('error');
+        } catch (e) {
+
+        }
+    });
+
+});
+
+describe("UNLIKE a post", () => {
+
+    beforeEach(async (done) => {
+        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        done();
+    });
+
+    it('should update the post object', async () => {
+        try {
+            const req = {
+                body: {
+                    name: 'my_name',
+                    postID: 'post_id'
+                }
+            }
+            let res = await likeFunction(req);
+            expect(res.message).toBe('error');
+        } catch (e) {
+
+        }
+    });
+
+});
+
+describe("DELETE an image", () => {
+
+    it('should delete the logo image', async () => {
+
+        try {
+            const bucketName = 'soen-341-instagram-pictures';
+            const gcsFileName = 'test_image';
+            const baseUrl = `https://storage.googleapis.com/${bucketName}/${gcsFileName}`;
+
+            // Delete the image that was inserted:
+            const response = await cloudHelpers.deleteImage(baseUrl, true);
+
+            expect(response).toBe("Image deleted successfully");
+        } catch (e) {
+
+        }
+    });
+});
+
+describe("DELETE a user object",  () => {
+
+    beforeEach(async (done) => {
+        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+        done();
+    });
+
+    it('should delete a user in the db', async () => {
+
+        try {
+            let res = await deleteUser('some_uid');
+            expect(res.message).toBe('User has been deleted');
+        } catch (e) {
+
+        }
+
+    });
+
+    it('should delete the second user in the db', async () => {
+
+        try {
+            let res = await deleteUser('some_uid_2');
+            expect(res.message).toBe('User has been deleted');
+        } catch (e) {
+
+        }
+    });
+
+});
+
+describe("signing in with the firebase method to veryfy the user's credentials", () => {
+    it('valid password, user should be signed in and not be null', async () => {
+
+        const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$")
+
+        return authentication().then(() =>{
+            expect(firebase.auth().currentUser).not.toBeNull()
+        }).catch(e => {
+
+        })
+    }) //testing signing with an existing user's credentials
+
+    it('invalid password, user shouldn\'t be signed in, should be null', () => {
+
+        const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "badPassword")
+
+        return auth.signOut().then(() => {
+            authentication().then(() =>{
+                expect(firebase.auth().currentUser).toBeNull()
+            })
+        }).catch(e => {
+
+        })
+    }) //testing signing with invalid credentials
 })
 
-describe("POST /like ", () => {
-    test('test expected status code for like route', () => {
-        return request(app)
-        .post('/like')
-        .then((response) => {
-            expect(response.statusCode).toBe(200);
-        });
-    });
-});
 
-describe("POST /follow ", () => {
-    test('test expected status code for follow route', () => {
-        return request(app)
-        .post('/follow')
-        .then((response) => {
-            expect(response.statusCode).toBe(200);
-        });
-    });
-});
 
-describe("GET /search/:filter ", () => {
-    test('test expected status code for search route', () => {
-        return request(app)
-        .get('/search/:filter')
-        .then((response) => {
-            expect(response.statusCode).toBe(200);
-        });
-    });
-});
+describe('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {
+    it('the current user is signed out and current user is null', () => {
+        const signOut = async () => auth.signOut()
 
-describe("GET /profile/:id ", () => {
-    test('This route should lead to the profile page', () => {
-        return request(app)
-        .get('/profile/:id')
-        .then((response) => {
-            expect(response.statusCode).toBe(401);
-        });
-    });
-});
+        return signOut().then(() => {
+                expect(firebase.auth().currentUser).toBeNull()
+            })
+    })
+})
+describe("signup should use the firebase method to create a new account and be automatically signed it", () => {
+    it('user does not exist, a new account should be created and signed in automatically, user should not be null', () => {
+        const email = "ryanmesservey" + Date.now() + "@gmail.com"
+        const password = "RyanDev1234$" + Date.now();
+    
+        const signUp = async() => auth.createUserWithEmailAndPassword(email, password);
+        const signOut = async () => auth.signOut()
 
-describe("POST /avatar ", () => {
-    test('test expected status code for sign up route', () => {
-        return request(app)
-        .post('/avatar')
-        .then((response) => {
-            expect(response.statusCode).toBe(200);
-        });
-    });
-});
+        return signOut().then(() => {
+            signUp().then(() =>{
+                expect(firebase.auth().currentUser).not.toBeNull()
+            }).catch(function(error) {
+            })
+        })
+    })
 
-describe("POST /signup ", () => {
-    test('test expected status code for sign up route', () => {
-        return request(app)
-        .post('/signin')
-        .then((response) => {
-            expect(response.statusCode).toBe(201);
-        });
-    });
-});
+    it( 'user already exist, an error message should be received', () => {
+        const signUp = async() => auth.createUserWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$");
 
-describe("GET /signout ", () => {
-    test('This route should lead to the sign out page', () => {
-        return request(app)
-        .get('/signout')
-        .then((response) => {
-            expect(response.statusCode).toBe(401);
-        });
-    });
-});
+        return auth.signOut().then(() => {
+            signUp().then(() =>{
+            }).catch(function(error) {
+                expect(error.code).toBe("auth/email-already-in-use")
+            })
+        }).catch(e => {
+        })
+    })
+})
+
+
+

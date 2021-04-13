@@ -37,7 +37,6 @@ const deleteImage = (imageUrl) => new Promise((resolve, reject) => {
     const filename = imageUrl.replace(`https://storage.googleapis.com/${bucketName}/`, '');
     const file = bucket.file(filename);
 
-    console.log(filename);
     file.delete().then((data) => {
         resolve(data);
     }).catch((error) => {
