@@ -24,7 +24,11 @@ const uploadImage = (image, test = false) => new Promise((resolve, reject) => {
     });
 
     stream.on('error', (error) => {
-        reject({error: error})
+        try {
+            reject({error: error})
+        } catch (e) {
+
+        }
     });
 
     stream.on('finish', () => {
@@ -45,7 +49,11 @@ const uploadImage = (image, test = false) => new Promise((resolve, reject) => {
 const deleteImage = (imageUrl, test = false) => new Promise((resolve, reject) => {
 
     if (imageUrl === null) {
-        reject("Image upload rejected!");
+        try {
+            reject("Image upload rejected!");
+        } catch (e) {
+
+        }
     }
 
     const filename = imageUrl.replace(`https://storage.googleapis.com/${bucketName}/`, '');
