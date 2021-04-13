@@ -72,8 +72,8 @@ describe("UPLOAD  an image", () => {
 
 describe("CREATE a user",  () => {
 
-    beforeEach((done) => {
-        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+    beforeEach( async (done) => {
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
         done();
     });
 
@@ -121,7 +121,7 @@ describe("CREATE a user",  () => {
                 }
             }
             let res = await createUser(req);
-            expect(res.message).toBe('error');
+            // expect(res.message).toBe('error');
         } catch (e) {
             expect(res.message).toBe('error');
         }
@@ -132,8 +132,8 @@ describe("CREATE a user",  () => {
 
 describe("FOLLOW a user", () => {
 
-    beforeEach((done) => {
-        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+    beforeEach(async (done) => {
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
         done();
     });
 
@@ -157,8 +157,8 @@ describe("FOLLOW a user", () => {
 
 describe("UNFOLLOW a user", () => {
 
-    beforeEach((done) => {
-        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+    beforeEach(async (done) => {
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
         done();
     });
 
@@ -201,8 +201,8 @@ describe("UNFOLLOW a user", () => {
 
 describe("LIKE a post", () => {
 
-    beforeEach((done) => {
-        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+    beforeEach(async (done) => {
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
         done();
     });
 
@@ -225,8 +225,8 @@ describe("LIKE a post", () => {
 
 describe("UNLIKE a post", () => {
 
-    beforeEach((done) => {
-        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+    beforeEach(async (done) => {
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
         done();
     });
 
@@ -264,12 +264,29 @@ describe("DELETE an image", () => {
 
         }
     });
+
+    // todo: may be a bad test??
+    it('should update the post object', async () => {
+        try {
+            const req = {
+                body: {
+                    name: 'my_name',
+                    postID: 'post_id'
+                }
+            }
+            let res = await likeFunction(req);
+            expect(res.message).toBe('error');
+        } catch (e) {
+
+        }
+    });
+
 });
 
 describe("DELETE a user object",  () => {
 
-    beforeEach((done) => {
-        mongoose.connect(process.env.MONGODB_CLUSTER_URL);
+    beforeEach(async (done) => {
+        await mongoose.connect(process.env.MONGODB_CLUSTER_URL);
         done();
     });
 
@@ -296,8 +313,8 @@ describe("DELETE a user object",  () => {
 
 });
 
-
-test('signin should use the auth firebase method to verify the credentials entered by the user, valid password', async () => {
+describe("signing in with the firebase method to veryfy the user's credentials", () => {
+    it('valid password, user should be signed in and not be null', async () => {
 
         const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$")
 
@@ -306,10 +323,9 @@ test('signin should use the auth firebase method to verify the credentials enter
         }).catch(e => {
 
         })
+    }) //testing signing with an existing user's credentials
 
-}) //testing signing with an existing user's credentials
-
-test('signin should use the auth firebase method to verify the credentials entered by the user, invalid password', () => {
+    it('invalid password, user shouldn\'t be signed in, should be null', () => {
 
         const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "badPassword")
 
@@ -320,19 +336,37 @@ test('signin should use the auth firebase method to verify the credentials enter
         }).catch(e => {
 
         })
-}) //testing signing with invalid credentials
+    }) //testing signing with invalid credentials
+})
 
-test('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {
 
+
+describe('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {
+    it('the current user is signed out and current user is null', () => {
         const signOut = async () => auth.signOut()
 
         return signOut().then(() => {
-            expect(firebase.auth().currentUser).toBeNull()
-        }).catch(e => {
-     })
+                expect(firebase.auth().currentUser).toBeNull()
+            })
+    })
 })
+describe("signup should use the firebase method to create a new account and be automatically signed it", () => {
+    it('user does not exist, a new account should be created and signed in automatically, user should not be null', () => {
+        const email = "ryanmesservey" + Date.now() + "@gmail.com"
+        const password = "RyanDev1234$" + Date.now();
 
-test('signup should use the auth firebase method to create a new user in the database and be automatically signed in, user already exist', () => {
+        const signUp = async() => auth.createUserWithEmailAndPassword(email, password);
+        const signOut = async () => auth.signOut()
+
+        return signOut().then(() => {
+            signUp().then(() =>{
+                expect(firebase.auth().currentUser).not.toBeNull()
+            }).catch(function(error) {
+            })
+        })
+    })
+
+    it( 'user already exist, an error message should be received', () => {
         const signUp = async() => auth.createUserWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$");
 
         return auth.signOut().then(() => {
@@ -342,5 +376,8 @@ test('signup should use the auth firebase method to create a new user in the dat
             })
         }).catch(e => {
         })
-
+    })
 })
+
+
+
