@@ -13,23 +13,16 @@ function AuthProvider({children}) {
 
     // signs up a user with email and password
     const signup = (email, password) => {
-        console.log(auth.createUserWithEmailAndPassword(email, password));
         return auth.createUserWithEmailAndPassword(email, password);
     }
 
     // signs in a user with email and password
     const signin = (email, password) => {
-<<<<<<< HEAD
-        console.log(auth.signInWithEmailAndPassword(email, password))
-=======
-        console.log(auth.signInWithEmailAndPassword(email, password));
->>>>>>> 94628a92a07ead6849874fb5854913759912f5e9
         return auth.signInWithEmailAndPassword(email, password);
     }
 
     // signs out a user
     const signout = () => {
-        console.log(auth.signOut());
         return auth.signOut();
     }
 

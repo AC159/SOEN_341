@@ -35,28 +35,51 @@ function sum(a, b) {
 
 test('signin should use the auth firebase method to verify the credentials entered by the user, valid password', () => {
     const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$")
-    authentication().then(() =>{
+
+    return authentication().then(() =>{
         expect(firebase.auth().currentUser).not.toBeNull()
     })
-    auth.signOut()
 }) //testing signing with an existing user's credentials
 
 test('signin should use the auth firebase method to verify the credentials entered by the user, invalid password', () => {
-    const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$")
-    authentication().then(() =>{
-        expect(firebase.auth().currentUser).toBeNull()
+    const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "badPassword")
+
+    return auth.signOut().then(() => {
+        authentication().then(() =>{
+            expect(firebase.auth().currentUser).toBeNull()
+        })
     })
 }) //testing signing with invalid credentials
 
 test('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {
-    const signIn = async () => auth.signOutauth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$")
-    const signOut = async () => auth.signOut
-    signIn().then(() =>{
-        signOut().then(() =>{
+    const signOut = async () => auth.signOut()
+    
+    return signOut().then(() => {
             expect(firebase.auth().currentUser).toBeNull()
         }) 
+})
+
+test('signup should use the auth firebase method to create a new user in the database and be automatically signed in, user already exist', () => {
+    const signUp = async() => auth.createUserWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$");
+
+    return auth.signOut().then(() => {
+        signUp().then(() =>{
+        }).catch(function(error) {
+            expect(error.code).toBe("auth/email-already-in-use")
+        })
     })
 })
+
+// test('signup should use the auth firebase method to create a new user in the database, user already exists', () => {
+//     const username = "ryanmesservey" + Date.now() + "@gmail.com"
+//     const signUp = async() => auth.createUserWithEmailAndPassword(username, "RyanDev1234$");
+//     const signIn = async () => auth.signInWithEmailAndPassword(username, "RyanDev1234$");
+//     signUp().then(() =>{
+//         console.log("shouldnt happen")
+//     }).catch(
+
+//     )
+// })
 
 // test('Uploading a new image', () => {
 //     return request(posts)
