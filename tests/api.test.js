@@ -123,8 +123,7 @@ describe("CREATE a user",  () => {
             let res = await createUser(req);
             
         } catch (e) {
-            console.log("BYE", e.message)
-            // expect(res.message).toBe('error');
+            expect(res.message).toBe('error');
         }
     });
 
@@ -265,6 +264,22 @@ describe("DELETE an image", () => {
 
         }
     });
+
+    it('should update the post object', async () => {
+        try {
+            const req = {
+                body: {
+                    name: 'my_name',
+                    postID: 'post_id'
+                }
+            }
+            let res = await likeFunction(req);
+            expect(res.message).toBe('error');
+        } catch (e) {
+
+        }
+    });
+
 });
 
 describe("DELETE a user object",  () => {

@@ -155,18 +155,39 @@ router.get('/', async (req, res) => {
 * REQUEST PARAMS: req.body.name + req.body.postID
 *
 *  */
-router.post('/like', async (req, res) => {
+
+const likeFunction = async (req) => {
 
   try {
 
     let post = await Post.findOneAndUpdate({ _id: req.body.postID },
         { "$addToSet": { likes: req.body.name } }, { new: true });
 
-    res.status(200).json({
-        post: post
-    });
+    return {
+      message: 'success',
+      post
+    }
 
   } catch (error) {
+    return {
+      error,
+      message: 'error'
+    }
+  }
+
+}
+
+router.post('/like', async (req, res) => {
+
+  let response = await likeFunction(req);
+
+  if (response.message !== 'error') {
+
+    res.status(200).json({
+      post: post
+    });
+
+  } else {
     res.send(error);
   }
 
@@ -197,4 +218,7 @@ router.post('/unlike', async (req, res) => {
 
 });
   
-module.exports.router = router;
+module.exports = {
+  router,
+  likeFunction: likeFunction
+};
