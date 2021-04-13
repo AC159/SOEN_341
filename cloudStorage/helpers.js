@@ -44,10 +44,15 @@ const uploadImage = (image, test = false) => new Promise((resolve, reject) => {
 
 const deleteImage = (imageUrl, test = false) => new Promise((resolve, reject) => {
 
+    if (imageUrl === null) {
+        reject("Image upload rejected!");
+    }
+
     const filename = imageUrl.replace(`https://storage.googleapis.com/${bucketName}/`, '');
     const file = bucket.file(filename);
 
     console.log(filename);
+
     file.delete().then((data) => {
         if (!test) {
             resolve(data);

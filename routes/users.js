@@ -41,6 +41,19 @@ router.get('/:uid', async function(req, res) {
 *
 *  */
 
+const deleteUser = async (uid) => {
+
+  try {
+
+    await User.deleteOne({ _id: uid });
+    return { message: 'User has been deleted' };
+
+  } catch (error) {
+    return { error, message: 'error' };
+  }
+
+}
+
 const createUser = async (req) => {
 
   if (!req.body.email || !req.body.name) {
@@ -183,13 +196,14 @@ router.post('/follow', async function (req, res) {
 
 });
 
+
 /* POST request to unfollow a user:
 *
 * REQUEST PARAMS: req.body.uid + req.body.following_uid
 *
 *  */
 
-router.post('/unfollow', async function (req, res) {
+const unfollowFunction = async (req) => {
 
   try {
 
@@ -203,12 +217,32 @@ router.post('/unfollow', async function (req, res) {
 
     let followedUser = await User.findOne({ _id: req.body.following_uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');
 
-    res.status(200).json({
-      user: user,
-      followedUser: followedUser
-    });
+    return {
+      user,
+      followedUser,
+      message: 'Operation successful'
+    }
 
   } catch (error) {
+    return {
+      error,
+      message: 'error'
+    }
+  }
+
+}
+
+router.post('/unfollow', async function (req, res) {
+
+  let response = await unfollowFunction(req);
+
+  if (response.message !== 'error') {
+    res.status(200).json({
+      user: response.user,
+      followedUser: response.followedUser
+    });
+  }
+  else {
     res.send(error);
   }
 
@@ -235,6 +269,9 @@ router.get('/search/:filter', async function (req, res) {
 
 module.exports = {
   router: router,
-  createUser: createUser
+  createUser: createUser,
+  deleteUser: deleteUser,
+  followFunction: followFunction,
+  unfollowFunction: unfollowFunction
 };
 
