@@ -1,7 +1,7 @@
 const cloudHelpers = require('../cloudStorage/helpers');
 const request = require('request');
 const { _, createUser, deleteUser, followFunction, unfollowFunction } = require('../routes/users');
-const { r, likeFunction } = require('../routes/posts');
+const { r, likeFunction, unlikeFunction } = require('../routes/posts');
 
 require('dotenv').config();
 require('firebase/auth');
@@ -19,6 +19,7 @@ const app = firebase.initializeApp(
         measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID
     }
 );
+
 const auth = app.auth();
 beforeAll(done => {
     done()
@@ -166,6 +167,22 @@ describe("FOLLOW a user", () => {
         }
     });
 
+
+    it('should reject the request to follow a user', async () => {
+        try {
+            // Missing parameter in the request
+            const req = {
+                body: {
+                    following_uid: 'some_uid_2'
+                }
+            }
+            let res = await followFunction(req);
+        } catch (e) {
+            expect(e).toBe('error when following a user');
+        }
+    });
+
+
 });
 
 
@@ -176,7 +193,7 @@ describe("UNFOLLOW a user", () => {
         done();
     });
 
-    it('should update the user object', async () => {
+    it('should update the user object by unfollowing a user', async () => {
         try {
             const req = {
                 body: {
@@ -184,34 +201,29 @@ describe("UNFOLLOW a user", () => {
                     following_uid: 'some_uid_2'
                 }
             }
-            let res = await followFunction(req);
+            let res = await unfollowFunction(req);
             expect(res.followedUser._id).toBe(req.body.following_uid);
         } catch (e) {
-            console.log("error in unfollowing the user")
+            console.log("error in unfollowing the user");
+        }
+    });
+
+    it('should reject the request to unfollow a user', async () => {
+        try {
+            // Missing parameter in the request
+            const req = {
+                body: {
+                    following_uid: 'some_uid_2'
+                }
+            }
+            let res = await unfollowFunction(req);
+        } catch (e) {
+            expect(e).toBe('error when unfollowing a user');
         }
     });
 
 });
 
-// describe("CREATE a post", () => {
-//
-//     beforeEach((done) => {
-//         mongoose.connect(process.env.MONGODB_CLUSTER_URL);
-//         done();
-//     });
-//
-//     it('should create a post object', async () => {
-//         const req = {
-//             body: {
-//                 name: 'my_name',
-//                 postID: 'post_id'
-//             }
-//         }
-//         let res = await likeFunction(req);
-//         expect(res.postID).toBe(req.body.postID);
-//     });
-//
-// });
 
 describe("LIKE a post", () => {
 
@@ -220,18 +232,46 @@ describe("LIKE a post", () => {
         done();
     });
 
-    it('should update the post object', async () => {
+    it('should reject the post object', async () => {
         try {
             const req = {
                 body: {
-                    name: 'my_name',
-                    postID: 'post_id'
+                    name: 'some_name',
+                    postID: 'id123'
                 }
             }
             let res = await likeFunction(req);
             expect(res.message).toBe('error');
         } catch (e) {
-            console.log("error when liking a post")
+            console.log("error when liking a post");
+        }
+    });
+
+    it('should reject the post request', async () => {
+        try {
+            const req = {
+                body: {
+                    name: 'my_name'
+                }
+            }
+            let res = await likeFunction(req);
+            expect(res.message).toBe('missing post id');
+        } catch (e) {
+            console.log("error when liking a post");
+        }
+    });
+
+    it('should reject the post request', async () => {
+        try {
+            const req = {
+                body: {
+                    postID: 'id123'
+                }
+            }
+            let res = await likeFunction(req);
+            expect(res.message).toBe('missing name');
+        } catch (e) {
+            console.log("error when liking a post");
         }
     });
 
@@ -244,18 +284,31 @@ describe("UNLIKE a post", () => {
         done();
     });
 
-    it('should update the post object', async () => {
+    it('should reject the post object', async () => {
         try {
             const req = {
                 body: {
-                    name: 'my_name',
                     postID: 'post_id'
                 }
             }
-            let res = await likeFunction(req);
-            expect(res.message).toBe('error');
+            let res = await unlikeFunction(req);
+            expect(res.message).toBe('missing name parameter');
         } catch (e) {
-            console.log("error when unliking a post")
+            console.log("error when unliking a post");
+        }
+    });
+
+    it('should indicate a missing parameter', async () => {
+        try {
+            const req = {
+                body: {
+                    name: 'random_name'
+                }
+            }
+            let res = await unlikeFunction(req);
+            expect(res.message).toBe('missing postID parameter');
+        } catch (e) {
+            console.log("error when unliking a post");
         }
     });
 
@@ -279,7 +332,6 @@ describe("DELETE an image", () => {
         }
     });
 
-    // todo: may be a bad test??
     it('should update the post object', async () => {
         try {
             const req = {
@@ -330,7 +382,7 @@ describe("DELETE a user object",  () => {
 describe("signing in with the firebase method to veryfy the user's credentials", () => {
     it('valid password, user should be signed in and not be null', async () => {
 
-        const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$")
+        const authentication = async () => auth.signInWithEmailAndPassword(process.env.EMAIL, process.env.PASSWORD)
 
         return authentication().then(() =>{
             expect(firebase.auth().currentUser).not.toBeNull()
@@ -341,7 +393,7 @@ describe("signing in with the firebase method to veryfy the user's credentials",
 
     it('invalid password, user shouldn\'t be signed in, should be null', () => {
 
-        const authentication = async () => auth.signInWithEmailAndPassword("ryanmesservey1@gmail.com", "badPassword")
+        const authentication = async () => auth.signInWithEmailAndPassword(process.env.EMAIL, process.env.PASSWORD)
 
         return (
             auth.signOut()
@@ -374,8 +426,8 @@ describe('signout should use the auth firebase method to revert the authenticate
 })
 describe("signup should use the firebase method to create a new account and be automatically signed it", () => {
     it('user does not exist, a new account should be created and signed in automatically, user should not be null', () => {
-        const email = "ryanmesservey" + Date.now() + "@gmail.com"
-        const password = "RyanDev1234$" + Date.now();
+        const email = Date.now() + "@gmail.com"
+        const password = process.env.PASSWORD + Date.now();
 
         const signUp = async() => auth.createUserWithEmailAndPassword(email, password);
 
@@ -390,7 +442,7 @@ describe("signup should use the firebase method to create a new account and be a
         )
 })
     it( 'user already exist, an error message should be received', () => {
-        const signUp = async() => auth.createUserWithEmailAndPassword("ryanmesservey1@gmail.com", "RyanDev1234$");
+        const signUp = async() => auth.createUserWithEmailAndPassword(process.env.EMAIL, process.env.PASSWORD);
 
         return auth.signOut().then(() => {
             signUp().then(() =>{

@@ -160,6 +160,18 @@ const likeFunction = async (req) => {
 
   try {
 
+    if (!req.body.postID) {
+      return {
+        message: 'missing post id'
+      }
+    }
+
+    if (!req.body.name) {
+      return {
+        message: 'missing name'
+      }
+    }
+
     let post = await Post.findOneAndUpdate({ _id: req.body.postID },
         { "$addToSet": { likes: req.body.name } }, { new: true });
 
@@ -181,7 +193,7 @@ router.post('/like', async (req, res) => {
 
   let response = await likeFunction(req);
 
-  if (response.message !== 'error') {
+  if (response.message !== 'error' || response.message !== 'missing post id' || response.message !== 'missing name') {
 
     res.status(200).json({
       post: response.post
@@ -201,24 +213,55 @@ router.post('/like', async (req, res) => {
 *
 *  */
 
-router.post('/unlike', async (req, res) => {
+const unlikeFunction = async (req) => {
 
   try {
+
+    if (!req.body.name) {
+      return {
+        message: 'missing name parameter'
+      }
+    }
+
+    if (!req.body.postID) {
+      return {
+        message: 'missing postID parameter'
+      }
+    }
 
     let post = await Post.findOneAndUpdate({ _id: req.body.postID },
         { "$pull": { likes: req.body.name } }, { new: true });
 
-    res.status(200).json({
-      post: post
-    });
+    return {
+      post,
+      message: 'unlike operation successful!'
+    }
 
   } catch (error) {
-    res.send(error);
+    return {
+      error,
+      message: 'unlike operation went wrong'
+    }
+  }
+
+}
+
+router.post('/unlike', async (req, res) => {
+
+  let response = await unlikeFunction(req);
+
+  if (response.message !== 'unlike operation went wrong' || response.message !== 'missing name parameter' || response.message !== 'missing postID parameter') {
+    res.status(200).json({
+      post: response.post
+    });
+  } else {
+    res.send(response.message);
   }
 
 });
   
 module.exports = {
   router,
-  likeFunction: likeFunction
+  likeFunction: likeFunction,
+  unlikeFunction: unlikeFunction
 };

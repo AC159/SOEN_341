@@ -162,6 +162,12 @@ const followFunction = async (req) => {
 
   try {
 
+    if (!req.body.uid || !req.body.following_uid) {
+      return {
+        message: 'error when following a user'
+      }
+    }
+
     // Append to the 'following' field the name of the user the current user want to follow
     await User.findOneAndUpdate({ _id: req.body.uid },
         { "$addToSet": { following: req.body.following_uid } }, { new: true });
@@ -176,11 +182,15 @@ const followFunction = async (req) => {
 
     return {
       user: user,
-      followedUser: followedUser
+      followedUser: followedUser,
+      message: 'User followed successfully'
     }
 
   } catch (error) {
-    res.send(error);
+    return {
+      message: 'error when following a user',
+      error
+    }
   }
 
 }
@@ -189,10 +199,15 @@ router.post('/follow', async function (req, res) {
 
   let response = followFunction(req);
 
-  res.status(200).json({
-    user: response.user,
-    followedUser: response.followedUser
-  });
+  if (response.message !== 'error when following a user') {
+    res.status(200).json({
+      user: response.user,
+      followedUser: response.followedUser
+    });
+  }
+  else {
+    res.send(response.error);
+  }
 
 });
 
@@ -206,6 +221,12 @@ router.post('/follow', async function (req, res) {
 const unfollowFunction = async (req) => {
 
   try {
+
+    if (!req.body.uid || !req.body.following_uid) {
+      return {
+        message: 'error when unfollowing a user'
+      }
+    }
 
     await User.updateOne({ _id: req.body.uid },
         { "$pullAll": { following: [req.body.following_uid] } });
@@ -226,7 +247,7 @@ const unfollowFunction = async (req) => {
   } catch (error) {
     return {
       error,
-      message: 'error'
+      message: 'error when unfollowing a user'
     }
   }
 
@@ -236,14 +257,14 @@ router.post('/unfollow', async function (req, res) {
 
   let response = await unfollowFunction(req);
 
-  if (response.message !== 'error') {
+  if (response.message !== 'error when unfollowing a user') {
     res.status(200).json({
       user: response.user,
       followedUser: response.followedUser
     });
   }
   else {
-    res.send(error);
+    res.send(response.error);
   }
 
 });
