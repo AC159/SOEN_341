@@ -197,7 +197,7 @@ const followFunction = async (req) => {
 
 router.post('/follow', async function (req, res) {
 
-  let response = followFunction(req);
+  let response = await followFunction(req);
 
   if (response.message !== 'error when following a user') {
     res.status(200).json({
