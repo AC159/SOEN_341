@@ -1,0 +1,700 @@
+[
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/Database/Models/Post.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/Database/Models/User.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/Database/MongoDB.js",
+    "messages": [
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'ObjectID' is assigned a value but never used.",
+        "line": 3,
+        "column": 7,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 3,
+        "endColumn": 15
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "const mongodb = require('mongodb');\nconst MongoClient = mongodb.MongoClient;\nconst ObjectID = mongodb.ObjectID; // To create our own MongoDB ids in place\n\n\nasync function get_connection () {\n\n    const connectionURL = process.env.MONGODB_CLUSTER_URL;\n\n    // Connect to the cluster\n    await MongoClient.connect(connectionURL, {useNewUrlParser: true}, (error, client) => {\n\n        if (error) {\n            return console.log('Unable to connect to db...');\n        }\n\n         // Create db or connect to it\n        return client.db('SOEN_341');\n\n    });\n\n}\n\nmodule.exports = {\n    get_connection: get_connection\n}\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/Database/Mongoose.js",
+    "messages": [
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'error' is defined but never used.",
+        "line": 15,
+        "column": 13,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 15,
+        "endColumn": 18
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "let mongoose = require('mongoose');\nconst chalk = require('chalk');\nrequire(\"dotenv\").config({ path: \".env\" })\n\n\n// This file contains the connection method to connect and save objects to the db\nmongoose.connect(process.env.MONGODB_CLUSTER_URL, {\n    useNewUrlParser: true,\n    useUnifiedTopology: true,\n    useFindAndModify: false\n})\n    .then(() => {\n      console.log(chalk.green('Successfully connected to cluster...'))\n    })\n    .catch((error) => {\n      console.log(chalk.red('Unable to connect to cluster...'));\n    });\n\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/app.js",
+    "messages": [
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'indexRouter' is assigned a value but never used.",
+        "line": 9,
+        "column": 7,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 9,
+        "endColumn": 18
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'next' is defined but never used.",
+        "line": 43,
+        "column": 33,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 43,
+        "endColumn": 37
+      }
+    ],
+    "errorCount": 2,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "const createError = require('http-errors');\nconst express = require('express');\nconst path = require('path');\nconst cookieParser = require('cookie-parser');\nconst logger = require('morgan');\nconst bodyParser = require('body-parser');\nrequire('./Database/Mongoose.js');\n\nconst indexRouter = require('./routes/index');\nconst usersRouter = require('./routes/users').router;\nconst postsRouter = require('./routes/posts').router;\n\nconst app = express();\n\n// view engine setup\napp.set('views', path.join(__dirname, 'views'));\napp.set('view engine', 'hbs');\n\n\napp.use(bodyParser.json());\napp.disable('x-powered-by');\napp.use(bodyParser.json());\napp.use(bodyParser.urlencoded({extended: false}));\n\napp.use(logger('dev'));\napp.use(express.json());\napp.use(express.urlencoded({ extended: false }));\napp.use(cookieParser());\napp.use(express.static(path.join(__dirname, 'frontend/build')));\n\napp.use('/users', usersRouter);\napp.use('/posts', postsRouter);\napp.get('*', (req, res) => {\n  res.sendFile(path.join(__dirname+'/frontend/build/index.html'));\n})\n\n// catch 404 and forward to error handler\napp.use(function(req, res, next) {\n  next(createError(404));\n});\n\n// error handler\napp.use(function(err, req, res, next) {\n  // set locals, only providing error in development\n  res.locals.message = err.message;\n  res.locals.error = req.app.get('env') === 'development' ? err : {};\n\n  // render the error page\n  res.status(err.status || 500);\n  res.render('error');\n});\n\nmodule.exports = app;\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/cloudStorage/helpers.js",
+    "messages": [
+      {
+        "ruleId": "no-empty",
+        "severity": 2,
+        "message": "Empty block statement.",
+        "line": 29,
+        "column": 21,
+        "nodeType": "BlockStatement",
+        "messageId": "unexpected",
+        "endLine": 31,
+        "endColumn": 10
+      },
+      {
+        "ruleId": "no-empty",
+        "severity": 2,
+        "message": "Empty block statement.",
+        "line": 54,
+        "column": 21,
+        "nodeType": "BlockStatement",
+        "messageId": "unexpected",
+        "endLine": 56,
+        "endColumn": 10
+      }
+    ],
+    "errorCount": 2,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "const gc = require('../config/index');\n\nconst bucketName = 'soen-341-instagram-pictures';\nconst bucket = gc.bucket(bucketName);\n\nconst uploadImage = (image, test = false) => new Promise((resolve, reject) => {\n\n    // Multer stores the image in req.file with upload.single('image')\n    // console.log(image);\n\n    // Multer stored the file (image) in a buffer\n    let gcsFileName = null;\n\n    if (!test) {\n        gcsFileName = `${Date.now()}_${image.originalname}`;\n    } else {\n        gcsFileName = 'test_image';\n    }\n\n    const file = bucket.file(gcsFileName);\n\n    const stream = file.createWriteStream({\n        resumable: false\n    });\n\n    stream.on('error', (error) => {\n        try {\n            reject({error: error})\n        } catch (e) {\n\n        }\n    });\n\n    stream.on('finish', () => {\n\n        resolve(`https://storage.googleapis.com/${bucketName}/${gcsFileName}`);\n\n    });\n\n    if (!test) {\n        stream.end(image.buffer);\n    } else {\n        stream.end(image);\n    }\n\n});\n\n\nconst deleteImage = (imageUrl, test = false) => new Promise((resolve, reject) => {\n\n    if (imageUrl === null) {\n        try {\n            reject(\"Image upload rejected!\");\n        } catch (e) {\n\n        }\n    }\n\n    const filename = imageUrl.replace(`https://storage.googleapis.com/${bucketName}/`, '');\n    const file = bucket.file(filename);\n\n    console.log(filename);\n\n    file.delete().then((data) => {\n        if (!test) {\n            resolve(data);\n        } else {\n          resolve(\"Image deleted successfully\");\n        }\n    }).catch((error) => {\n        reject(error);\n    });\n\n});\n\n\nmodule.exports.uploadImage = uploadImage;\nmodule.exports.deleteImage = deleteImage;\n\n\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/config/index.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/App.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React from \"react\";\nimport { BrowserRouter, Route, Switch } from \"react-router-dom\";\nimport Posts from '../src/components/Posts/Posts';\nimport classes from \"./components/Layout/Layout.module.css\";\nimport SignUp from './components/Authentication/SignUp/SignUp'\nimport SignIn from './components/Authentication/SignIn/SignIn'\nimport Profile from './components/Profile/Profile'\nimport AuthProvider from \"./AuthProvider\";\nimport SignOut from './components/Authentication/SignOut/SignOut';\nimport ModalContextProvider from \"./components/Profile/ModalContextProvider/ModalContextProvider\";\n\nfunction App() {\n\n      return (\n        <BrowserRouter>\n            <AuthProvider>\n                <div>\n                    <main className={classes.content}>\n                        <ModalContextProvider>\n                        <Switch>\n                            <Route exact path=\"/profile/:id\" component={Profile}/>\n\n                            <Route exact path=\"/signup\" component={SignUp}/>\n\n                            <Route exact path=\"/signin\" component={SignIn}/>\n\n                            <Route exact path=\"/signout\" component={SignOut}/>\n\n                            <Route exact path=\"/\" component={Posts}/>\n                        </Switch>\n                        </ModalContextProvider>\n                    </main>\n                </div>\n            </AuthProvider>\n        </BrowserRouter>\n      );\n}\n\nexport default App;\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/AuthProvider.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import axios from 'axios';\nimport React, { useContext, useEffect, useState } from 'react'\nimport { auth } from './firebase';\n\nconst AuthContext = React.createContext();\n\nexport function useAuth() {\n    return useContext(AuthContext);\n}\n\nfunction AuthProvider({children}) {\n    const [currentUser, setCurrentUser] = useState();\n\n    // signs up a user with email and password\n    const signup = (email, password) => {\n        return auth.createUserWithEmailAndPassword(email, password);\n    }\n\n    // signs in a user with email and password\n    const signin = (email, password) => {\n        console.log('Signin', auth.signInWithEmailAndPassword(email, password));\n        return auth.signInWithEmailAndPassword(email, password);\n    }\n\n    // signs out a user\n    const signout = () => {\n        return auth.signOut();\n    }\n\n    // initialize the current user whenever a user signs in\n    useEffect(() => {\n        const unsubscribe = auth.onAuthStateChanged(async user => {\n            if(user && user.uid) {\n                const res = await axios.get(`/users/${user.uid}`);\n                user = {\n                    ...user,\n                    ...res.data\n                };\n            }\n            setCurrentUser(user);\n        })\n\n        return unsubscribe;\n    }, [])\n\n    // value will be passed down using the Provider API\n    const value = {\n        currentUser,\n        signup,\n        signin,\n        signout\n    }\n\n    return (\n        <AuthContext.Provider value={value}>\n            {children}\n        </AuthContext.Provider>\n    )\n}\n\nexport default AuthProvider\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Authentication/SignIn/SignIn.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, {useState, useEffect} from 'react';\nimport { Link, useHistory } from 'react-router-dom';\nimport { useAuth } from '../../../AuthProvider';\nimport wallStreetBets from \"../../../../src/assets/images/wallStreetBets.jpg\";\nimport classes from './SignIn.module.css';\n\nfunction SignIn() {\n    const [email, setEmail] = useState('');\n    const [password, setPassword] = useState('');\n    const [error, setError] = useState(false);\n    const { signin, currentUser } = useAuth();\n    const history = useHistory();\n\n    const submitForm = () => {\n        // signs in user and then redirect to main page\n        signin(email, password).then(() =>{\n            setTimeout(() =>{\n                history.replace('/');\n            }, 500)\n        })\n        .catch(e => {\n            setError(e.message)\n        })\n    }\n    useEffect(() => {\n        if (currentUser !== null){\n            history.push('/')\n        }\n    }, [currentUser, history])\n\n    return (\n\n        <div className={classes.super_container}>\n            <div className={classes.container}>\n\n                <div className={classes.container_image}>\n                    <img src={wallStreetBets} alt=\"WallStreet Bets logo\"/>\n                </div>\n\n                <div className={classes.container_title}>Sign in to see pictures of your friends!</div>\n\n                <form className={classes.container_item}>\n\n                    <label>email</label>\n                    <input type=\"text\" value={email} onChange={(event) => setEmail(event.target.value)} placeholder=\"email\"/>\n\n                    <label>password</label>\n                    <input type=\"password\" value={password} onChange={(event) => setPassword(event.target.value)} placeholder=\"password\"/>\n\n                </form>\n\n                {error ? <div className={classes.container_error}>There was an error while attempting to sign in</div> : null}\n\n                <button type=\"submit\" className={classes.submit_button} onClick={submitForm} disabled={email === \"\" || password === \"\"}>Sign in!</button>\n                <div className={classes.container_footer}>Don't have an account yet? <Link to=\"/signup\"> Sign up!</Link></div>\n\n            </div>\n        </div>\n    )\n}\n\nexport default SignIn\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Authentication/SignOut/SignOut.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, {useState} from 'react';\nimport { Link, useHistory } from 'react-router-dom';\nimport { useAuth } from '../../../AuthProvider';\n\n\nfunction SignOut() {\n    const { signout } = useAuth();\n    const history = useHistory();\n    console.log(\"e\")\n    signout().then(async () => {\n        history.push('/')\n    }).catch(e => {\n        alert(e.message)\n    });\n    return null\n}\n\nexport default SignOut;",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Authentication/SignUp/SignUp.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, {useState, useEffect} from 'react';\nimport {Link, useHistory } from 'react-router-dom';\nimport { useAuth } from '../../../AuthProvider';\nimport axios from 'axios';\nimport wallStreetBets from \"../../../assets/images/wallStreetBets.jpg\";\nimport classes from './SignUp.module.css';\n\nconst emailRegex = /^(([^<>()[\\]\\\\.,;:\\s@\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$/;\nconst passwordRegex = /^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$/;\n\nfunction SignUp() {\n    const history = useHistory();\n    const [email, setEmail] = useState('');\n    const [password, setPassword] = useState('');\n    const [confirmPassword, setConfirmPassword] = useState('');\n    const [showPassword, changeShowPassword] = useState(false)\n    const [errorEmail, setErrorEmail] = useState(false);\n    const [errorPassword, setErrorPassword] = useState(false)\n    const [errorConfirmPassword, setErrorConfirmPassword] = useState(false)\n    const [name, changeName] = useState(\"\")\n    const { signup, signin } = useAuth();\n\n    const submitForm = async () => {\n        // signup an user, then sign the user in and finally redirects user to the main page\n        signup(email, password).then(async (userData) => {\n            await axios.post('/users/signup', {\n                email: email,\n                name: name,\n                uid: userData.user.uid\n            }).then(res => {\n                console.log(res);\n                signin(email, password).then(() =>{\n                    history.replace('/');\n                }).catch(e => {\n                    console.log(e.message);\n                })\n            });\n        }).catch(e => {\n            console.log(e.message)\n        });\n    }\n\n    useEffect(() => {\n        if (emailRegex.test(String(email).toLowerCase()) || email === \"\") setErrorEmail(false)\n        else setErrorEmail(true)\n    }, [email])\n\n    useEffect(() =>{\n        if (password !== confirmPassword && password !== \"\" && confirmPassword !== \"\" ) setErrorConfirmPassword(true)\n        else setErrorConfirmPassword(false)\n    }, [confirmPassword, password])\n\n    useEffect(() =>{\n        if (passwordRegex.test(String(password).toLowerCase()) || password === \"\") setErrorPassword(false)\n        else setErrorPassword(true)\n    }, [password])\n\n    return (\n\n        <div className={classes.super_container}>\n            <div className={classes.container}>\n\n                <div className={classes.container_image}>\n                    <img src={wallStreetBets} alt=\"WallStreet Bets logo\"/>\n                </div>\n\n                <div className={classes.container_title}>Sign up to see pictures of your friends!</div>\n\n                <form className={classes.container_item}>\n\n                    <label>email</label>\n                    <input type=\"text\" value={email} onChange={(event) => setEmail(event.target.value)} placeholder=\"email\"/>\n                    {errorEmail ? <div className={classes.container_error}>The email is not valid</div> : null}\n\n                    <label>name</label>\n                    <input type=\"text\" value={name} onChange={(event) => changeName(event.target.value)} placeholder=\"name\"/>\n\n                    <label>password</label>\n                    <input type=\"password\" value={password} onChange={(event) => setPassword(event.target.value)} placeholder=\"password\"/>\n                    {errorPassword ? <div className={classes.container_error}>\n                        The password must contain at least eight characters, at least one number, at least one special character, and both lower and upper case letters\n                    </div> : null}\n\n                    <label>confirm password</label>\n                    <input type=\"password\" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)}\n                           placeholder=\"confirm password\"/>\n                    {errorConfirmPassword ? <div className={classes.container_error}>The passwords do not match</div> : null}\n\n                </form>\n\n                <button type=\"submit\" className={classes.submit_button} onClick={submitForm}\n                        disabled={errorEmail || name === \"\" || errorPassword || email === \"\" || password === \"\" || confirmPassword === \"\" || errorConfirmPassword}>\n                    Sign up!\n                </button>\n                <div className={classes.container_footer}>Already have an account? <Link to=\"/signin\"> Sign in!</Link></div>\n\n            </div>\n        </div>\n\n    )\n}\n\nexport default SignUp\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Images/Upload/Upload.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, { Component } from \"react\";\nimport axios from 'axios';\nimport Button from '@material-ui/core/Button';\nimport { DropzoneDialog } from 'material-ui-dropzone'\nimport AddAPhotoIcon from '@material-ui/icons/AddAPhoto';\nimport classes from '../../Navbar/Navbar.module.css'\nimport TextField from '@material-ui/core/TextField';\nimport Dialog from '@material-ui/core/Dialog';\nimport DialogActions from '@material-ui/core/DialogActions';\nimport DialogContent from '@material-ui/core/DialogContent';\nimport DialogContentText from '@material-ui/core/DialogContentText';\nimport DialogTitle from '@material-ui/core/DialogTitle';\n\nclass Upload extends Component {\n    constructor(props) {\n        super(props);\n        this.state = {\n            open: false,\n            files: [],\n            isShown: false,\n            description: \"\"\n        };\n    }\n\n    //Create a POST request to upload the image\n    dialogSubmit() {\n        this.setState({\n            isShown: false\n        });\n        const formData = new FormData();\n        formData.append('image', this.state.files[0], this.state.files[0].name);\n        formData.append('uid', this.props.currentUser.uid);\n        formData.append('caption', this.state.description);\n        formData.append('avatar', this.props.currentUser.avatar);\n        axios.post('/posts/new', formData).then(res => {\n            console.log(res);\n            window.location.reload(); //Profile and feed update\n        });\n    };\n\n    //Modal handlers\n    dialogOpen() {\n        this.setState({\n            isShown: true\n        });\n    };\n\n    dialogClose() {\n        this.setState({\n            isShown: false\n        });\n    };\n\n    handleTextChange(desc) {\n        this.setState({\n            description: desc.target.value\n        })\n    }\n\n    handleClose() {\n        this.setState({\n            open: false\n        });\n    }\n\n    handleOpen() {\n        this.setState({\n            open: true,\n        });\n    }\n\n    handleSave(files) {\n        this.setState({\n            files: files,\n            open: false\n        });\n        this.dialogOpen(); //Caption modal\n    }\n\n    render() {\n        return (\n            <div>\n                <Button onClick={this.handleOpen.bind(this)} classes={{ root: classes.UploadButton }} >\n                    <AddAPhotoIcon />\n                </Button>\n                <DropzoneDialog\n                    open={this.state.open}\n                    onSave={this.handleSave.bind(this)}\n                    acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}\n                    showPreviews={false}\n                    showPreviewsInDropzone={true}\n                    maxFileSize={1000000}\n                    filesLimit={1}\n                    onClose={this.handleClose.bind(this)}>\n                </DropzoneDialog>\n\n                <div>\n                    <Dialog open={this.state.isShown} onClose={this.dialogClose.bind(this)} aria-labelledby=\"form-dialog-title\" fullWidth={true}>\n                        <DialogTitle id=\"form-dialog-title\">Finish uploading</DialogTitle>\n                        <DialogContent>\n                            <DialogContentText>\n                                Give your image a description\n                            </DialogContentText>\n                            <TextField value={this.state.description}\n                                multiline\n                                autoFocus\n                                rows={7}\n                                rowsmax={Infinity}\n                                margin=\"normal\"\n                                id=\"desc\"\n                                label=\"description\"\n                                fullWidth\n                                onChange={this.handleTextChange.bind(this)}\n                                inputProps={{\n                                    maxLength: '512',\n                                }}\n                                helperText={`${this.state.description.length}/512`}\n                            />\n                        </DialogContent>\n                        <DialogActions>\n                            <Button onClick={this.dialogClose.bind(this)} color=\"primary\">\n                                Cancel\n                        </Button>\n                            <Button onClick={this.dialogSubmit.bind(this)} color=\"primary\">\n                                Submit\n                        </Button>\n                        </DialogActions>\n                    </Dialog>\n                </div>\n            </div>\n        );\n    }\n}\n\nexport default Upload;\n\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Logo/Logo.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React from 'react';\nimport classes from './Logo.module.css';\nimport instagramLogo from '../../assets/images/insta_logo.png';\n\n\nconst logo = (props) => {\n\n    return (\n        <div className={classes.logo} >\n            <img src={instagramLogo} alt=\"Instagram Logo\"/>\n        </div>\n    );\n\n}\n\nexport default logo;\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Navbar/Navbar.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, {useEffect, useState, useRef} from 'react';\nimport classes from './Navbar.module.css';\nimport Logo from '../Logo/Logo';\nimport { useHistory } from \"react-router-dom\";\nimport { useAuth } from '../../AuthProvider';\nimport UploadButton from '../Images/Upload/Upload'\nimport BottomNavigation from '@material-ui/core/BottomNavigation';\nimport BottomNavigationAction from '@material-ui/core/BottomNavigationAction';\nimport FeaturedPlayListIcon from '@material-ui/icons/FeaturedPlayList';\nimport AccountBoxIcon from '@material-ui/icons/AccountBox';\nimport CreateIcon from '@material-ui/icons/Create';\nimport TextField from '@material-ui/core/TextField';\nimport Autocomplete from '@material-ui/lab/Autocomplete';\nimport Button from '@material-ui/core/Button';\nimport PersonOutline from '@material-ui/icons/PersonOutline';\nimport AddAPhotoIcon from '@material-ui/icons/AddAPhoto';\nimport axios from 'axios';\n\nconst Navbar = (props) => {\n    const [page, changePage] = useState(0);\n    const [searchUser, setSearchUser] = useState(\"\");\n    const [filteredUsers, setFilteredUsers] = useState([{name: \"No results\"}]);\n    const [value, setValue] = useState();\n    const { currentUser, signout } = useAuth();\n    const history = useHistory();\n    const inputRef = useRef(null);\n\n    function getButtons() {\n        if (currentUser == null) {\n            const buttonsNotSignedIn = [\n                { label: \"Posts\", icon: <FeaturedPlayListIcon />, link: \"/\" },\n                { label: \"Sign In\", icon: <CreateIcon />, link: \"/signin\" }\n            ];\n            return buttonsNotSignedIn;\n        }\n        else {\n            const buttonsSignedIn = [\n                { label: \"Posts\", icon: <FeaturedPlayListIcon />, link: \"/\" },\n                { label: \"Profile\", icon: <AccountBoxIcon />, link: \"/profile/\" + currentUser.uid},\n                { label: \"Sign Out\", icon: <PersonOutline />, link: \"/signout\" }\n            ];\n            return buttonsSignedIn;\n        }\n    }\n    function Upload() {\n        if (currentUser == null) {\n            return (\n                <Button onClick={() => {history.push(\"/signin\")}} classes={{ root: classes.uploadButton }} >\n                    <AddAPhotoIcon />\n                </Button>\n            );\n        }\n        return (\n            <UploadButton currentUser={currentUser} />\n        );\n\n    }\n\n    // this useEffect executes only when searchUser changes\n    useEffect(() => {\n\n        const timer = setTimeout(() => {\n\n            if (inputRef.current.value === null || inputRef.current.value === undefined || inputRef.current.value === \"\") {\n                return;\n            }\n\n            // searchUser will be the old value at the moment the time was set\n            // Fetch the db only when the user has stopped typing\n            if (searchUser === inputRef.current.value) {\n                axios.get(`/users/search/${searchUser}`).then(response => {\n                    console.log(response);\n                    const array = [];\n                    for (let i = 0; i < response.data.users.length; i++) {\n                        array.push({\n                            name: response.data.users[i].name,\n                            uid: response.data.users[i]._id\n                        })\n                    }\n                    setFilteredUsers(array);\n                });\n            }\n\n        }, 500);\n\n        // Function that runs before the next time useEffect will run\n        return () => {\n            // this ensures we only have one time running\n            clearTimeout(timer);\n        };\n\n    }, [searchUser, inputRef]);\n\n    return (\n\n        <header className={classes.navbar}>\n\n            <div className={classes.logo}>\n                <Logo />\n            </div>\n            <Upload />\n            <div>\n\n                <Autocomplete\n                    id=\"combo-box-demo\"\n                    onChange={(event, option) => {\n                        if (option != undefined && option != null) {\n                            history.replace(`/profile/${option.uid}`);\n                            setSearchUser(\"\");\n                        }\n                    }}\n                    options={filteredUsers}\n                    getOptionLabel={(option) => option.name}\n                    style={{ width: 300 }}\n                    renderInput={(params) => (\n                        <TextField {...params} id=\"outlined-basic\" inputRef={inputRef} value={searchUser} onChange={event => setSearchUser(event.target.value)}\n                                   label=\"Search user...\" variant=\"outlined\" margin='dense' style={{ height: 40, marginTop: '5px' }} />\n                    )}\n                />\n            </div>\n            <nav className={classes.navigationItem}>\n                <BottomNavigation showLabels value={page} onChange={(event, newPage) => { changePage(newPage); }}>\n                    {getButtons().map((button, index) => <BottomNavigationAction key={index} label={button.label} icon={button.icon} onClick={() => { history.push(button.link) }} classes={{ wrapper: classes.navbarButton }} />)}\n                </BottomNavigation>\n            </nav>\n        </header>\n\n    );\n\n}\n\nexport default Navbar;\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Posts/Post/BootstrapTooltip.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React from 'react';\nimport { makeStyles } from '@material-ui/core/styles';\nimport Tooltip from '@material-ui/core/Tooltip';\n\nconst useStylesBootstrap = makeStyles((theme) => ({\n    arrow: {\n        color: theme.palette.common.black,\n    },\n    tooltip: {\n        backgroundColor: theme.palette.common.black,\n    },\n}));\n\nfunction BootstrapTooltip(props) {\n    const classes = useStylesBootstrap();\n\n    return <Tooltip arrow classes={classes} {...props}/>;\n}\n\nexport default function BootstrapTooltips(props) {\n    return (\n        <BootstrapTooltip title={props.title}>\n            {props.children}\n        </BootstrapTooltip>\n\n    );\n}",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Posts/Post/Post.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, { useState } from \"react\";\nimport classes from'./Post.module.css';\nimport Button from '@material-ui/core/Button';\nimport TextField from '@material-ui/core/TextField';\nimport BootstrapTooltips from './BootstrapTooltip';\nimport { Link } from 'react-router-dom'\nimport axios from 'axios'\nimport { useAuth } from '../../../AuthProvider';\n\nfunction Post(props){\n    const [inputBox, changeInputBox] = useState(false);\n    const [comments, changeComments] = useState(props.comments);\n    const [like, setLike] = useState(props.likedby);\n    const [text, changeText] = useState(\"\");\n    const { currentUser } = useAuth();\n\n    function postComment() {\n        // Post a comment (send the data to the backend) and change state so that it triggers a re-render of the component\n        let temp = comments\n        temp.push({id: comments.length + 1, person: props.user, content: text})\n        changeComments(temp)\n        changeText(\"\")\n        axios.post('/posts/comment', {\n            comment: text,\n            imageUrl: props.source,\n            uid: currentUser.uid,\n            name: currentUser.name,\n            ImageOwnerName: props.owner\n          })\n          .then(function (response) {\n            console.log(response);\n          })\n          .catch(function (error) {\n            console.log(error);\n          });\n    }\n\n    const postLike = (postID) => {\n        // Like a post and change state so that it triggers a re-render of the component\n\n        axios.post('/posts/like', {\n            uid: currentUser.uid,\n            name: currentUser.name,\n            postID: postID\n        }).then((response) => {\n            console.log(response.data);\n            if (!like.includes(currentUser.name))\n                setLike(like.concat(currentUser.name));\n        }).catch((error) => {\n            console.log(error);\n        });\n    }\n\n    const postUnlike = (postID) => {\n\n        // Unlike a post and change state so that it triggers a re-render of the component\n\n        axios.post('/posts/unlike', {\n            uid: currentUser.uid,\n            name: currentUser.name,\n            postID: postID\n        }).then((response) => {\n\n            if (!like.includes(currentUser.name)) {\n                setLike(like.concat(currentUser.name));\n            }\n\n            // Remove the current user name from the list of \"likes\" for this post since he just unliked\n            setLike(like.filter(name => {\n                return name !== currentUser.name;\n            }));\n\n        }).catch((error) => {\n            console.log(error);\n        });\n    }\n\n        return <article className={classes.post}>\n            {props.modal ? null: <header>\n                <div className={classes.post_user}>\n                    <div className={classes.post_userAvatar}>\n                        <Link to={\"/profile/\" + props.owner}> <img src={props.profile} alt=\"Anonymous\"/></Link>\n                    </div>\n                    <div className={classes.post_userNickname}>\n                        <Link to={\"/profile/\" + props.owner}><p style={{textDecoration:'none', color:'black'}}>{props.name}</p></Link>\n                    </div>\n                </div>\n            </header>}\n            <div className={classes.post_image}>\n                <img src={props.source} alt=\"Anonymous\"/>\n            </div>\n            <h3 className={classes.post_caption}>{props.caption}</h3>\n            <div className={classes.post_like}>\n                <BootstrapTooltips title={like.join(\",\\n\")}>\n                    <h4>{like.length + \" like(s)\"}</h4>\n                </BootstrapTooltips>\n                { like.includes(currentUser.name) ? <Button variant=\"outlined\"\n                        size=\"small\" onClick={() => postUnlike(props.postID)}\n                        style={{height: 40, marginLeft:'auto'}}>Unlike</Button> : <Button variant=\"outlined\"\n                                                                                          size=\"small\"\n                                                                                          onClick={() => postLike(props.postID)}\n                                                                                          style={{height: 40, marginLeft:'auto'}}>Like</Button>\n                }\n                <Button variant=\"outlined\" size=\"small\"  onClick={() => changeInputBox(!inputBox)} style={{height: 40}}>Leave a comment</Button>\n            </div>\n            {inputBox ? <div className = {classes.post_comments}>\n                <div className = {classes.post_commentsBox}>\n                {comments.map((item, index) => {\n                        return(\n                            <p className={classes.post_comment}><b>{item.person}</b>{item.content}</p>\n                        )\n                })}\n                </div>\n                <div className={classes.post_commentBox}>\n                    <TextField id=\"outlined_basic\" label=\"Comment...\" variant=\"outlined\" style={{width: \"85%\"}} value={text} onChange={(event) => changeText(event.target.value)}/>\n                    <Button disabled={text === \"\"} variant=\"outlined\" onClick={postComment} style={{width: \"15%\"}} >Post</Button>\n                </div>\n            </div>: null}\n        </article>;\n}\nexport default Post;\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Posts/Posts.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, {useEffect, useState} from 'react';\nimport Post from './Post/Post';\nimport axios from \"axios\";\nimport Image from '../../assets/images/anonymous.jpg'\nimport CircularProgress from '@material-ui/core/CircularProgress';\nimport classes from '../Posts/Post/Post.module.css'\nimport InfiniteScroll from 'react-infinite-scroll-component';\nimport LinearProgress from '@material-ui/core/LinearProgress';\nimport { useAuth } from '../../AuthProvider';\nimport { useHistory } from \"react-router-dom\";\nimport Navbar from \"../Navbar/Navbar\";\n\n\nconst Posts = (props) => {\n    const [Posts, setPosts] = useState(null)\n    const [hiddenPosts, changeHiddenPosts] = useState(null);\n    const [MoreItems, changeMoreItems] = useState(true)\n    const { currentUser } = useAuth();\n    const history = useHistory();\n\n    useEffect(() => {\n\n        if (currentUser === null){\n            history.push('/signin')\n        } else if(currentUser === undefined){\n            \n        }\n        else {\n            // Retrieve post from backend\n            axios.get('/posts')\n            .then((res) => {\n                if (res.data.length < 10){\n                    setPosts(res.data)\n                } else{\n                    changeHiddenPosts(res.data)\n                    setPosts(res.data.slice(0, 10))\n                }\n            });\n        }\n    }, [currentUser, history]);\n\n    useEffect(() => {\n        if (Posts === null || hiddenPosts === null) {\n            return;\n        }\n         else if (hiddenPosts === null || hiddenPosts.length === Posts.length)\n            setTimeout(() => {\n                changeMoreItems(false)\n            } ,1000);\n\n    }, [Posts, hiddenPosts])\n\n    if (Posts === null && hiddenPosts === null)\n        return <div className={classes.posts_loading}>\n            <CircularProgress size='100px'/>\n        </div>\n\n    const users = Posts !== null ? Posts.map((post, index) => {\n        return <Post key={post._id} name={post.owner.name} caption={post.caption} source={post.imageUrl}\n                     profile={post.owner.avatar || Image} likedby={post.likes} comments={post.comments}\n                     user={currentUser.name} owner={post.owner._id} postID = {post._id}/>;\n    }) : [];\n\n    function getMoreItems(){\n        // Load more post when the user reaches the bottom of the screen\n        if (hiddenPosts === null || hiddenPosts.length === Posts.length)\n            changeMoreItems(false)\n        else\n            setPosts(hiddenPosts.slice(0, Posts.length + 10))\n    }\n    \n    return (\n        <React.Fragment>\n            <Navbar />\n            <InfiniteScroll\n                style={{paddingTop:'40px'}}\n                dataLength={hiddenPosts === null ? Posts.length: hiddenPosts.length}\n                next={getMoreItems}\n                hasMore={MoreItems}\n                loader={<LinearProgress style={{ textAlign: 'center', marginBottom: '25px', marginLeft: '100px', marginRight: '100px' }}/>}\n                endMessage={\n                    <p style={{ textAlign: 'center' }}>\n                        <b>You are up to date</b>\n                    </p>}>\n                {users}\n            </InfiniteScroll>\n        </React.Fragment>\n       );\n\n}\n\nexport default Posts;\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Profile/Followers_Following_Dialog/Dialog.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, {useContext} from 'react';\nimport { makeStyles } from '@material-ui/core/styles';\nimport Avatar from '@material-ui/core/Avatar';\nimport List from '@material-ui/core/List';\nimport ListItem from '@material-ui/core/ListItem';\nimport ListItemAvatar from '@material-ui/core/ListItemAvatar';\nimport ListItemText from '@material-ui/core/ListItemText';\nimport DialogTitle from '@material-ui/core/DialogTitle';\nimport Dialog from '@material-ui/core/Dialog';\nimport { blue } from '@material-ui/core/colors';\nimport { ModalContext } from '../ModalContextProvider/ModalContextProvider';\nimport { useHistory } from \"react-router\";\n\nconst useStyles = makeStyles({\n    avatar: {\n        backgroundColor: blue[100],\n        color: blue[600],\n    },\n});\n\nfunction SimpleDialog(props) {\n    const classes = useStyles();\n    const { type, onClose, selectedValues, open } = props;\n    const history = useHistory();\n\n    const handleClose = () => {\n        onClose(selectedValues);\n    };\n\n    const handleListItemClick = (user) => {\n        onClose(user);\n        history.push(`/profile/${user._id}`);\n    };\n\n    return (\n        <Dialog onClose={handleClose} aria-labelledby=\"simple-dialog-title\" open={open}>\n            <DialogTitle id=\"simple-dialog-title\">{type}</DialogTitle>\n            <List>\n                {selectedValues.map((followerOrfollowing) => (\n                    <ListItem button onClick={() => handleListItemClick(followerOrfollowing)} key={followerOrfollowing._id}>\n                        <ListItemAvatar>\n                            <Avatar className={classes.avatar} src={followerOrfollowing.avatar}>\n                            </Avatar>\n                        </ListItemAvatar>\n                        <ListItemText primary={followerOrfollowing.name} />\n                    </ListItem>\n                ))}\n            </List>\n        </Dialog>\n    );\n}\n\nexport default function SimpleDialogDemo(props) {\n\n    const [open, setOpen] = React.useState(true);\n    const [selectedValues, setSelectedValues] = React.useState(props.data);\n    const { closeFollowersDialog, closeFollowingDialog } = useContext(ModalContext);\n\n    // Close the modal\n    const handleClose = (value) => {\n        setOpen(false);\n        setSelectedValues(value);\n\n        if (props.type === \"followers\") {\n            closeFollowersDialog();\n        }\n\n        if (props.type === \"following\") {\n            closeFollowingDialog();\n        }\n\n    };\n\n    return (\n        <div>\n            <SimpleDialog type={props.type} selectedValues={selectedValues} open={open} onClose={handleClose} />\n        </div>\n    );\n}\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Profile/ModalContextProvider/ModalContextProvider.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, { useState } from 'react';\n\nexport const ModalContext = React.createContext();\n\nfunction ModalContextProvider ({children}) {\n\n    const [openFollowersModal, setFollowersModal] = useState(false);\n    const [openFollowingModal, setFollowingModal] = useState(false);\n\n    const closeFollowersDialog = () => {\n        setFollowersModal(false);\n    }\n\n    const closeFollowingDialog = () => {\n        setFollowingModal(false);\n    }\n\n    const openFollowersDialog = () => {\n        setFollowersModal(true);\n    }\n\n    const openFollowingDialog = () => {\n        setFollowingModal(true);\n    }\n\n    return (\n        <ModalContext.Provider value={{\n            openFollowersModal,\n            openFollowingModal,\n            closeFollowersDialog,\n            closeFollowingDialog,\n            openFollowersDialog,\n            openFollowingDialog\n        }}>\n            {children}\n        </ModalContext.Provider>\n    );\n\n}\n\nexport default ModalContextProvider;\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Profile/PictureModal/PictureModal.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, { useState, useEffect } from 'react'\nimport classes from './PictureModal.module.css'\nimport BootstrapTooltips from '../../Posts/Post/BootstrapTooltip'\nimport { useAuth } from '../../../AuthProvider';\nimport TextField from '@material-ui/core/TextField';\nimport Button from '@material-ui/core/Button';\nimport axios from 'axios'\nimport { useHistory, useParams } from \"react-router-dom\";\n\nfunction PictureModal(props){\n    const { currentUser } = useAuth();\n    const params = useParams();\n\n    const [text, changeText] = useState(\"\")\n    const [comments, changeComments] = useState(props.comments)\n    const [likedBy, changeLikedBy] = useState(props.likedBy)\n\n    //self-explanatory functions to like,unlike,comment on pictures from the modal\n    //the states are changed to trigger rerenders of the popup and its props with functions called in the parent component when one closes/opens back the modal\n    function postComment() {\n        if (text === \"\")\n            return;\n        let temp = comments;\n        props.commentFunction(props.index, text)\n        temp.push({ id: temp.length + 1, person: currentUser.name, content: text })\n        changeComments(temp)\n        changeText(\"\")\n        axios.post('/posts/comment', {\n            comment: text,\n            imageUrl: props.source,\n            uid: currentUser.uid,\n            name: currentUser.name,\n            ImageOwnerName: params.id,\n        }).then((response) => {\n                console.log(response);\n            })\n            .catch((error) => {\n                console.log(error);\n            });\n    }\n    \n    const postLike = () => {\n        axios.post('/posts/like', {\n            uid: currentUser.uid,\n            name: currentUser.name,\n            postID: props.postID\n        }).then((response) => {\n            changeLikedBy(likedBy.concat(currentUser.name))\n            props.likeFunction(props.index)\n        }).catch((error) => {\n            console.log(error)\n        });\n    }\n\n    const postUnlike = () => {\n        axios.post('/posts/unlike', {\n            uid: currentUser.uid,\n            name: currentUser.name,\n            postID: props.postID\n        }).then((response) => {\n            // Remove the current user name from the list of \"likes\" for this post since he just unliked\n            changeLikedBy(likedBy.filter(name => name !== currentUser.name));\n            props.likeFunction(props.index)\n        }).catch((error) => {\n            console.log(error);\n        });\n    }\n\n    return (\n        <div className={classes.pictureModal_popup}>\n        <div>\n            <div className={classes.pictureModal_picture}>\n                <img src={props.source} alt={props.caption} style={{ maxHeight: '50vh', maxWidth: \"60vw\" }} />\n            </div>\n            <h3 style={{ marginTop: '5px', marginBottom: '-10px' }}>{props.caption}</h3>\n            <div className={classes.pictureModal_caption}>\n\n                <BootstrapTooltips title={likedBy.join(', ')}>\n                    <h4>{likedBy.length + \" like(s)\"}</h4>\n                </BootstrapTooltips>\n\n                {likedBy.includes(currentUser.name) ? <Button variant=\"outlined\"\n                        size=\"small\" onClick={() => postUnlike(props.postID)}\n                        style={{height: 40, marginLeft:'auto'}}>Unlike</Button> : <Button variant=\"outlined\"\n                          size=\"small\"\n                          onClick={() => postLike(props.postID)}\n                          style={{height: 40, marginLeft:'auto'}}>Like</Button>\n                }\n            </div>\n        </div>\n        <div className={classes.pictureModal_comments}>\n            <div className={classes.pictureModal_commentsScroll}>\n                {comments.map((item,index) => {\n                    return (<p key={index} className={classes.pictureModal_comment}><b>{item.person}</b>{item.content}</p>)\n                })}\n            </div>\n            <div className={classes.pictureModal_commentBox}>\n                <TextField id=\"outlined-basic\" label=\"Comment...\" variant=\"outlined\" style={{ marginLeft: \"10px\", width: '80%' }} value={text} onChange={(event) => changeText(event.target.value)} />\n                <Button variant=\"outlined\" onClick={postComment} style={{ height: 56 }} >Post</Button>\n            </div>\n        </div>\n    </div>\n    )\n}\n\nexport default PictureModal",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/components/Profile/Profile.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, { useState, useEffect, useContext } from 'react';\nimport classes from './Profile.module.css'\nimport Avatar from '@material-ui/core/Avatar';\nimport GridList from '@material-ui/core/GridList';\nimport GridListTile from '@material-ui/core/GridListTile';\nimport Button from '@material-ui/core/Button';\nimport Modal from '@material-ui/core/Modal';\nimport { useAuth } from '../../AuthProvider';\nimport { ModalContext } from './ModalContextProvider/ModalContextProvider';\nimport { useHistory, useParams } from \"react-router-dom\";\nimport CircularProgress from '@material-ui/core/CircularProgress';\nimport axios from 'axios'\nimport Dialog from \"./Followers_Following_Dialog/Dialog\";\nimport IconButton from '@material-ui/core/IconButton'\nimport { DropzoneDialog } from 'material-ui-dropzone'\nimport Navbar from \"../Navbar/Navbar\";\nimport PictureModal from './PictureModal/PictureModal'\n\nfunction Profile(props) {\n    const [picture, setPicture] = useState(null)\n    const [name, setName] = useState(null)\n    const [folllowersFollowing, changeFollowersFollowing] = useState(null);\n    const [includesID, setIncludesID] = useState(false);\n    const [pictures, changePictures] = useState(null)\n    const [open, setOpen] = useState(false)\n    const [shown, setShown] = useState(false)\n    const [attributes, setAttributes] = useState(\"\")\n    const { currentUser } = useAuth();\n    const history = useHistory();\n    const params = useParams();\n    const { openFollowersModal, openFollowingModal, openFollowersDialog, openFollowingDialog } = useContext(ModalContext);\n\n    useEffect(() => {\n        // Verify if the current user is already following the other user and change state accordingly\n        if (folllowersFollowing !== null) {\n            setIncludesID(folllowersFollowing.followers.some(user => user._id === currentUser.uid));\n        }\n\n    }, [folllowersFollowing, changeFollowersFollowing, setIncludesID, includesID]);\n\n    //fetching the data for the profile only if the user is logged in\n    useEffect(() => {\n        if (currentUser === null) {\n            history.push('/signin')\n        } else if (currentUser === undefined) {\n\n        } else {\n            axios.get('/users/' + params.id)\n                .then(function (response) {\n                    setName(response.data.name);\n                    changeFollowersFollowing({ \"followers\": response.data.followers, \"following\": response.data.following })\n                    setPicture(response.data.avatar);\n                })\n                .catch(function (error) {\n                    console.log(error);\n                })\n            axios.get(`/posts/${params.id}`).then((res) => {\n                const { data } = res;\n                changePictures(data);\n            })\n        }\n    }, [currentUser, history, params.id])\n\n    function TryFollow() {\n        // Here the current user is looking at another user's profile page\n        if (includesID) {\n            axios.post('/users/unfollow', {\n                uid: currentUser.uid,\n                following_uid: params.id,\n            })\n                .then(function (response) {\n                    console.log('unfollow', response);\n                    changeFollowersFollowing({ \"followers\": response.data.followedUser.followers, \"following\": response.data.followedUser.following });\n                })\n                .catch(function (error) {\n                    console.log(error);\n                });\n        } else {\n            axios.post('/users/follow', {\n                uid: currentUser.uid,\n                following_uid: params.id,\n            })\n                .then(function (response) {\n                    console.log('follow', response);\n                    changeFollowersFollowing({ \"followers\": response.data.followedUser.followers, \"following\": response.data.followedUser.following })\n                })\n                .catch(function (error) {\n                    console.log(error);\n                });\n        }\n    }\n\n    //the popup needs to get the props from the clicked picture before opening\n    useEffect(() => {\n        if (attributes === \"\")\n            setOpen(false)\n        else \n            setOpen(true)\n    }, [attributes])\n\n    //similar working to the upload component that receives a picture to change the avatar\n    function saveAvatar(event){\n        const formData = new FormData();\n        formData.append('avatar', event[0]);\n        formData.append('uid', currentUser.uid);\n        axios.post('/users/avatar', formData\n        ).then((res) => {\n            console.log(res);\n            setPicture(res.data.data);\n        });\n        setShown(false);\n    }\n\n    if (picture === null || name === null || folllowersFollowing == null || pictures == null)\n        return (<div className={classes.profile_loading}>\n            <CircularProgress size='100px'/>\n        </div>)\n\n    let clickableAvatar = null;\n    if (currentUser.uid === params.id) {\n        clickableAvatar = <IconButton>\n            <Avatar alt={name} src={picture} onClick={() => { setShown(true) }} style={{ height: '150px', width: '150px' }} />\n            <DropzoneDialog\n                open={shown}\n                onSave={saveAvatar}\n                acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}\n                showPreviews={false}\n                showPreviewsInDropzone={true}\n                maxFileSize={1000000}\n                filesLimit={1}\n                onClose={() => { setShown(false) }}>\n            </DropzoneDialog>\n        </IconButton>\n\n    } else {\n        clickableAvatar = <Avatar alt={name} src={picture} style={{ height: '150px', width: '150px' }} />\n    }\n\n    //like function for the popup's props\n    function handleLike(index){\n        let temp = pictures\n        if (temp[index].likes.includes(currentUser.name)){\n            for (let i = 0; i < temp[index].likes.length; i++){\n                if (temp[index].likes[i] === currentUser.name){\n                    temp[index].likes.splice(i, 1);\n                    break;\n                }\n            }\n        }\n        else {\n            temp[index].likes.push(currentUser.name)\n        }\n        changePictures(temp)\n    }\n\n    //comment function for the popup's props\n    function handleComment(index, content){\n        let temp = pictures\n        temp[index].comments.push({\"person\": currentUser.name, \"content\": content})\n        changePictures(temp)\n    }\n\n    return (\n        <React.Fragment>\n            <Navbar />\n            <div className={classes.profile_container}>\n                <div className={classes.profile_top}>\n                    {clickableAvatar}\n                    <table className={classes.profile_stats}>\n                        <tbody>\n                            <tr>\n                                <td colSpan=\"2\">\n                                    <h1 className={classes.profile_name}>{name}</h1>\n                                </td>\n                            </tr>\n                            <tr>\n                                <td>\n                                    <span className={classes.profile_stats} onClick={() => openFollowersDialog(true)} style={{ cursor: 'pointer' }}>\n                                        Followers: {folllowersFollowing.followers.length}\n                                    </span>\n                                </td>\n                                <td>\n                                    <span className={classes.profile_stats} onClick={() => openFollowingDialog(true)} style={{ cursor: 'pointer' }}>\n                                        Following: {folllowersFollowing.following.length}\n                                    </span>\n                                </td>\n                            </tr>\n                        </tbody>\n                    </table>\n                    {\n                        currentUser.uid === params.id ? <div /> :\n                            includesID ? <div><Button variant=\"outlined\" onClick={TryFollow}>Unfollow</Button></div> :\n                                <div> <Button variant=\"outlined\" onClick={TryFollow}>Follow</Button></div>\n                    }\n                </div>\n                <GridList cellHeight={250} style={{ width: \"100%\", cursor: 'pointer' }} cols={3}>\n                    {pictures.map((tile, index) => (<GridListTile key={tile._id} cols={tile.cols || 1} rows={tile.rows || 1} onClick={(event) => setAttributes(event.target.attributes)}>\n                        <img src={tile.imageUrl} alt={tile.caption} likedby={JSON.stringify(tile.likes)} comments={JSON.stringify(tile.comments)} id={tile._id} index={index} />\n                    </GridListTile>))}\n                </GridList>\n                {openFollowersModal ? <Dialog contentStyle={{ maxWidth: 300 }} type={\"followers\"} data={folllowersFollowing.followers} /> : null}\n                {openFollowingModal ? <Dialog type={\"following\"} data={folllowersFollowing.following} /> : null}\n                <Modal open={open} onClose={() => {\n                    setOpen(false)\n                    setAttributes(\"\")\n                }}>\n                   {open ?  <PictureModal commentFunction={handleComment} likeFunction={handleLike} comments={JSON.parse(attributes.getNamedItem(\"comments\").value)} likedBy={JSON.parse(attributes.getNamedItem(\"likedby\").value)} postID={attributes.getNamedItem(\"id\").value} caption={attributes.getNamedItem(\"alt\").value} source={attributes.getNamedItem(\"src\").value} index={attributes.getNamedItem(\"index\").value}/>: null}\n                </Modal>\n            </div>\n        </React.Fragment>\n    )\n}\n\nexport default Profile;",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/firebase.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import firebase from 'firebase/app';\nimport \"firebase/auth\";\n\nconst app = firebase.initializeApp(\n    {\n      apiKey: process.env.REACT_APP_FIREBASE_APIKEY,\n      authDomain: process.env.REACT_APP_FIREBASE_AUTHDOMAIN,\n      projectId: process.env.REACT_APP_FIREBASE_PROJECTID,\n      storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,\n      messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,\n      appId: process.env.REACT_APP_FIREBASE_APPID,\n      measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID\n  }\n);\n\nexport default app;\nexport const auth = app.auth();",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/frontend/src/index.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: 'import' and 'export' may appear only with 'sourceType: module'",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React from 'react';\nimport ReactDOM from 'react-dom';\nimport App from './App';\n\nReactDOM.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n  document.getElementById('root')\n);\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/jest.config.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/routes/index.js",
+    "messages": [
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'next' is defined but never used.",
+        "line": 5,
+        "column": 36,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 5,
+        "endColumn": 40
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "var express = require('express');\nvar router = express.Router();\n\n/* GET home page. */\nrouter.get('/', function(req, res, next) {\n  res.send('test');\n});\n\nmodule.exports = router;\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/routes/posts.js",
+    "messages": [
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'next' is defined but never used.",
+        "line": 23,
+        "column": 70,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 23,
+        "endColumn": 74
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'response' is assigned a value but never used.",
+        "line": 108,
+        "column": 15,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 108,
+        "endColumn": 23
+      }
+    ],
+    "errorCount": 2,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "const router = require('express').Router();\nconst multer = require('multer');\nconst cloudHelpers = require('../cloudStorage/helpers');\nconst Post = require('../Database/Models/Post');\nconst User = require('../Database/Models/User.js');\n\n// Middleware to check for image size\nconst upload = multer({\n    storage: multer.memoryStorage(),\n    limits: {\n      fileSize: 10 * 1024 * 1024, // Max image size is 10mb\n    },\n  })\n\n\n// Route to post a new picture\n/* POST a picture for a user:\n*\n* REQUEST PARAMS: req.body.uid + req.body.caption + image file with name 'image'\n*\n*  */\n\nrouter.post('/new', upload.single('image'), async function(req, res, next) {\n    try {\n  \n      // Upload the image to google cloud and returns a public image url\n      const imageUrl = await cloudHelpers.uploadImage(req.file);\n      // Update user (append the new imageUrl to the images array)\n      let post = new Post({\n        imageUrl,\n        comments: [],\n        likes: [],\n        owner: req.body.uid,\n        caption: req.body.caption\n      })\n      await post.save();\n      let user = await User.findByIdAndUpdate(req.body.uid, { \"$push\": { images: post._id}}, { new: true });\n  \n      res.status(200).json({\n        user: user, // return updated user object\n        message: \"Upload was successful!\",\n        data: imageUrl // New image url\n      });\n  \n    } catch (error) {\n      res.send(error);\n    }\n  \n  });\n\n/* POST a comment for an image:\n*\n* REQUEST PARAMS: req.body.imageUrl + req.body.comment + req.body.ImageOwnerName + req.body.name\n*\n* req.body.ImageOwnerName is the name of the OWNER OF THE PICTURE, NOT the person who comments\n* req.body.name is the username of the person who comments\n*  */\n\nrouter.post('/comment', async function (req, res) {\n\n  try {\n\n    if (!req.body.ImageOwnerName) {\n      res.status(401).json({ error: \"Not Authorized. Authentication required.\" });\n    }\n\n    // Find the user of the picture that was commented on\n    await Post.findOne({\"imageUrl\": req.body.imageUrl} , async function (error, image) {\n\n      if (error) {\n        res.status(404).send(error);\n      }\n      image.comments.push({ person: req.body.name, content: req.body.comment, uid: req.body.uid});\n      await Post.replaceOne({ \"imageUrl\": req.body.imageUrl }, image);\n\n      res.status(200).json({\n        image: image // return updated image object\n      });\n\n    });\n\n  } catch (error) {\n    res.send(error);\n  }\n\n});\n\n  /* DELETE an image for a user:\n*\n* REQUEST PARAMS: req.body.imageUrl\n*\n*  */\n\nrouter.delete('/:id', async function (req, res) {\n\n    try {\n      // Delete user image in mongodb\n      const post = await Post.findById(req.params.id);\n      User.findOne({ _id: post.owner }, async function (error, user) {\n  \n        for (let i = 0; i < user.images.length; i++) {\n          if (user.images[i] === req.params.id) {\n            user.images.splice(i, 1); // Delete the image from user object\n            break;\n          }\n        }\n  \n        const response = await User.replaceOne({ _id: post.owner }, user);\n  \n        // Delete the image in google cloud bucket\n        const data = await cloudHelpers.deleteImage(req.body.imageUrl);\n  \n        res.status(200).json({\n          user: user, // return updated user object\n          data: data\n        });\n  \n      });\n  \n    } catch (error) {\n      res.send(error);\n    }\n  \n  });\n\n\n// Route to get a post\n/* GET a post for a user:\n*\n* REQUEST PARAMS: req.params.uid\n*\n*  */\n\nrouter.get('/:uid', async (req, res) => {\n  const posts = await Post.find({owner: req.params.uid}).populate('owner', '_id name avatar');\n  return res.json(posts);\n});\n\n\n\n/* GET all posts from database:\n*\n* REQUEST PARAMS: No params\n*\n*/\nrouter.get('/', async (req, res) => {\n    const posts = await Post.find({}).populate('owner', '_id name avatar');\n    return res.json(posts);\n});\n\n\n// Route to like a post\n/* POST a like on a post:\n*\n* REQUEST PARAMS: req.body.name + req.body.postID\n*\n*  */\n\nconst likeFunction = async (req) => {\n\n  try {\n\n    if (!req.body.postID) {\n      return {\n        message: 'missing post id'\n      }\n    }\n\n    if (!req.body.name) {\n      return {\n        message: 'missing name'\n      }\n    }\n\n    let post = await Post.findOneAndUpdate({ _id: req.body.postID },\n        { \"$addToSet\": { likes: req.body.name } }, { new: true });\n\n    return {\n      message: 'success',\n      post\n    }\n\n  } catch (error) {\n    return {\n      error,\n      message: 'error'\n    }\n  }\n\n}\n\nrouter.post('/like', async (req, res) => {\n\n  let response = await likeFunction(req);\n\n  if (response.message !== 'error' || response.message !== 'missing post id' || response.message !== 'missing name') {\n\n    res.status(200).json({\n      post: response.post\n    });\n\n  } else {\n    res.send(response.message);\n  }\n\n});\n\n\n// Route to unlike a post\n/* POST an unlike on a post:\n*\n* REQUEST PARAMS: req.body.name + req.body.postID\n*\n*  */\n\nconst unlikeFunction = async (req) => {\n\n  try {\n\n    if (!req.body.name) {\n      return {\n        message: 'missing name parameter'\n      }\n    }\n\n    if (!req.body.postID) {\n      return {\n        message: 'missing postID parameter'\n      }\n    }\n\n    let post = await Post.findOneAndUpdate({ _id: req.body.postID },\n        { \"$pull\": { likes: req.body.name } }, { new: true });\n\n    return {\n      post,\n      message: 'unlike operation successful!'\n    }\n\n  } catch (error) {\n    return {\n      error,\n      message: 'unlike operation went wrong'\n    }\n  }\n\n}\n\nrouter.post('/unlike', async (req, res) => {\n\n  let response = await unlikeFunction(req);\n\n  if (response.message !== 'unlike operation went wrong' || response.message !== 'missing name parameter' || response.message !== 'missing postID parameter') {\n    res.status(200).json({\n      post: response.post\n    });\n  } else {\n    res.send(response.message);\n  }\n\n});\n  \nmodule.exports = {\n  router,\n  likeFunction: likeFunction,\n  unlikeFunction: unlikeFunction\n};\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/routes/users.js",
+    "messages": [
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'Post' is assigned a value but never used.",
+        "line": 5,
+        "column": 7,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 5,
+        "endColumn": 11
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'next' is defined but never used.",
+        "line": 118,
+        "column": 74,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 118,
+        "endColumn": 78
+      }
+    ],
+    "errorCount": 2,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "const express = require('express');\nconst router = express.Router();\nconst multer = require('multer');\nconst cloudHelpers = require('../cloudStorage/helpers');\nconst Post = require('../Database/Models/Post');\nconst User = require('../Database/Models/User.js');\n\n\n// Middleware to check for image size an\nconst upload = multer({\n  storage: multer.memoryStorage(),\n  limits: {\n    fileSize: 10 * 1024 * 1024, // Max image size is 10mb\n  },\n});\n\nrouter.get('/:uid/followers', async (req, res) => {\n  const users = await User.find({});\n  return res.json(users);\n});\n\n/* GET a user's information:\n*\n* REQUEST PARAMS: req.body.name\n*\n*  */\n\nrouter.get('/:uid', async function(req, res) {\n\n  // Fetch user here from database\n  const user = await User.findById(req.params.uid).populate('followers', '_id name avatar').populate('following', '_id name avatar');\n  return res.json(user);\n});\n\n\n//  Route to save/create users to database\n\n/* POST to create a user\n*\n* REQUEST PARAMS: req.body.email and req.body.name\n*\n*  */\n\nconst deleteUser = async (uid) => {\n\n  try {\n\n    await User.deleteOne({ _id: uid });\n    return { message: 'User has been deleted' };\n\n  } catch (error) {\n    return { error, message: 'error' };\n  }\n\n}\n\nconst createUser = async (req) => {\n\n  if (!req.body.email || !req.body.name) {\n    return;\n  }\n\n  // Create new user:\n  console.log(req.body)\n\n  const user = new User({\n    _id: req.body.uid,\n    email: req.body.email,\n    name: req.body.name,\n    avatar: \"\",\n    images: [],\n    following: [],\n    followers: []\n  });\n\n  try {\n\n    await user.save();\n    return { user, message: 'Everything is clear!' };\n\n  } catch (error) {\n    return { error, message: 'error' };\n  }\n}\n\nrouter.post('/signup', async function (req, res) {\n\n    let response = await createUser(req);\n\n    if (response.message === 'error') {\n      res.status(404).send(response.error);\n    }\n    else if (response.message === 'Everything is clear!') {\n      res.status(201).send(response.user);\n    }\n    else {\n      res.status(401).json({ error: \"Name and email required\" });\n    }\n\n});\n\n/* POST an image for a user:\n*\n* REQUEST PARAMS: req.body.name + image file with name 'image'\n*\n*  */\n\n\n\n// Route to post a profile picture\n/* POST an avatar for a user:\n*\n* REQUEST PARAMS: req.body.name + avatar file with name 'avatar'\n*\n*  */\n\n// The 'name' property of the html \"input\" element must be named \"avatar\" and it will be stored in \"req.file\":\nrouter.post('/avatar', upload.single('avatar'), async function(req, res, next) {\n\n  try {\n\n    if (!req.body.uid) {\n      res.status(401).json({ error: \"Not Authorized. Authentication required\" });\n    }\n\n    // Fetch the old avatar url of the user if any:\n    const user = await User.findOne({ \"_id\": req.body.uid });\n\n    // Remove old avatar image if any:\n    if (user.avatar) {\n      const response = await cloudHelpers.deleteImage(user.avatar);\n      console.log('Delete avatar response: ', response);\n    }\n\n    // Upload the image to google cloud and returns a public image url\n    const avatarUrl = await cloudHelpers.uploadImage(req.file);\n\n    // Update user with new avatar and save\n    user.avatar = avatarUrl;\n    await user.save();\n\n    res.status(200).json({\n      user: user, // return updated user object\n      message: \"Upload was successful!\",\n      data: avatarUrl // New avatarUrl url\n    });\n\n  } catch (error) {\n    console.log(error);\n    res.send(error);\n  }\n\n});\n\n/* POST request to follow a user:\n*\n* REQUEST PARAMS: req.body.uid + req.body.following_uid\n*\n*  */\n\nconst followFunction = async (req) => {\n\n  try {\n\n    if (!req.body.uid || !req.body.following_uid) {\n      return {\n        message: 'error when following a user'\n      }\n    }\n\n    // Append to the 'following' field the name of the user the current user want to follow\n    await User.findOneAndUpdate({ _id: req.body.uid },\n        { \"$addToSet\": { following: req.body.following_uid } }, { new: true });\n\n    let user = await User.findOne({ _id: req.body.uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');\n\n    // Append to the 'followers' field of the other (followed) user the name of the current user\n    await User.findOneAndUpdate({ _id: req.body.following_uid },\n        { \"$addToSet\": { followers: req.body.uid  }}, { new: true });\n\n    let followedUser = await User.findOne({ _id: req.body.following_uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');\n\n    return {\n      user: user,\n      followedUser: followedUser,\n      message: 'User followed successfully'\n    }\n\n  } catch (error) {\n    return {\n      message: 'error when following a user',\n      error\n    }\n  }\n\n}\n\nrouter.post('/follow', async function (req, res) {\n\n  let response = await followFunction(req);\n\n  if (response.message !== 'error when following a user') {\n    res.status(200).json({\n      user: response.user,\n      followedUser: response.followedUser\n    });\n  }\n  else {\n    res.send(response.error);\n  }\n\n});\n\n\n/* POST request to unfollow a user:\n*\n* REQUEST PARAMS: req.body.uid + req.body.following_uid\n*\n*  */\n\nconst unfollowFunction = async (req) => {\n\n  try {\n\n    if (!req.body.uid || !req.body.following_uid) {\n      return {\n        message: 'error when unfollowing a user'\n      }\n    }\n\n    await User.updateOne({ _id: req.body.uid },\n        { \"$pullAll\": { following: [req.body.following_uid] } });\n\n    let user = await User.findOne({ _id: req.body.uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');\n\n    await User.updateOne({ _id: req.body.following_uid },\n        { \"$pullAll\": { followers: [req.body.uid] }}, { new: true });\n\n    let followedUser = await User.findOne({ _id: req.body.following_uid }).populate('followers', '_id name avatar').populate('following', '_id name avatar');\n\n    return {\n      user,\n      followedUser,\n      message: 'Operation successful'\n    }\n\n  } catch (error) {\n    return {\n      error,\n      message: 'error when unfollowing a user'\n    }\n  }\n\n}\n\nrouter.post('/unfollow', async function (req, res) {\n\n  let response = await unfollowFunction(req);\n\n  if (response.message !== 'error when unfollowing a user') {\n    res.status(200).json({\n      user: response.user,\n      followedUser: response.followedUser\n    });\n  }\n  else {\n    res.send(response.error);\n  }\n\n});\n\nrouter.get('/search/:filter', async function (req, res) {\n\n  try {\n\n    const users = await User.find({ name: req.params.filter });\n\n    // todo: only send back a max of 10 values ??\n\n    res.status(200).json({\n      users\n    });\n\n  } catch (error) {\n    res.send(error);\n  }\n\n});\n\n\nmodule.exports = {\n  router: router,\n  createUser: createUser,\n  deleteUser: deleteUser,\n  followFunction: followFunction,\n  unfollowFunction: unfollowFunction\n};\n\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/styleMock.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "/home/anastassy/WebstormProjects/SOEN_341/tests/api.test.js",
+    "messages": [
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'_' is assigned a value but never used.",
+        "line": 3,
+        "column": 9,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 3,
+        "endColumn": 10
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'r' is assigned a value but never used.",
+        "line": 4,
+        "column": 9,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 4,
+        "endColumn": 10
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'res' is assigned a value but never used.",
+        "line": 76,
+        "column": 19,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 76,
+        "endColumn": 22
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'res' is assigned a value but never used.",
+        "line": 179,
+        "column": 17,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 179,
+        "endColumn": 20
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'res' is assigned a value but never used.",
+        "line": 219,
+        "column": 17,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 219,
+        "endColumn": 20
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'e' is defined but never used.",
+        "line": 389,
+        "column": 18,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 389,
+        "endColumn": 19
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'error' is defined but never used.",
+        "line": 404,
+        "column": 27,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 404,
+        "endColumn": 32
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'e' is defined but never used.",
+        "line": 407,
+        "column": 22,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 407,
+        "endColumn": 23
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'e' is defined but never used.",
+        "line": 422,
+        "column": 23,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 422,
+        "endColumn": 24
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'e' is defined but never used.",
+        "line": 439,
+        "column": 23,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 439,
+        "endColumn": 24
+      },
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 2,
+        "message": "'e' is defined but never used.",
+        "line": 452,
+        "column": 18,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 452,
+        "endColumn": 19
+      }
+    ],
+    "errorCount": 11,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "const cloudHelpers = require('../cloudStorage/helpers');\r\nconst request = require('request');\r\nconst { _, createUser, deleteUser, followFunction, unfollowFunction } = require('../routes/users');\r\nconst { r, likeFunction, unlikeFunction } = require('../routes/posts');\r\n\r\nrequire('dotenv').config();\r\nrequire('firebase/auth');\r\nconst firebase = require('firebase/app');\r\nconst mongoose = require('mongoose');\r\n\r\nconst app = firebase.initializeApp(\r\n    {\r\n        apiKey: process.env.REACT_APP_FIREBASE_APIKEY,\r\n        authDomain: process.env.REACT_APP_FIREBASE_AUTHDOMAIN,\r\n        projectId: process.env.REACT_APP_FIREBASE_PROJECTID,\r\n        storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,\r\n        messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,\r\n        appId: process.env.REACT_APP_FIREBASE_APPID,\r\n        measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID\r\n    }\r\n);\r\n\r\nconst auth = app.auth();\r\nbeforeAll(done => {\r\n    done()\r\n  })\r\n  \r\n  afterAll(async done => {\r\n    // Closing the DB connection allows Jest to exit successfully.\r\n    try{\r\n        await mongoose.connection.close()\r\n        done()\r\n    } catch{\r\n        console.log(\"error in ending the connection\")\r\n    }\r\n  })\r\n\r\ndescribe(\"UPLOAD  an image\", () => {\r\n\r\n    it('should upload the logo image', async () => {\r\n\r\n        try {\r\n            const bucketName = 'soen-341-instagram-pictures';\r\n            const gcsFileName = 'test_image';\r\n            const baseUrl = `https://storage.googleapis.com/${bucketName}/${gcsFileName}`;\r\n            let file = null;\r\n\r\n            let url = '../frontend/src/assets/images/wallStreetBets.jpg';\r\n            request({ url, encoding: null }, (err, resp, buffer) => {\r\n                // Use the buffer\r\n                // buffer contains the image data\r\n                // typeof buffer === 'object'\r\n\r\n                if (err) {\r\n                    file = null;\r\n                }\r\n                else {\r\n                    file = buffer;\r\n                }\r\n            });\r\n\r\n            // Upload the image to google cloud and returns a public image url\r\n            const avatarUrl = await cloudHelpers.uploadImage(file, true);\r\n            expect(avatarUrl).toBe(baseUrl);\r\n        } catch (e) {\r\n            console.log(\"error when uploading the logo image\")\r\n        }\r\n    });\r\n\r\n    it('should reject upload', async () => {\r\n        expect.assertions(1);\r\n        try {\r\n            let url = null;\r\n\r\n            // Upload the image to google cloud and returns a public image url\r\n            const res = await cloudHelpers.deleteImage(url, true);\r\n            // expect(res).toBe(\"Image upload rejected!\");\r\n        } catch (e) {\r\n            expect(e).toBe(\"Image upload rejected!\");\r\n        }\r\n    });\r\n\r\n});\r\n\r\n\r\n\r\ndescribe(\"CREATE a user\",  () => {\r\n\r\n    beforeEach( async (done) => {\r\n        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))\r\n        done();\r\n    });\r\n\r\n    it('should create a user in the db', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    uid: 'some_uid',\r\n                    name: 'some_name',\r\n                    email: 'some_email'\r\n                }\r\n            }\r\n            let res = await createUser(req);\r\n\r\n            expect(res.message).toBe('Everything is clear!');\r\n        } catch (e) {\r\n            console.log(\"error when creating a new user\")\r\n        }\r\n    });\r\n\r\n    it('should create a second user in the db', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    uid: 'some_uid_2',\r\n                    name: 'some_name_2',\r\n                    email: 'some_email_2'\r\n                }\r\n            }\r\n            let res = await createUser(req);\r\n\r\n            expect(res.message).toBe('Everything is clear!');\r\n        } catch (e) {\r\n            console.log(\"error when creating a 2nd user\")\r\n        }\r\n    });\r\n\r\n    it('should create an error when trying to make the same user', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    uid: 'some_uid',\r\n                    name: 'some_name',\r\n                    email: 'some_email'\r\n                }\r\n            }\r\n            let res = await createUser(req);\r\n            expect(res.message).toBe('error');\r\n        } catch (e) {\r\n            console.log(\"error, created the user when it shouldn't be possible since he already exists\")\r\n\r\n        }\r\n    });\r\n\r\n});\r\n\r\n\r\ndescribe(\"FOLLOW a user\", () => {\r\n\r\n    beforeEach(async (done) => {\r\n        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))\r\n        done();\r\n    });\r\n\r\n    it('should update the user object', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    uid: 'some_uid',\r\n                    following_uid: 'some_uid_2'\r\n                }\r\n            }\r\n            let res = await followFunction(req);\r\n            expect(res.user._id).toBe(req.body.uid);\r\n        } catch (e) {\r\n            console.log(\"error in following the user\")\r\n        }\r\n    });\r\n\r\n\r\n    it('should reject the request to follow a user', async () => {\r\n        try {\r\n            // Missing parameter in the request\r\n            const req = {\r\n                body: {\r\n                    following_uid: 'some_uid_2'\r\n                }\r\n            }\r\n            let res = await followFunction(req);\r\n        } catch (e) {\r\n            expect(e).toBe('error when following a user');\r\n        }\r\n    });\r\n\r\n\r\n});\r\n\r\n\r\ndescribe(\"UNFOLLOW a user\", () => {\r\n\r\n    beforeEach(async (done) => {\r\n        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))\r\n        done();\r\n    });\r\n\r\n    it('should update the user object by unfollowing a user', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    uid: 'some_uid',\r\n                    following_uid: 'some_uid_2'\r\n                }\r\n            }\r\n            let res = await unfollowFunction(req);\r\n            expect(res.followedUser._id).toBe(req.body.following_uid);\r\n        } catch (e) {\r\n            console.log(\"error in unfollowing the user\");\r\n        }\r\n    });\r\n\r\n    it('should reject the request to unfollow a user', async () => {\r\n        try {\r\n            // Missing parameter in the request\r\n            const req = {\r\n                body: {\r\n                    following_uid: 'some_uid_2'\r\n                }\r\n            }\r\n            let res = await unfollowFunction(req);\r\n        } catch (e) {\r\n            expect(e).toBe('error when unfollowing a user');\r\n        }\r\n    });\r\n\r\n});\r\n\r\n\r\ndescribe(\"LIKE a post\", () => {\r\n\r\n    beforeEach(async (done) => {\r\n        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))\r\n        done();\r\n    });\r\n\r\n    it('should reject the post object', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    name: 'some_name',\r\n                    postID: 'id123'\r\n                }\r\n            }\r\n            let res = await likeFunction(req);\r\n            expect(res.message).toBe('error');\r\n        } catch (e) {\r\n            console.log(\"error when liking a post\");\r\n        }\r\n    });\r\n\r\n    it('should reject the post request', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    name: 'my_name'\r\n                }\r\n            }\r\n            let res = await likeFunction(req);\r\n            expect(res.message).toBe('missing post id');\r\n        } catch (e) {\r\n            console.log(\"error when liking a post\");\r\n        }\r\n    });\r\n\r\n    it('should reject the post request', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    postID: 'id123'\r\n                }\r\n            }\r\n            let res = await likeFunction(req);\r\n            expect(res.message).toBe('missing name');\r\n        } catch (e) {\r\n            console.log(\"error when liking a post\");\r\n        }\r\n    });\r\n\r\n});\r\n\r\ndescribe(\"UNLIKE a post\", () => {\r\n\r\n    beforeEach(async (done) => {\r\n        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))\r\n        done();\r\n    });\r\n\r\n    it('should reject the post object', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    postID: 'post_id'\r\n                }\r\n            }\r\n            let res = await unlikeFunction(req);\r\n            expect(res.message).toBe('missing name parameter');\r\n        } catch (e) {\r\n            console.log(\"error when unliking a post\");\r\n        }\r\n    });\r\n\r\n    it('should indicate a missing parameter', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    name: 'random_name'\r\n                }\r\n            }\r\n            let res = await unlikeFunction(req);\r\n            expect(res.message).toBe('missing postID parameter');\r\n        } catch (e) {\r\n            console.log(\"error when unliking a post\");\r\n        }\r\n    });\r\n\r\n});\r\n\r\ndescribe(\"DELETE an image\", () => {\r\n\r\n    it('should delete the logo image', async () => {\r\n\r\n        try {\r\n            const bucketName = 'soen-341-instagram-pictures';\r\n            const gcsFileName = 'test_image';\r\n            const baseUrl = `https://storage.googleapis.com/${bucketName}/${gcsFileName}`;\r\n\r\n            // Delete the image that was inserted:\r\n            const response = await cloudHelpers.deleteImage(baseUrl, true);\r\n\r\n            expect(response).toBe(\"Image deleted successfully\");\r\n        } catch (e) {\r\n            console.log(\"error when deleting an image\")\r\n        }\r\n    });\r\n\r\n    it('should update the post object', async () => {\r\n        try {\r\n            const req = {\r\n                body: {\r\n                    name: 'my_name',\r\n                    postID: 'post_id'\r\n                }\r\n            }\r\n            let res = await likeFunction(req);\r\n            expect(res.message).toBe('error');\r\n        } catch (e) {\r\n            console.log(\"error\")\r\n        }\r\n    });\r\n\r\n});\r\n\r\ndescribe(\"DELETE a user object\",  () => {\r\n\r\n    beforeEach(async (done) => {\r\n        await mongoose.connect(process.env.MONGODB_CLUSTER_URL).catch(err => console.log(err))\r\n        done();\r\n    });\r\n\r\n    it('should delete a user in the db', async () => {\r\n\r\n        try {\r\n            let res = await deleteUser('some_uid');\r\n            expect(res.message).toBe('User has been deleted');\r\n        } catch (e) {\r\n            console.log(\"error when deleting the user object\")\r\n        }\r\n\r\n    });\r\n\r\n    it('should delete the second user in the db', async () => {\r\n\r\n        try {\r\n            let res = await deleteUser('some_uid_2');\r\n            expect(res.message).toBe('User has been deleted');\r\n        } catch (e) {\r\n            console.log(\"error when deleting the 2nd created user\")\r\n        }\r\n    });\r\n\r\n});\r\n\r\ndescribe(\"signing in with the firebase method to veryfy the user's credentials\", () => {\r\n    it('valid password, user should be signed in and not be null', async () => {\r\n\r\n        const authentication = async () => auth.signInWithEmailAndPassword(process.env.EMAIL, process.env.PASSWORD)\r\n\r\n        return authentication().then(() =>{\r\n            expect(firebase.auth().currentUser).not.toBeNull()\r\n        }).catch(e => {\r\n            console.log(\"error when signing in with firebase\")\r\n        })\r\n    }) //testing signing with an existing user's credentials\r\n\r\n    it('invalid password, user shouldn\\'t be signed in, should be null', () => {\r\n\r\n        const authentication = async () => auth.signInWithEmailAndPassword(process.env.EMAIL, process.env.PASSWORD)\r\n\r\n        return (\r\n            auth.signOut()\r\n            .then(() => {\r\n                authentication()\r\n                .then(() =>{\r\n                    expect(firebase.auth().currentUser).toBeNull()\r\n                 }).catch(error => {\r\n                    // console.log(error.code)\r\n                })\r\n            }).catch(e => {\r\n                console.log(\"error, user got logged in when he shouldn't have\")\r\n            })\r\n        )\r\n    }) //testing signing with invalid credentials\r\n})\r\n\r\n\r\n\r\ndescribe('signout should use the auth firebase method to revert the authenticated user to an signed out state', () => {\r\n    it('the current user is signed out and current user is null', () => {\r\n        const signOut = async () => auth.signOut()\r\n\r\n        return signOut().then(() => {\r\n                expect(firebase.auth().currentUser).toBeNull()\r\n            }).catch((e) => {\r\n                console.log(\"error when signing out the user\")\r\n            })\r\n    })\r\n})\r\ndescribe(\"signup should use the firebase method to create a new account and be automatically signed it\", () => {\r\n    it('user does not exist, a new account should be created and signed in automatically, user should not be null', () => {\r\n        const email = Date.now() + \"@gmail.com\"\r\n        const password = process.env.PASSWORD + Date.now();\r\n\r\n        const signUp = async() => auth.createUserWithEmailAndPassword(email, password);\r\n\r\n        return(\r\n            signUp(() => {\r\n\r\n            }).then(() =>{\r\n                expect(firebase.auth().currentUser).not.toBeNull();\r\n            }).catch((e) =>{\r\n                console.log(\"error when signing up\")\r\n            })\r\n        )\r\n})\r\n    it( 'user already exist, an error message should be received', () => {\r\n        const signUp = async() => auth.createUserWithEmailAndPassword(process.env.EMAIL, process.env.PASSWORD);\r\n\r\n        return auth.signOut().then(() => {\r\n            signUp().then(() =>{\r\n            }).catch(function(error) {\r\n                expect(error.code).toBe(\"auth/email-already-in-use\")\r\n            })\r\n        }).catch(e => {\r\n            console.log(\"error when signing up, the user shouldn't be able to create the same user but still did\")\r\n        })\r\n    })\r\n})\r\n\r\n\r\n\r\n",
+    "usedDeprecatedRules": []
+  }
+]
